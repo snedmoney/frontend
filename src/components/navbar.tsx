@@ -14,13 +14,12 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { IoWalletOutline, IoShareSocialOutline } from "react-icons/io5";
 import { RxDashboard } from "react-icons/rx";
 import { MdOutlineHistory } from "react-icons/md";
-import { Divider } from "@nextui-org/react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { Button, Divider } from "@nextui-org/react";
 
 import UserMenuDropdown from "./user-menu-dropdown";
 import CreatePage from "./create-page";
-import ShareModal from "./share-modal";
 
+import useShareModal from "@/hooks/use-share-modal";
 import useTheme from "@/hooks/use-theme";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Logo } from "@/components/icons";
@@ -30,15 +29,7 @@ export const Navbar = () => {
   const { openConnectModal } = useConnectModal();
   const { disconnect } = useDisconnect();
   const { isDark } = useTheme();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-
-  const handleOpenModal = () => {
-    const newSearchParams = new URLSearchParams(searchParams);
-
-    newSearchParams.set("openShareModal", "true");
-    navigate({ search: newSearchParams.toString() }, { replace: true });
-  };
+  const openShareModal = useShareModal();
 
   return (
     <NextUINavbar maxWidth="2xl" position="sticky">
@@ -63,7 +54,14 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
         <CreatePage />
-        <ShareModal />
+        <Button
+          color="default"
+          endContent={<IoShareSocialOutline />}
+          variant="ghost"
+          onPress={openShareModal}
+        >
+          Share
+        </Button>
         <UserMenuDropdown />
       </NavbarContent>
 
@@ -120,8 +118,8 @@ export const Navbar = () => {
             <span>Transaction history</span>
           </Link>
         </NavbarMenuItem>
-        <NavbarMenuItem className="flex items-center">
-          <div className="flex items-center gap-4" onClick={handleOpenModal}>
+        <NavbarMenuItem className="flex items-center" onClick={openShareModal}>
+          <div className="flex items-center gap-4">
             <IoShareSocialOutline className="fill-foreground" size="18" />
             <span>Share this page</span>
           </div>
