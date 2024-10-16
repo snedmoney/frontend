@@ -6,6 +6,7 @@ import { button as buttonStyles } from "@nextui-org/theme";
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
+import PaymentWidget from "@/components/payment-widget";
 
 export default function IndexPage() {
   return (
@@ -45,6 +46,7 @@ export default function IndexPage() {
             </span>
           </Snippet>
         </div>
+        <PaymentWidget />
       </section>
     </DefaultLayout>
   );
