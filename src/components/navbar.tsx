@@ -11,11 +11,40 @@ import {
 import { link as linkStyles } from "@nextui-org/theme";
 import clsx from "clsx";
 
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount, useSignMessage } from "wagmi";
+import { useEffect } from "react";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Logo } from "@/components/icons";
+import { apiClient } from "@/config/api";
 
 export const Navbar = () => {
+  const token = localStorage.getItem("token");
+  const { isConnected, isDisconnected } = useAccount();
+  const { signMessage, isSuccess, data } = useSignMessage();
+  useEffect(() => {
+    if (!token && isConnected) {
+      signMessage({ message: "hello world" });
+    }
+  }, [isConnected]);
+  useEffect(() => {
+    if (isDisconnected) {
+      localStorage.removeItem("token");
+    }
+  }, [isDisconnected]);
+  useEffect(() => {
+    async function process() {
+      if (isSuccess && data) {
+        apiClient.post("/authorize", { signature: data }).then((response) => {
+          if (response.data.token) {
+            localStorage.setItem("token", response.data.token);
+          }
+        });
+      }
+    }
+    process();
+  }, [isSuccess, data]);
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
