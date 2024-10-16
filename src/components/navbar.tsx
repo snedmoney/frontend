@@ -8,46 +8,40 @@ import {
   NavbarMenu,
   NavbarMenuItem,
 } from "@nextui-org/navbar";
-import { link as linkStyles } from "@nextui-org/theme";
-import clsx from "clsx";
+import { useAccount, useDisconnect } from "wagmi";
+import { AiOutlineLogin, AiOutlineLogout } from "react-icons/ai";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { IoWalletOutline, IoShareSocialOutline } from "react-icons/io5";
+import { RxDashboard } from "react-icons/rx";
+import { MdOutlineHistory } from "react-icons/md";
+import { Divider } from "@nextui-org/react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount, useSignMessage } from "wagmi";
-import { useEffect } from "react";
-import { siteConfig } from "@/config/site";
+import UserMenuDropdown from "./user-menu-dropdown";
+import CreatePage from "./create-page";
+import ShareModal from "./share-modal";
+
+import useTheme from "@/hooks/use-theme";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Logo } from "@/components/icons";
-import { apiClient } from "@/config/api";
 
 export const Navbar = () => {
-  const token = localStorage.getItem("token");
-  const { isConnected, isDisconnected } = useAccount();
-  const { signMessage, isSuccess, data } = useSignMessage();
-  useEffect(() => {
-    if (!token && isConnected) {
-      signMessage({ message: "hello world" });
-    }
-  }, [isConnected]);
-  useEffect(() => {
-    if (isDisconnected) {
-      localStorage.removeItem("token");
-    }
-  }, [isDisconnected]);
-  useEffect(() => {
-    async function process() {
-      if (isSuccess && data) {
-        apiClient.post("/authorize", { signature: data }).then((response) => {
-          if (response.data.token) {
-            localStorage.setItem("token", response.data.token);
-          }
-        });
-      }
-    }
-    process();
-  }, [isSuccess, data]);
+  const { isDisconnected, address } = useAccount();
+  const { openConnectModal } = useConnectModal();
+  const { disconnect } = useDisconnect();
+  const { isDark } = useTheme();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const handleOpenModal = () => {
+    const newSearchParams = new URLSearchParams(searchParams);
+
+    newSearchParams.set("openShareModal", "true");
+    navigate({ search: newSearchParams.toString() }, { replace: true });
+  };
 
   return (
-    <NextUINavbar maxWidth="xl" position="sticky">
+    <NextUINavbar maxWidth="2xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <Link
@@ -55,26 +49,10 @@ export const Navbar = () => {
             color="foreground"
             href="/"
           >
-            <Logo />
+            {!isDark ? <Logo /> : <Logo />}
             <p className="font-bold text-inherit">ACME</p>
           </Link>
         </NavbarBrand>
-        <div className="hidden lg:flex gap-4 justify-start ml-2">
-          {siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <Link
-                className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
-                )}
-                color="foreground"
-                href={item.href}
-              >
-                {item.label}
-              </Link>
-            </NavbarItem>
-          ))}
-        </div>
       </NavbarContent>
 
       <NavbarContent
@@ -84,6 +62,9 @@ export const Navbar = () => {
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
         </NavbarItem>
+        <CreatePage />
+        <ShareModal />
+        <UserMenuDropdown />
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
@@ -92,25 +73,69 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarMenu>
-        <div className="mx-4 mt-2 flex flex-col gap-2">
-          {siteConfig.navMenuItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}`}>
-              <Link
-                color={
-                  index === 2
-                    ? "primary"
-                    : index === siteConfig.navMenuItems.length - 1
-                      ? "danger"
-                      : "foreground"
-                }
-                href="#"
-                size="lg"
-              >
-                {item.label}
-              </Link>
-            </NavbarMenuItem>
-          ))}
-        </div>
+        <NavbarMenuItem
+          className="flex items-center gap-4"
+          onClick={isDisconnected ? openConnectModal : undefined}
+        >
+          {isDisconnected ? (
+            <>
+              <AiOutlineLogin className="fill-foreground" size="18" />
+              <p className="font-bold text-foreground">Login</p>
+            </>
+          ) : (
+            <>
+              <IoWalletOutline className="fill-foreground" size="26" />
+              <span className="truncate">{address}</span>
+            </>
+          )}
+        </NavbarMenuItem>
+        <NavbarMenuItem className="flex items-center">
+          <Link isExternal className="items-center gap-4" href="/" size="lg">
+            {/* <LuWand size='18' className='fill-primary' /> */}
+            🪄
+            <span>Create your own page</span>
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem className="flex items-center">
+          <Link
+            isExternal
+            className="items-center gap-4"
+            color="foreground"
+            href="/"
+            size="lg"
+          >
+            <RxDashboard className="fill-foreground" size="18" />
+            <span>Dashboard</span>
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem className="flex items-center">
+          <Link
+            isExternal
+            className="items-center gap-4"
+            color="foreground"
+            href="/"
+            size="lg"
+          >
+            <MdOutlineHistory className="fill-foreground" size="18" />
+            <span>Transaction history</span>
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem className="flex items-center">
+          <div className="flex items-center gap-4" onClick={handleOpenModal}>
+            <IoShareSocialOutline className="fill-foreground" size="18" />
+            <span>Share this page</span>
+          </div>
+        </NavbarMenuItem>
+        <Divider className="w-full h-0.5" />
+        <NavbarMenuItem
+          className={`flex items-center gap-4 ${isDisconnected ? "hidden" : ""}`}
+          onClick={() => disconnect()}
+        >
+          <>
+            <AiOutlineLogout className="fill-danger" size="18" />
+            <span className="font-bold text-danger">Logout</span>
+          </>
+        </NavbarMenuItem>
       </NavbarMenu>
     </NextUINavbar>
   );

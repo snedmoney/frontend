@@ -4,7 +4,6 @@ import {
   ModalHeader,
   ModalBody,
   Button,
-  useDisclosure,
   Snippet,
   Chip,
 } from "@nextui-org/react";
@@ -14,12 +13,7 @@ import {
   AiFillInstagram,
   AiFillTikTok,
 } from "react-icons/ai";
-import {
-  IoLogoWhatsapp,
-  IoShareSocialOutline,
-  IoRocket,
-  IoLogoYoutube,
-} from "react-icons/io5";
+import { IoLogoWhatsapp, IoRocket, IoLogoYoutube } from "react-icons/io5";
 import { Link } from "@nextui-org/link";
 import { PiQrCodeFill } from "react-icons/pi";
 import { TbCodeCircle2Filled } from "react-icons/tb";
@@ -29,15 +23,20 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 type ShareModalProps = {
   title?: string;
-  triggerButton?: React.ReactNode;
 };
 
-const ShareModal = ({ title, triggerButton }: ShareModalProps) => {
-  const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
+const ShareModal = ({ title }: ShareModalProps) => {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const getBaseUrl = () => {
+    const { host, pathname } = window.location;
+
+    return `${host}${pathname}`;
+  };
+
   const searchParams = new URLSearchParams(location.search);
-  const modalOpen = searchParams.get("openShareModal") === "true";
+  const isOpen = searchParams.get("openShareModal") === "true";
 
   const clearQueryParam = useCallback(() => {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -48,39 +47,27 @@ const ShareModal = ({ title, triggerButton }: ShareModalProps) => {
 
   const handleClose = useCallback(() => {
     clearQueryParam();
-    onClose();
-  }, [clearQueryParam, onClose]);
+  }, [clearQueryParam]);
 
   useEffect(() => {
-    if (modalOpen) {
-      onOpen();
-    } else {
-      handleClose();
+    if (
+      searchParams.get("openShareModal") !== null &&
+      searchParams.get("openShareModal") !== "true"
+    ) {
+      clearQueryParam();
     }
-  }, [modalOpen, searchParams, onOpen, handleClose]);
+  }, [searchParams, handleClose]);
 
   return (
     <>
-      {triggerButton ? (
-        <div onClick={onOpen}>{triggerButton}</div>
-      ) : (
-        <Button
-          color="default"
-          endContent={<IoShareSocialOutline />}
-          variant="ghost"
-          onPress={onOpen}
-        >
-          Share
-        </Button>
-      )}
       <Modal
         className="mx-0 my-0 rounded-b-none sm:rounded-b-lg"
         classNames={{
           base: "h-[calc(100dvh-88px)] sm:h-auto",
         }}
         isOpen={isOpen}
+        portalContainer={document.body}
         onClose={handleClose}
-        onOpenChange={onOpenChange}
       >
         <ModalContent>
           <ModalHeader className=" text-default-400 bg-gradient-to-tr from-[#CCC2FF] to-white text-center">
@@ -227,7 +214,7 @@ const ShareModal = ({ title, triggerButton }: ShareModalProps) => {
                 symbol="🔗"
                 variant="bordered"
               >
-                {window.location.href}
+                {getBaseUrl()}
               </Snippet>
             </div>
             <div className="bg-default-100/80 flex flex-col gap-1 p-2 rounded-large border-1 border-secondary text-center text-sm w-10/12 m-auto my-0 shadow-md">
