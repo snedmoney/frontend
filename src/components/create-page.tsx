@@ -14,7 +14,7 @@ const CreatePage = ({
       as={Link}
       color="primary"
       href={href}
-      variant="ghost"
+      variant="shadow"
     >
       {textContent || "Create your own page"}
     </Button>
