@@ -24,6 +24,8 @@ import { Link } from "@nextui-org/link";
 import { PiQrCodeFill } from "react-icons/pi";
 import { TbCodeCircle2Filled } from "react-icons/tb";
 import { MdEmail } from "react-icons/md";
+import { useEffect, useCallback } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type ShareModalProps = {
   title?: string;
@@ -32,6 +34,30 @@ type ShareModalProps = {
 
 const ShareModal = ({ title, triggerButton }: ShareModalProps) => {
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+  const modalOpen = searchParams.get("openShareModal") === "true";
+
+  const clearQueryParam = useCallback(() => {
+    const newSearchParams = new URLSearchParams(searchParams);
+
+    newSearchParams.delete("openShareModal");
+    navigate({ search: newSearchParams.toString() }, { replace: true });
+  }, [navigate, searchParams]);
+
+  const handleClose = useCallback(() => {
+    clearQueryParam();
+    onClose();
+  }, [clearQueryParam, onClose]);
+
+  useEffect(() => {
+    if (modalOpen) {
+      onOpen();
+    } else {
+      handleClose();
+    }
+  }, [modalOpen, searchParams, onOpen, handleClose]);
 
   return (
     <>
@@ -53,7 +79,7 @@ const ShareModal = ({ title, triggerButton }: ShareModalProps) => {
           base: "h-[calc(100dvh-88px)] sm:h-auto",
         }}
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={handleClose}
         onOpenChange={onOpenChange}
       >
         <ModalContent>
