@@ -6,6 +6,7 @@ import {
   Button,
   useDisclosure,
   Snippet,
+  Chip,
 } from "@nextui-org/react";
 import { FaFacebook, FaFacebookMessenger } from "react-icons/fa6";
 import {
@@ -40,7 +41,7 @@ const ShareModal = ({ title, triggerButton }: ShareModalProps) => {
         <Button
           color="default"
           endContent={<IoShareSocialOutline />}
-          variant="shadow"
+          variant="ghost"
           onPress={onOpen}
         >
           Share
@@ -63,89 +64,134 @@ const ShareModal = ({ title, triggerButton }: ShareModalProps) => {
           </ModalHeader>
           <ModalBody className="text-default-600 py-4 gap-4">
             <div className="flex flex-col gap-4">
-              <p className="text-sm sm:text-md font-bold">
-                Choose your favorite way to share
-              </p>
-              <div className="grid grid-cols-4 gap-4 md:grid-cols-2 justify-start">
-                <Link
-                  isExternal
-                  className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
-                  color="foreground"
-                >
-                  <Button isIconOnly className="rounded-full " variant="light">
-                    <FaFacebook size="24" />
-                  </Button>
-                  <p className="text-xs">Facebook</p>
-                </Link>
-                <Link
-                  isExternal
-                  className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
-                  color="foreground"
-                >
-                  <Button isIconOnly className="rounded-full " variant="light">
-                    <AiFillInstagram size="26" />
-                  </Button>
-                  <p className="text-xs">Instagram</p>
-                </Link>
-                <Link
-                  isExternal
-                  className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
-                  color="foreground"
-                >
-                  <Button isIconOnly className="rounded-full " variant="light">
-                    <AiFillTwitterCircle size="26" />
-                  </Button>
-                  <p className="text-xs">Twitter</p>
-                </Link>
-                <Link
-                  isExternal
-                  className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
-                  color="foreground"
-                >
-                  <Button isIconOnly className="rounded-full " variant="light">
-                    <FaFacebookMessenger size="24" />
-                  </Button>
-                  <p className="text-xs">Messenger</p>
-                </Link>
-                <Link
-                  isExternal
-                  className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
-                  color="foreground"
-                >
-                  <Button isIconOnly className="rounded-full " variant="light">
-                    <IoLogoWhatsapp size="24" />
-                  </Button>
-                  <p className="text-xs">WhatsApp</p>
-                </Link>
-                <div
-                  className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
-                  color="foreground"
-                >
-                  <Button isIconOnly className="rounded-full " variant="light">
-                    <PiQrCodeFill size="24" />
-                  </Button>
-                  <p className="text-xs text-foreground">QR Code</p>
+              <>
+                <div className="flex gap-2 items-center">
+                  <p className="text-sm sm:text-md font-bold">
+                    Choose your favorite way to share
+                  </p>
+                  <Chip
+                    className="text-default-600"
+                    classNames={{ content: "font-bold" }}
+                    color="primary"
+                    size="sm"
+                    variant="flat"
+                  >
+                    Coming soon
+                  </Chip>
                 </div>
-                <Link
-                  isExternal
-                  className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
-                  color="foreground"
-                >
-                  <Button isIconOnly className="rounded-full " variant="light">
-                    <MdEmail size="28" />
-                  </Button>
-                  <p className="text-xs">Email</p>
-                </Link>
-                <div
-                  className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
-                  color="foreground"
-                >
-                  <Button isIconOnly className="rounded-full " variant="light">
-                    <TbCodeCircle2Filled size="28" />
-                  </Button>
-                  <p className="text-xs text-foreground">Widget</p>
+                <div className="grid grid-cols-4 gap-4 sm:grid-cols-3 lg:grid-cols-2 justify-start opacity-30 pointer-events-none">
+                  <Link
+                    isExternal
+                    className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
+                    color="foreground"
+                  >
+                    <Button
+                      isIconOnly
+                      className="rounded-full "
+                      variant="light"
+                    >
+                      <FaFacebook size="24" />
+                    </Button>
+                    <p className="text-xs">Facebook</p>
+                  </Link>
+                  <Link
+                    isExternal
+                    className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
+                    color="foreground"
+                  >
+                    <Button
+                      isIconOnly
+                      className="rounded-full "
+                      variant="light"
+                    >
+                      <AiFillInstagram size="26" />
+                    </Button>
+                    <p className="text-xs">Instagram</p>
+                  </Link>
+                  <Link
+                    isExternal
+                    className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
+                    color="foreground"
+                  >
+                    <Button
+                      isIconOnly
+                      className="rounded-full "
+                      variant="light"
+                    >
+                      <AiFillTwitterCircle size="26" />
+                    </Button>
+                    <p className="text-xs">Twitter</p>
+                  </Link>
+                  <Link
+                    isExternal
+                    className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
+                    color="foreground"
+                  >
+                    <Button
+                      isIconOnly
+                      className="rounded-full "
+                      variant="light"
+                    >
+                      <FaFacebookMessenger size="24" />
+                    </Button>
+                    <p className="text-xs">Messenger</p>
+                  </Link>
+                  <Link
+                    isExternal
+                    className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
+                    color="foreground"
+                  >
+                    <Button
+                      isIconOnly
+                      className="rounded-full "
+                      variant="light"
+                    >
+                      <IoLogoWhatsapp size="24" />
+                    </Button>
+                    <p className="text-xs">WhatsApp</p>
+                  </Link>
+                  <div
+                    className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
+                    color="foreground"
+                  >
+                    <Button
+                      isIconOnly
+                      className="rounded-full "
+                      variant="light"
+                    >
+                      <PiQrCodeFill size="24" />
+                    </Button>
+                    <p className="text-xs text-foreground">QR Code</p>
+                  </div>
+                  <Link
+                    isExternal
+                    className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
+                    color="foreground"
+                  >
+                    <Button
+                      isIconOnly
+                      className="rounded-full "
+                      variant="light"
+                    >
+                      <MdEmail size="28" />
+                    </Button>
+                    <p className="text-xs">Email</p>
+                  </Link>
+                  <div
+                    className="cursor-pointer flex flex-col sm:flex-row gap-2 items-center"
+                    color="foreground"
+                  >
+                    <Button
+                      isIconOnly
+                      className="rounded-full "
+                      variant="light"
+                    >
+                      <TbCodeCircle2Filled size="28" />
+                    </Button>
+                    <p className="text-xs text-foreground">Widget</p>
+                  </div>
                 </div>
-              </div>
+              </>
             </div>
             <div className="flex flex-col gap-1">
               <p className="text-sm sm:text-md font-bold">Page link</p>
@@ -155,7 +201,7 @@ const ShareModal = ({ title, triggerButton }: ShareModalProps) => {
                 symbol="🔗"
                 variant="bordered"
               >
-                Quick Share link
+                {window.location.href}
               </Snippet>
             </div>
             <div className="bg-default-100/80 flex flex-col gap-1 p-2 rounded-large border-1 border-secondary text-center text-sm w-10/12 m-auto my-0 shadow-md">
