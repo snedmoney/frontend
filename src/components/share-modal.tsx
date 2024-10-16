@@ -49,7 +49,7 @@ const ShareModal = ({ title, triggerButton }: ShareModalProps) => {
       <Modal
         className="mx-0 my-0 rounded-b-none sm:rounded-b-lg"
         classNames={{
-          base: "h-[87dvh] sm:h-auto",
+          base: "h-[calc(100dvh-88px)] sm:h-auto",
         }}
         isOpen={isOpen}
         onClose={onClose}
@@ -124,7 +124,7 @@ const ShareModal = ({ title, triggerButton }: ShareModalProps) => {
                   <Button isIconOnly className="rounded-full " variant="light">
                     <PiQrCodeFill size="24" />
                   </Button>
-                  <p className="text-xs">QR Code</p>
+                  <p className="text-xs text-foreground">QR Code</p>
                 </div>
                 <Link
                   isExternal
@@ -143,7 +143,7 @@ const ShareModal = ({ title, triggerButton }: ShareModalProps) => {
                   <Button isIconOnly className="rounded-full " variant="light">
                     <TbCodeCircle2Filled size="28" />
                   </Button>
-                  <p className="text-xs">Widget</p>
+                  <p className="text-xs text-foreground">Widget</p>
                 </div>
               </div>
             </div>
