@@ -1,6 +1,7 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { apiClient } from '../config/api';
+import { useEffect } from 'react';
 
 export type Token = {
   chainId: number;
@@ -13,15 +14,21 @@ export type Token = {
   tokenAddress: string;
 };
 
-const fetchTokens = async (chainId: number, page: number = 1): Promise<Token[]> => {
+export type TokensResponse = {
+  data: Token[];
+  page: number;
+  per_page: number;
+  count: number;
+}
+
+const fetchTokens = async (chainId: number, page: number = 1): Promise<TokensResponse> => {
   try {
-    const response: AxiosResponse<Token[]> = await apiClient.get(`/tokens/chains/${chainId}`, {
+    const response: AxiosResponse<TokensResponse> = await apiClient.get(`/tokens/chains/${chainId}`, {
       params: {
         page: page,
-        per_page: 30
+        per_page: 20
       }
     });
-    console.log(response)
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
@@ -31,19 +38,34 @@ const fetchTokens = async (chainId: number, page: number = 1): Promise<Token[]> 
   }
 };
 
-
 const useGetTokens = (chainId: Token['chainId']) => {
-  return useInfiniteQuery<Token[], Error>({
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['tokens', chainId] });
+  }, [chainId, queryClient]);
+
+  const manualRefetch = () => {
+    queryClient.invalidateQueries({ queryKey: ['tokens', chainId] });
+  };
+
+  const query =  useInfiniteQuery<TokensResponse, Error>({
     queryKey: ['tokens', chainId],
     queryFn: ({ pageParam = 1 }) => fetchTokens(chainId, pageParam as number),
     getNextPageParam: (lastPage, pages) => {
-      const currentPage = pages.length;
-      return lastPage.length > 0 ? currentPage + 1 : undefined;
+      const nextPage = pages.length + 1;
+      return lastPage.data.length > 0 ? nextPage : undefined;
     },
     initialPageParam: 1,
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
     enabled: !!chainId,
+    
   });
+  return {
+    ...query,
+    manualRefetch
+  }
 };
+
 export default useGetTokens;
