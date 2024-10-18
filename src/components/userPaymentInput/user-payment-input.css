@@ -1,0 +1,10 @@
+.remove-stepper input[type="number"]::-webkit-outer-spin-button,
+.remove-stepper input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.remove-stepper input[type="number"] {
+  -moz-appearance: textfield; /* For Firefox */
+  appearance: textfield;
+}
