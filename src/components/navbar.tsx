@@ -8,31 +8,50 @@ import {
   NavbarMenu,
   NavbarMenuItem,
 } from "@nextui-org/navbar";
-import { link as linkStyles } from "@nextui-org/theme";
-import clsx from "clsx";
-
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount, useSignMessage } from "wagmi";
+import { useAccount, useSignMessage, useDisconnect } from "wagmi";
 import { useEffect } from "react";
+import { AiOutlineLogin, AiOutlineLogout } from "react-icons/ai";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { IoWalletOutline, IoShareSocialOutline } from "react-icons/io5";
+import { RxDashboard } from "react-icons/rx";
+import { MdOutlineHistory } from "react-icons/md";
+import { Divider } from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
+
+import UserMenuDropdown from "./user-menu-dropdown";
+import CreatePage from "./create-page";
+
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
-import { Logo } from "@/components/icons";
+import { TwitterIcon, GithubIcon, DiscordIcon } from "@/components/icons";
+import BlackLogoSVG from "@/assets/logos/only-logo-black.svg";
+import WhiteLogoSVG from "@/assets/logos/only-logo-white.svg";
 import { apiClient } from "@/config/api";
+import useTheme from "@/hooks/use-theme";
+import useShareModal from "@/hooks/use-share-modal";
 
+//TODO: conditionally render create your own page and share button. Render create your own page if not page owner. Render share button if page owner.
 export const Navbar = () => {
   const token = localStorage.getItem("token");
-  const { isConnected, isDisconnected } = useAccount();
+  const { isConnected, isDisconnected, address } = useAccount();
   const { signMessage, isSuccess, data } = useSignMessage();
+  const { openConnectModal } = useConnectModal();
+  const { disconnect } = useDisconnect();
+  const { isDark } = useTheme();
+  const openShareModal = useShareModal();
+
   useEffect(() => {
     if (!token && isConnected) {
       signMessage({ message: "hello world" });
     }
   }, [isConnected]);
+
   useEffect(() => {
     if (isDisconnected) {
       localStorage.removeItem("token");
     }
   }, [isDisconnected]);
+
   useEffect(() => {
     async function process() {
       if (isSuccess && data) {
@@ -47,7 +66,7 @@ export const Navbar = () => {
   }, [isSuccess, data]);
 
   return (
-    <NextUINavbar maxWidth="xl" position="sticky">
+    <NextUINavbar maxWidth="2xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <Link
@@ -55,26 +74,14 @@ export const Navbar = () => {
             color="foreground"
             href="/"
           >
-            <Logo />
-            <p className="font-bold text-inherit">ACME</p>
+            {!isDark ? (
+              <BlackLogoSVG height="30" width="30" />
+            ) : (
+              <WhiteLogoSVG height="30" width="30" />
+            )}
+            <p className="font-bold text-inherit">Sned</p>
           </Link>
         </NavbarBrand>
-        <div className="hidden lg:flex gap-4 justify-start ml-2">
-          {siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <Link
-                className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
-                )}
-                color="foreground"
-                href={item.href}
-              >
-                {item.label}
-              </Link>
-            </NavbarItem>
-          ))}
-        </div>
       </NavbarContent>
 
       <NavbarContent
@@ -82,8 +89,27 @@ export const Navbar = () => {
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
+          <Link isExternal href={siteConfig.links.twitter}>
+            <TwitterIcon className="text-default-500" />
+          </Link>
+          <Link isExternal href={siteConfig.links.discord}>
+            <DiscordIcon className="text-default-500" />
+          </Link>
+          <Link isExternal href={siteConfig.links.github}>
+            <GithubIcon className="text-default-500" />
+          </Link>
           <ThemeSwitch />
         </NavbarItem>
+        <CreatePage />
+        <Button
+          color="default"
+          endContent={<IoShareSocialOutline />}
+          variant="ghost"
+          onPress={openShareModal}
+        >
+          Share
+        </Button>
+        <UserMenuDropdown />
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
@@ -92,24 +118,73 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarMenu>
-        <div className="mx-4 mt-2 flex flex-col gap-2">
-          {siteConfig.navMenuItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}`}>
-              <Link
-                color={
-                  index === 2
-                    ? "primary"
-                    : index === siteConfig.navMenuItems.length - 1
-                      ? "danger"
-                      : "foreground"
-                }
-                href="#"
-                size="lg"
-              >
-                {item.label}
-              </Link>
-            </NavbarMenuItem>
-          ))}
+        <div className="mx-1 mt-2 flex flex-col gap-4">
+          <NavbarMenuItem
+            className="flex items-center gap-4"
+            onClick={isDisconnected ? openConnectModal : undefined}
+          >
+            {isDisconnected ? (
+              <>
+                <AiOutlineLogin className="fill-foreground" size="18" />
+                <p className="font-bold text-foreground">Login</p>
+              </>
+            ) : (
+              <>
+                <IoWalletOutline className="fill-foreground" size="26" />
+                <span className="truncate">{address}</span>
+              </>
+            )}
+          </NavbarMenuItem>
+          <NavbarMenuItem className="flex items-center">
+            <Link isExternal className="items-center gap-4" href="/" size="lg">
+              {/* <LuWand size='18' className='fill-primary' /> */}
+              🪄
+              <span>Create your own page</span>
+            </Link>
+          </NavbarMenuItem>
+          <NavbarMenuItem className="flex items-center">
+            <Link
+              isExternal
+              className="items-center gap-4"
+              color="foreground"
+              href="/"
+              size="lg"
+            >
+              <RxDashboard className="fill-foreground" size="18" />
+              <span>Dashboard</span>
+            </Link>
+          </NavbarMenuItem>
+          <NavbarMenuItem className="flex items-center">
+            <Link
+              isExternal
+              className="items-center gap-4"
+              color="foreground"
+              href="/"
+              size="lg"
+            >
+              <MdOutlineHistory className="fill-foreground" size="18" />
+              <span>Transaction history</span>
+            </Link>
+          </NavbarMenuItem>
+          <NavbarMenuItem
+            className="flex items-center"
+            onClick={openShareModal}
+          >
+            <div className="flex items-center gap-4">
+              <IoShareSocialOutline className="fill-foreground" size="18" />
+              <span>Share this page</span>
+            </div>
+          </NavbarMenuItem>
+          <Divider className="w-full h-0.5" />
+          <NavbarMenuItem
+            className={`flex items-center gap-4 ${isDisconnected ? "hidden" : ""}`}
+            onClick={() => disconnect()}
+          >
+            <>
+              <AiOutlineLogout className="fill-danger" size="18" />
+              <span className="font-bold text-danger">Logout</span>
+            </>
+          </NavbarMenuItem>
         </div>
       </NavbarMenu>
     </NextUINavbar>
