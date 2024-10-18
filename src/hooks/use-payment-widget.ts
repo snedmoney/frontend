@@ -5,15 +5,19 @@ const usePaymentWidget = () => {
   const {
     selectedChain,
     selectedToken,
+    tokenAmount,
     setSelectedChain,
     setSelectedToken,
+    setTokenAmount
   } = useContext(PaymentWidgetContext);
 
   return {
     selectedChain,
     selectedToken,
+    tokenAmount,
     setSelectedChain,
     setSelectedToken,
+    setTokenAmount
   };
 };
 

@@ -29,14 +29,18 @@ export type PaymentWidgetContextType = {
   selectedToken: Token;
   setSelectedChain: (chain: Chain) => void;
   setSelectedToken: (token: Token) => void;
+  tokenAmount?: number;
+  setTokenAmount: (amount?: number) => void;
 };
 
 //Later we might need more values for chain switching
 const PaymentWidgetContext = createContext<PaymentWidgetContextType>({
   selectedChain: {} as Chain,
   selectedToken: {} as Token,
-  setSelectedChain: () => {},
-  setSelectedToken: () => {},
+  tokenAmount: undefined,
+  setSelectedChain: () => { },
+  setSelectedToken: () => { },
+  setTokenAmount: () => { }
 });
 
 export default PaymentWidgetContext;
