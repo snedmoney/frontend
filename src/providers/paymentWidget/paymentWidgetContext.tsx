@@ -38,9 +38,9 @@ const PaymentWidgetContext = createContext<PaymentWidgetContextType>({
   selectedChain: {} as Chain,
   selectedToken: {} as Token,
   tokenAmount: undefined,
-  setSelectedChain: () => { },
-  setSelectedToken: () => { },
-  setTokenAmount: () => { }
+  setSelectedChain: () => {},
+  setSelectedToken: () => {},
+  setTokenAmount: () => {}
 });
 
 export default PaymentWidgetContext;

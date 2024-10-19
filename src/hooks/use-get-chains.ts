@@ -1,19 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { apiClient } from '../config/api';
-
-export type Chain = {
-  networkId: number;
-  name: string;
-  allowed: boolean;
-  iconURL: string;
-  nativeCurrency: {
-    name: string;
-    symbol: string;
-    decimals: number;
-  };
-  explorerURL: string;
-}
+import type { Chain } from '@/providers/paymentWidget/paymentWidgetContext';
 
 const fetchChains = async (): Promise<Chain[]> => {
   try {
@@ -26,10 +14,8 @@ const fetchChains = async (): Promise<Chain[]> => {
       "BNB Smart Chain",
       "Polygon",
       "Avalanche C-Chain",
-      "Linea",
-      "Scroll",
       "Fantom Opera",
-      "Blast",
+      "Klaytn",
       "Aurora"
     ];
 

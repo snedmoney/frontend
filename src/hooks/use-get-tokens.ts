@@ -2,17 +2,7 @@ import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { apiClient } from '../config/api';
 import { useEffect } from 'react';
-
-export type Token = {
-  chainId: number;
-  chainName: string;
-  decimals: number;
-  id: number;
-  logoURI: string;
-  name: string;
-  symbol: string;
-  tokenAddress: string;
-};
+import type { Token } from '@/providers/paymentWidget/paymentWidgetContext';
 
 export type TokensResponse = {
   data: Token[];

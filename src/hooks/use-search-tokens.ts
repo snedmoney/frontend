@@ -2,17 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { apiClient } from '../config/api';
 import { useEffect } from 'react';
-
-type Token = {
-  chainId: number;
-  chainName: string;
-  decimals: number;
-  id: number;
-  logoURI: string;
-  name: string;
-  symbol: string;
-  tokenAddress: string;
-};
+import type { Token } from '@/providers/paymentWidget/paymentWidgetContext';
 
 const searchTokens = async (chainId: number, searchParam: string): Promise<Token[]> => {
   try {
