@@ -6,6 +6,8 @@ import InfiniteScrollTokenList from "./infinite-scrolling-token-list";
 import TokenSearchInput from "./token-search-input";
 import usePaymentWidget from "@/hooks/use-payment-widget";
 import ScrollableChainList from "./scrollable-chain-list";
+import { switchChain } from '@wagmi/core';
+import { config } from '@/providers/provider';
 
 type PaymentTokenModalProps = {
   isOpen: boolean;
@@ -22,9 +24,11 @@ const PaymentTokenModal = ({ isOpen, onOpenChange, chains, onModalClose }: Payme
     const chosenChain = chains.find(chain => chain.networkId === parseInt(chainId));
     setInnerSelectedChain(chosenChain!);
   }
-  const onTokenClick = () => {
+  const onTokenClick = async () => {
     setSelectedChain(innerSelectedChain);
     onModalClose();
+    //@ts-expect-error types are correct
+    await switchChain(config, { chainId: innerSelectedChain.networkId });
   }
 
   useEffect(() => {
