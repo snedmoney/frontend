@@ -1,22 +1,23 @@
 import usePaymentWidget from "@/hooks/use-payment-widget"
+import { type Chain } from "@/providers/paymentWidget/paymentWidgetContext"
 import { Button } from "@nextui-org/button"
 import { Skeleton } from "@nextui-org/react"
 import { FaCaretDown } from "react-icons/fa6"
 
 const SelectedChain = ({ isLoading, onOpen }: { isLoading: boolean, onOpen: () => void }) => {
-  const { selectedChain } = usePaymentWidget();
+  const { selectedChain = {} as Chain } = usePaymentWidget();
   return (
     <>
       {isLoading ? (
-        <Skeleton className="h-[40px]" />
+        <Skeleton className="rounded-full w-[120px] h-[32px]" />
       ) : (
         <Button
-          className="inline-flex justify-start items-center gap-1 text-sm cursor-pointer px-0"
+          className="inline-flex justify-start items-center gap-1 text-sm cursor-pointer px-0 h-8"
           data-hover="false"
           variant="light"
           onClick={onOpen}
         >
-          <p className="text-foreground-600 p-0">From </p>
+          <p className="text-foreground-500 p-0 font-bold">From </p>
           {Object.keys(selectedChain).length ?
             <>
               <img
@@ -25,12 +26,12 @@ const SelectedChain = ({ isLoading, onOpen }: { isLoading: boolean, onOpen: () =
                 src={selectedChain?.iconURL}
                 width="16"
               />
-              <p className='truncate max-w-full'>{selectedChain?.name}</p>
+              <p className='truncate max-w-full text-foreground-500 font-bold'>{selectedChain?.name}</p>
             </>
             :
-            <span className='hover:underline underline-offset-4'>Select chain</span>
+            <span className='hover:underline underline-offset-4 text-foreground-500 font-bold'>Select chain</span>
           }
-          <FaCaretDown className="text-foreground-600" size="8" />
+          <FaCaretDown className="text-foreground-500" size="8" />
         </Button>
       )}
     </>

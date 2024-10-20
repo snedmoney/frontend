@@ -66,7 +66,7 @@ const InfiniteScrollTokenList = ({ chainId, onTokenClick }: TInfiniteScrollToken
 
   return (
     <Listbox
-      aria-label="Tokens List"
+      aria-label="Available tokens list"
       variant="flat"
       disallowEmptySelection
       selectionMode="single"
