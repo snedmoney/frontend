@@ -1,15 +1,15 @@
+import usePaymentWidget from "@/hooks/use-payment-widget";
 import { Input } from "@nextui-org/react";
 import React, { useRef } from "react";
 import { FaSearch } from "react-icons/fa";
 
 type TokenSearchInputProps = {
-  setIsSearching: (isSearching: boolean) => void;
   setSearchInput: (searchInput: string) => void;
   searchInput: string;
-  isSearching: boolean;
 }
 
-const TokenSearchInput = ({ setIsSearching, setSearchInput, searchInput, isSearching }: TokenSearchInputProps) => {
+const TokenSearchInput = ({ setSearchInput, searchInput }: TokenSearchInputProps) => {
+  const { isSearching, setIsSearching } = usePaymentWidget();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
   };

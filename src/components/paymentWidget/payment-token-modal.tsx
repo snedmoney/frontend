@@ -19,9 +19,8 @@ type PaymentTokenModalProps = {
 }
 
 const PaymentTokenModal = ({ isOpen, onOpenChange, chains, onModalClose, isLoadingChains }: PaymentTokenModalProps) => {
-  const { selectedChain, setSelectedChain } = usePaymentWidget();
+  const { selectedChain, setSelectedChain, setIsSearching, isSearching } = usePaymentWidget();
   const [innerSelectedChain, setInnerSelectedChain] = useState(selectedChain);
-  const [isSearching, setIsSearching] = useState(false);
   const [searchInput, setSearchInput] = useState('');
 
   const onChainClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -46,6 +45,7 @@ const PaymentTokenModal = ({ isOpen, onOpenChange, chains, onModalClose, isLoadi
       classNames={{ backdrop: "bg-black/50", closeButton: "sm:top-2 sm:right-2.5 rounded-none" }}
       isOpen={isOpen}
       onOpenChange={onOpenChange}
+      onClose={() => setIsSearching(false)}
       size='md'
       scrollBehavior="inside"
       radius='none'
@@ -57,7 +57,7 @@ const PaymentTokenModal = ({ isOpen, onOpenChange, chains, onModalClose, isLoadi
         </ModalHeader>
         <Divider />
         <div className='px-3 sm:px-6 pt-5'>
-          <TokenSearchInput setIsSearching={setIsSearching} setSearchInput={setSearchInput} searchInput={searchInput} isSearching={isSearching} />
+          <TokenSearchInput setSearchInput={setSearchInput} searchInput={searchInput} />
           <p className="text-small font-bold pr-3 pt-3 pb-1">
             Select network: {innerSelectedChain?.name}
           </p>
@@ -67,7 +67,7 @@ const PaymentTokenModal = ({ isOpen, onOpenChange, chains, onModalClose, isLoadi
             <ScrollableChainList chains={chains} innerSelectedChain={innerSelectedChain} onChainClick={onChainClick} />
           }
           <p className="text-small font-bold pr-3 pt-3 pb-1">
-            Available Tokens
+            {isSearching ? 'Available Search Tokens' : 'Available Tokens'}
           </p>
         </div>
         <ModalBody className="px-0 py-0 sm:pb-5 sm:px-3">
@@ -75,7 +75,12 @@ const PaymentTokenModal = ({ isOpen, onOpenChange, chains, onModalClose, isLoadi
             (
               <InfiniteScrollTokenList chainId={innerSelectedChain?.networkId} onTokenClick={onTokenClick} />
             ) : (
-              <TokenSearchResult chainId={innerSelectedChain?.networkId} onTokenClick={onTokenClick} searchInput={searchInput} isSearching={isSearching} />
+              <TokenSearchResult
+                chainId={innerSelectedChain?.networkId}
+                onTokenClick={onTokenClick}
+                searchInput={searchInput}
+                setSearchInput={setSearchInput}
+              />
             )}
         </ModalBody>
       </ModalContent>
