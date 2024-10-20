@@ -11,16 +11,26 @@ import usePaymentWidget from "@/hooks/use-payment-widget";
 import SelectedChain from "../selected-chain";
 import SelectedToken from "../selected-token";
 import CustomConnectButton from "../custom-connect-button";
+import useBatchFetchBalances from "@/hooks/use-batch-fetch-balances";
+import { useChainId } from 'wagmi';
 
 const UserPaymentInput = () => {
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
+  const chainId = useChainId();
   const { data: chains = [], isLoading } = useGetChains();
+  const initialChain = chains.find(chain => chain.networkId === chainId);
   const { setSelectedChain } = usePaymentWidget();
-
+  // const { } = useBatchFetchBalances([{
+  //   tokenAddress: "0x123",
+  //   decimal: 0
+  // }, {
+  //   tokenAddress: '0x234',
+  //   decimal: 1
+  // }]);
   useEffect(() => {
-    if (!isLoading) setSelectedChain(chains?.[0]!);
-  }, [isLoading]);
-
+    if (!isLoading) setSelectedChain(initialChain!);
+  }, [isLoading, chainId]);
+  const error_condition = false;
   return (
     <>
       <Card radius="sm" shadow="sm">
@@ -35,14 +45,14 @@ const UserPaymentInput = () => {
             <Input
               className="remove-stepper"
               classNames={{
-                input: ["text-right", "text-2xl", "font-bold"],
+                input: ["text-right", "text-2xl", "font-bold", `${error_condition && "border-danger border-1"}`],
                 innerWrapper: ["focus:bg-transparent"],
                 inputWrapper: [
                   "bg-transparent",
                   "pr-0",
                   "shadow-none",
                   "group-data-[focus=true]:bg-transparent",
-                  "data-[hover=true]:bg-transparent"
+                  "data-[hover=true]:bg-transparent",
                 ],
               }}
               radius='none'
@@ -52,6 +62,7 @@ const UserPaymentInput = () => {
               type="number"
             />
           </div>
+          {error_condition && <p className="text-right text-danger">err msg</p>}
           <p className="text-right text-foreground-500">$1234</p>
         </CardBody>
       </Card>
