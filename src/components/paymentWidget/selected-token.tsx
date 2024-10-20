@@ -14,14 +14,14 @@ const SelectedToken = ({ onOpen }: { onOpen: () => void }) => {
       {Object.keys(selectedToken).length ?
         <>
           <img src={selectedToken.logoURI} height='24' width='24' />
-          <span className="pl-1 text-l">
+          <span className="pl-1 text-l text-foreground-500">
             <b>{selectedToken.symbol}</b>
           </span>
         </>
         :
-        <span className='hover:underline underline-offset-4'>Select token</span>
+        <span className='hover:underline underline-offset-4 text-foreground-500 font-bold'>Select token</span>
       }
-      <span className="pl-1 text-foreground-600">
+      <span className="pl-1 text-foreground-500">
         <FaCaretDown size="12" />
       </span>
     </Button>

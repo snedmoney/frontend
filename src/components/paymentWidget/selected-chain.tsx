@@ -16,7 +16,7 @@ const SelectedChain = ({ isLoading, onOpen }: { isLoading: boolean, onOpen: () =
           variant="light"
           onClick={onOpen}
         >
-          <p className="text-foreground-600 p-0">From </p>
+          <p className="text-foreground-500 p-0 font-bold">From </p>
           {Object.keys(selectedChain).length ?
             <>
               <img
@@ -25,12 +25,12 @@ const SelectedChain = ({ isLoading, onOpen }: { isLoading: boolean, onOpen: () =
                 src={selectedChain?.iconURL}
                 width="16"
               />
-              <p className='truncate max-w-full'>{selectedChain?.name}</p>
+              <p className='truncate max-w-full text-foreground-500 font-bold'>{selectedChain?.name}</p>
             </>
             :
-            <span className='hover:underline underline-offset-4'>Select chain</span>
+            <span className='hover:underline underline-offset-4 text-foreground-500 font-bold'>Select chain</span>
           }
-          <FaCaretDown className="text-foreground-600" size="8" />
+          <FaCaretDown className="text-foreground-500" size="8" />
         </Button>
       )}
     </>
