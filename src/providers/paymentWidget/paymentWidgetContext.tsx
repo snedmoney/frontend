@@ -30,8 +30,8 @@ export type PaymentWidgetContextType = {
   isSearching: boolean;
   setSelectedChain: (chain: Chain) => void;
   setSelectedToken: (token: Token) => void;
-  tokenAmount?: number;
-  setTokenAmount: (amount?: number) => void;
+  tokenAmount?: string;
+  setTokenAmount: (amount?: string) => void;
   setIsSearching: (isSearching: boolean) => void;
 };
 
