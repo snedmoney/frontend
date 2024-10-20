@@ -40,9 +40,9 @@ const TokenSearchResult = ({ onTokenClick, chainId, searchInput, isSearching }: 
       }}
     >
       {searchResult.length > 0 ? (
-        searchResult.map((token, index) => (
+        searchResult.map(token => (
           <ListboxItem
-            key={token.tokenAddress + token.symbol + index}
+            key={token.id}
             textValue={token.name}
             classNames={{
               selectedIcon: 'hidden',

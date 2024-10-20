@@ -18,7 +18,6 @@ const TokenSearchInput = ({ setIsSearching, setSearchInput, searchInput, isSearc
     setIsSearching(false);
     setSearchInput('');
     if (inputRef.current) {
-      console.log(inputRef.current)
       inputRef.current.blur();
     }
   }
