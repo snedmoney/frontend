@@ -1,7 +1,8 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { apiClient } from '../config/api';
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import debounce from 'lodash.debounce';
 import type { Token } from '@/providers/paymentWidget/paymentWidgetContext';
 
 const searchTokens = async (chainId: number, searchParam: string): Promise<Token[]> => {
@@ -21,16 +22,28 @@ const searchTokens = async (chainId: number, searchParam: string): Promise<Token
 };
 
 const useSearchTokens = (chainId: Token['chainId'], searchParam: string) => {
+  const [debouncedSearchParam, setDebouncedSearchParam] = useState(searchParam);
   const queryClient = useQueryClient();
 
+  const debouncedSetSearchParam = useCallback(
+    debounce((value: string) => {
+      setDebouncedSearchParam(value);
+    }, 500),
+    []
+  );
+
   useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ['tokens', chainId, searchParam] });
-  }, [chainId, searchParam, queryClient]);
+    debouncedSetSearchParam(searchParam);
+  }, [searchParam, debouncedSetSearchParam]);
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['tokens', chainId, debouncedSearchParam] });
+  }, [chainId, debouncedSearchParam, queryClient]);
 
   return useQuery<Token[], Error>({
-    queryKey: ['tokens', chainId, searchParam],
-    queryFn: () => searchTokens(chainId, searchParam),
-    enabled: !!chainId && !!searchParam,
+    queryKey: ['tokens', chainId, debouncedSearchParam],
+    queryFn: () => searchTokens(chainId, debouncedSearchParam),
+    enabled: !!chainId && debouncedSearchParam.length > 0,
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
   });

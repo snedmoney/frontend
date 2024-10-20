@@ -14,7 +14,7 @@ import CustomConnectButton from "../custom-connect-button";
 
 const UserPaymentInput = () => {
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
-  const { data: chains, isLoading } = useGetChains();
+  const { data: chains = [], isLoading } = useGetChains();
   const { setSelectedChain } = usePaymentWidget();
 
   useEffect(() => {
@@ -60,6 +60,7 @@ const UserPaymentInput = () => {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onModalClose={onClose}
+        isLoadingChains={isLoading}
       />
     </>
   );

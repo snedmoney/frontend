@@ -1,4 +1,4 @@
-import { Modal, ModalContent, ModalHeader, ModalBody, Divider } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, Divider, Spinner } from "@nextui-org/react";
 import { IoCloseSharp } from "react-icons/io5";
 import React, { useEffect, useState } from "react";
 import type { Chain } from '@/providers/paymentWidget/paymentWidgetContext';
@@ -8,17 +8,22 @@ import usePaymentWidget from "@/hooks/use-payment-widget";
 import ScrollableChainList from "./scrollable-chain-list";
 import { switchChain } from '@wagmi/core';
 import { config } from '@/providers/provider';
+import TokenSearchResult from "./token-search-result";
 
 type PaymentTokenModalProps = {
   isOpen: boolean;
   onOpenChange: () => void;
   chains: Chain[];
   onModalClose: () => void;
+  isLoadingChains: boolean;
 }
 
-const PaymentTokenModal = ({ isOpen, onOpenChange, chains, onModalClose }: PaymentTokenModalProps) => {
+const PaymentTokenModal = ({ isOpen, onOpenChange, chains, onModalClose, isLoadingChains }: PaymentTokenModalProps) => {
   const { selectedChain, setSelectedChain } = usePaymentWidget();
   const [innerSelectedChain, setInnerSelectedChain] = useState(selectedChain);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
+
   const onChainClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const chainId = e.currentTarget.getAttribute("data-chain")!;
     const chosenChain = chains.find(chain => chain.networkId === parseInt(chainId));
@@ -52,17 +57,26 @@ const PaymentTokenModal = ({ isOpen, onOpenChange, chains, onModalClose }: Payme
         </ModalHeader>
         <Divider />
         <div className='px-3 sm:px-6 pt-5'>
-          <TokenSearchInput />
+          <TokenSearchInput setIsSearching={setIsSearching} setSearchInput={setSearchInput} searchInput={searchInput} isSearching={isSearching} />
           <p className="text-small font-bold pr-3 pt-3 pb-1">
             Select network: {innerSelectedChain?.name}
           </p>
-          <ScrollableChainList chains={chains} innerSelectedChain={innerSelectedChain} onChainClick={onChainClick} />
+          {isLoadingChains ?
+            <div className="p-0 py-2 grid place-items-center"><Spinner aria-label="Chains Loading" color='default' /></div>
+            :
+            <ScrollableChainList chains={chains} innerSelectedChain={innerSelectedChain} onChainClick={onChainClick} />
+          }
           <p className="text-small font-bold pr-3 pt-3 pb-1">
             Available Tokens
           </p>
         </div>
         <ModalBody className="px-0 py-0 sm:pb-5 sm:px-3">
-          <InfiniteScrollTokenList chainId={innerSelectedChain.networkId} onTokenClick={onTokenClick} />
+          {!isSearching ?
+            (
+              <InfiniteScrollTokenList chainId={innerSelectedChain?.networkId} onTokenClick={onTokenClick} />
+            ) : (
+              <TokenSearchResult chainId={innerSelectedChain?.networkId} onTokenClick={onTokenClick} searchInput={searchInput} isSearching={isSearching} />
+            )}
         </ModalBody>
       </ModalContent>
     </Modal >
