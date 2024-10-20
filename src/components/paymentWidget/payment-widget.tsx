@@ -10,6 +10,8 @@ type PaymentWidgetProps = {
   footerContent?: React.ReactNode;
 }
 
+//TODO: Input needs some validation (disable send button), need to check balance when clicking on submit button, need to get token price
+// waiting for balance from backend
 const PaymentWidget = ({ headerContent, bodyContent, footerContent }: PaymentWidgetProps) => {
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();

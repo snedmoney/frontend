@@ -10,11 +10,11 @@ type TokenSearchResultProps = {
   onTokenClick: () => void;
   chainId: number;
   searchInput: string | null;
-  isSearching: boolean;
+  setSearchInput: (searchInput: string) => void;
 };
 
-const TokenSearchResult = ({ onTokenClick, chainId, searchInput, isSearching }: TokenSearchResultProps) => {
-  const { setSelectedToken } = usePaymentWidget();
+const TokenSearchResult = ({ onTokenClick, chainId, searchInput, setSearchInput }: TokenSearchResultProps) => {
+  const { setSelectedToken, isSearching, setIsSearching } = usePaymentWidget();
   const { data: searchResult = [], isLoading } = useSearchTokens(chainId, searchInput ?? '');
   // if (isError) {
   //   return (
@@ -40,9 +40,9 @@ const TokenSearchResult = ({ onTokenClick, chainId, searchInput, isSearching }: 
       }}
     >
       {searchResult.length > 0 ? (
-        searchResult.map((token, index) => (
+        searchResult.map(token => (
           <ListboxItem
-            key={token.tokenAddress + token.symbol + index}
+            key={token.id}
             textValue={token.name}
             classNames={{
               selectedIcon: 'hidden',
@@ -51,6 +51,8 @@ const TokenSearchResult = ({ onTokenClick, chainId, searchInput, isSearching }: 
             onClick={() => {
               onTokenClick();
               setSelectedToken(token);
+              setIsSearching(false);
+              setSearchInput('');
             }}
           >
             <TokenListItem onTokenClick={onTokenClick} token={token} />

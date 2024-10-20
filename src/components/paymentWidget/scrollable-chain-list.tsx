@@ -13,7 +13,7 @@ const ScrollableChainList = ({ chains, onChainClick, innerSelectedChain }: Scrol
     <div className="py-2 gap-1 flex items-center max-w-full overflow-x-scroll">
       {chains?.map(chain => {
         return (
-          <React.Fragment key={chain.name}>
+          <React.Fragment key={chain.networkId}>
             <Button
               isIconOnly
               aria-label={chain.name}

@@ -70,7 +70,7 @@ const InfiniteScrollTokenList = ({ chainId, onTokenClick }: TInfiniteScrollToken
       variant="flat"
       disallowEmptySelection
       selectionMode="single"
-      selectedKeys={[selectedToken.tokenAddress + selectedToken.symbol]}
+      selectedKeys={[selectedToken.tokenAddress + selectedToken.id]}
       className="p-0 h-[400px]"
       classNames={{
         list: 'overflow-y-auto'
@@ -80,7 +80,7 @@ const InfiniteScrollTokenList = ({ chainId, onTokenClick }: TInfiniteScrollToken
         const isLastItem = index === allTokens.length - 1;
         return (
           <ListboxItem
-            key={token.tokenAddress + token.symbol}
+            key={token.tokenAddress + token.id}
             textValue={token.name}
             classNames={{
               selectedIcon: 'hidden',

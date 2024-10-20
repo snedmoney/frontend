@@ -16,7 +16,7 @@ const fetchTokens = async (chainId: number, page: number = 1): Promise<TokensRes
     const response: AxiosResponse<TokensResponse> = await apiClient.get(`/tokens/chains/${chainId}`, {
       params: {
         page: page,
-        per_page: 20
+        per_page: 60
       }
     });
     return response.data;

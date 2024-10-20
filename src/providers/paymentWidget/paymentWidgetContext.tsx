@@ -1,3 +1,4 @@
+// ThemeContext.js
 import { createContext } from "react";
 
 export type Chain = {
@@ -11,7 +12,7 @@ export type Chain = {
     decimals: number;
   };
   explorerURL: string;
-}
+};
 
 export type Token = {
   chainId: number;
@@ -27,10 +28,12 @@ export type Token = {
 export type PaymentWidgetContextType = {
   selectedChain: Chain;
   selectedToken: Token;
+  isSearching: boolean;
   setSelectedChain: (chain: Chain) => void;
   setSelectedToken: (token: Token) => void;
-  tokenAmount?: number;
-  setTokenAmount: (amount?: number) => void;
+  tokenAmount?: string;
+  setTokenAmount: (amount?: string) => void;
+  setIsSearching: (isSearching: boolean) => void;
 };
 
 //Later we might need more values for chain switching
@@ -38,9 +41,11 @@ const PaymentWidgetContext = createContext<PaymentWidgetContextType>({
   selectedChain: {} as Chain,
   selectedToken: {} as Token,
   tokenAmount: undefined,
+  isSearching: false,
   setSelectedChain: () => {},
   setSelectedToken: () => {},
-  setTokenAmount: () => {}
+  setTokenAmount: () => {},
+  setIsSearching: () => {},
 });
 
 export default PaymentWidgetContext;

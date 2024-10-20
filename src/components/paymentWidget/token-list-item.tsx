@@ -9,7 +9,7 @@ type TokenListItemProps = {
 
 const TokenListItem = ({ token, lastItemRef, isLastItem }: TokenListItemProps) => {
   return (
-    <div className='flex justify-between items-center rounded-md gap-2 py-3' ref={isLastItem ? lastItemRef : undefined} key={token.tokenAddress + token.symbol} >
+    <div className='flex justify-between items-center rounded-md gap-2 py-3' ref={isLastItem ? lastItemRef : undefined} key={token.id} >
       <span><img src={token.logoURI} width='32' height='32' /></span>
       <div className='flex flex-col flex-1 pl-2 min-w-0'>
         <div className='truncate max-w-full'>{token.symbol}</div>

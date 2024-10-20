@@ -1,4 +1,5 @@
 import { useContext } from "react";
+
 import PaymentWidgetContext from "../providers/paymentWidget/paymentWidgetContext";
 
 const usePaymentWidget = () => {
@@ -6,18 +7,22 @@ const usePaymentWidget = () => {
     selectedChain,
     selectedToken,
     tokenAmount,
+    isSearching,
     setSelectedChain,
     setSelectedToken,
-    setTokenAmount
+    setTokenAmount,
+    setIsSearching,
   } = useContext(PaymentWidgetContext);
 
   return {
     selectedChain,
     selectedToken,
     tokenAmount,
+    isSearching,
     setSelectedChain,
     setSelectedToken,
-    setTokenAmount
+    setTokenAmount,
+    setIsSearching,
   };
 };
 
