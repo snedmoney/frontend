@@ -1,55 +1,75 @@
-import { useNavigate } from "react-router-dom";
 import { useFormContext } from "react-hook-form";
-import ProtectedRoute from "../protected-route";
-import FlowLayout from "@/layouts/flow-layout";
+import { Button } from "@nextui-org/react";
+import { useState } from "react";
+
 import useCreateProfileFlow from "@/hooks/use-create-profile-flow";
+import FlowLayout from "@/layouts/flow-layout";
+import { CreateProfileFlowData } from "@/providers/createProfileFlow/createProfileFlowContext";
+import UserInfo2Form from "@/components/user-info2-form";
 
 const UserInfo2 = () => {
-  const {
-    register,
-    formState: { errors, isValid },
-  } = useFormContext();
-  const { completeStep, canAccessStep } = useCreateProfileFlow();
-  const navigate = useNavigate();
+  const { handleSubmit } = useFormContext<CreateProfileFlowData>();
+  const { totalSteps, onSubmit, prevStep } = useCreateProfileFlow();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleNext = () => {
-    if (isValid) {
-      completeStep(2);
-      navigate("/create/profile/preferences"); // Assuming the next step is 'preferences'
+  const handleSubmitWrapper = async (data: CreateProfileFlowData) => {
+    setIsSubmitting(true);
+    try {
+      await onSubmit(data);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handlePrevious = () => {
-    navigate("/create/profile/user-info1");
-  };
-
   const leftContent = (
-    <div className="text-center">
-      <h2 className="text-2xl font-bold mb-4">Welcome to Sned</h2>
-      <p className="text-lg">
-        Let's start by getting some basic information from you.
-      </p>
+    <div className="flex flex-col h-full justify-between py-2 md:py-8 md:px-6">
+      <div className="space-y-4 md:space-y-6">
+        <div className="space-y-2 md:space-y-8">
+          <h1 className="text-xl md:text-3xl font-bold text-foreground">
+            Payment Method & Social Links
+          </h1>
+          <h2 className="text-base md:text-lg text-foreground/80 mt-2">
+            We are almost at the finish line! Just need to know how you'd
+            like to be paid.
+          </h2>
+          <h2 className="text-base md:text-lg text-foreground/80 mt-2">
+            And social media accounts to display on your profile page!
+          </h2>
+        </div>
+      </div>
     </div>
   );
 
-  const rightContent = (
-    <div className="space-y-4">
-      {/* ... (form fields and button as in the previous example) ... */}
+  const rightFooterContent = (
+    <div className="flex flex-col w-full justify-center gap-4 py-4 md:flex-row md:justify-between">
+      <Button
+        className="border-foreground font-bold flex justify-center items-center"
+        variant="bordered"
+        onClick={prevStep}
+      >
+        Back
+      </Button>
+      <Button
+        className="bg-foreground text-background font-bold flex justify-center items-center"
+        disabled={isSubmitting}
+        onClick={handleSubmit(handleSubmitWrapper)}
+      >
+        Submit
+      </Button>
     </div>
   );
 
   return (
-    <ProtectedRoute
-      canAccess={canAccessStep(2)}
-      redirectPath="/create/profile/user-info1"
-    >
-      <FlowLayout
-        leftContent={leftContent}
-        rightContent={rightContent}
-        currentStep={2}
-        totalSteps={3}
-      />
-    </ProtectedRoute>
+    <FlowLayout
+      leftContent={leftContent}
+      rightContent={
+        <div className="flex flex-col gap-2 md:gap-4 md:pl-3">
+          <UserInfo2Form />
+        </div>
+      }
+      rightFooterContent={rightFooterContent}
+      totalSteps={totalSteps}
+    />
   );
 };
 

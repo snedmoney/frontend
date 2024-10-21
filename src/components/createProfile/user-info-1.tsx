@@ -1,47 +1,71 @@
-import { useNavigate } from 'react-router-dom';
-import { useFormContext } from 'react-hook-form';
-import ProtectedRoute from "../protected-route";
-import FlowLayout from '@/layouts/flow-layout';
+import { useFormContext } from "react-hook-form";
+import { Button } from "@nextui-org/react";
+
+import FlowLayout from "@/layouts/flow-layout";
 import useCreateProfileFlow from "@/hooks/use-create-profile-flow";
+import { CreateProfileFlowData } from "@/providers/createProfileFlow/createProfileFlowContext";
+import UserInfo1Form from "@/components/user-info1-form";
 
 const UserInfo1 = () => {
-  const { register, formState: { errors, isValid } } = useFormContext();
-  const { completeStep, canAccessStep, totalSteps} = useCreateProfileFlow();
-  const navigate = useNavigate();
+  const { trigger } = useFormContext<CreateProfileFlowData>();
+  const { totalSteps, nextStep, prevStep } = useCreateProfileFlow();
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    const isValid = await trigger(["name", "userName", "about", "slogan"]);
+
     if (isValid) {
-      completeStep(1);
-      navigate('/create/profile/additional-info');
+      nextStep();
     }
   };
 
   const leftContent = (
-    <div className="text-center">
-      <h2 className="text-2xl font-bold mb-4">Welcome to Sned</h2>
-      <p className="text-lg">Let's start by getting some basic information from you.</p>
+    <div className="flex flex-col h-full justify-between py-2 md:py-8 md:px-6">
+      <div className="space-y-4 md:space-y-6">
+        <div className="space-y-2 md:space-y-8">
+          <h1 className="text-xl md:text-3xl font-bold text-foreground">
+            Profile Setup
+          </h1>
+          <h2 className="text-base md:text-lg text-foreground/80">
+            Let's get a few basic information from you.
+          </h2>
+          <h2 className="text-base md:text-lg text-foreground/80">
+            Don't worry you can always change it later. 👌
+          </h2>
+        </div>
+      </div>
     </div>
   );
 
-  const rightContent = (
-    <div className="space-y-4">
-      {/* ... (form fields and button as in the previous example) ... */}
+  const rightFooterContent = (
+    <div className="flex flex-col w-full justify-center gap-4 py-4 md:flex-row md:justify-between">
+      <Button
+        className="border-foreground font-bold flex justify-center items-center"
+        variant="bordered"
+        onClick={prevStep}
+      >
+        Back
+      </Button>
+      <Button
+        className="bg-foreground text-background font-bold flex justify-center items-center"
+        onClick={handleNext}
+      >
+        Continue
+      </Button>
     </div>
   );
 
   return (
-    <ProtectedRoute
-      canAccess={canAccessStep(1)}
-      redirectPath="/create/profile"
-    >
-      <FlowLayout
-        leftContent={leftContent}
-        rightContent={rightContent}
-        currentStep={2}
-        totalSteps={totalSteps}
-      />
-    </ProtectedRoute>
-  )
-}
+    <FlowLayout
+      leftContent={leftContent}
+      rightContent={
+        <div className="flex flex-col gap-2 md:gap-4 md:pl-3">
+          <UserInfo1Form />
+        </div>
+      }
+      rightFooterContent={rightFooterContent}
+      totalSteps={totalSteps}
+    />
+  );
+};
 
 export default UserInfo1;

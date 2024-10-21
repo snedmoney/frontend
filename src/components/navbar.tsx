@@ -18,19 +18,24 @@ import { MdOutlineHistory } from "react-icons/md";
 import { Divider } from "@nextui-org/react";
 import { Button } from "@nextui-org/button";
 
-import UserMenuDropdown from "./user-menu-dropdown";
 import CreatePage from "./create-page";
+import UserMenuDropdown from "./user-menu-dropdown";
 
-import { siteConfig } from "@/config/site";
-import { ThemeSwitch } from "@/components/theme-switch";
-import { TwitterIcon, GithubIcon, DiscordIcon } from "@/components/icons";
-import BlackLogoSVG from "@/assets/logos/only-logo-black.svg";
-import WhiteLogoSVG from "@/assets/logos/only-logo-white.svg";
-import { apiClient } from "@/config/api";
 import useTheme from "@/hooks/use-theme";
+import { apiClient } from "@/config/api";
+import { ThemeSwitch } from "@/components/theme-switch";
 import useShareModal from "@/hooks/use-share-modal";
 
 //TODO: conditionally render create your own page and share button. Render create your own page if not page owner. Render share button if page owner.
+const logoURLWhite = new URL(
+  "../assets/logos/sample-logo1.png",
+  import.meta.url,
+).href;
+const logoURLBlack = new URL(
+  "../assets/logos/sample-logo2.png",
+  import.meta.url,
+).href;
+
 export const Navbar = () => {
   const token = localStorage.getItem("token");
   const { isConnected, isDisconnected, address } = useAccount();
@@ -66,20 +71,26 @@ export const Navbar = () => {
   }, [isSuccess, data]);
 
   return (
-    <NextUINavbar maxWidth="2xl" position="sticky">
+    <NextUINavbar
+      className="md:border-b-1 border-b-default-200 bg-background"
+      maxWidth="2xl"
+      position="sticky"
+    >
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <Link
-            className="flex justify-start items-center gap-1"
+            className="flex justify-start items-center gap-1 pb-0"
             color="foreground"
             href="/"
           >
             {!isDark ? (
-              <BlackLogoSVG height="30" width="30" />
+              <img alt="logo" height="38px" src={logoURLWhite} width="38px" />
             ) : (
-              <WhiteLogoSVG height="30" width="30" />
+              <img alt="logo" height="38px" src={logoURLBlack} width="38px" />
             )}
-            <p className="font-bold text-inherit">Sned</p>
+            <p className="font-bold text-foreground/80 pl-1 text-xl hidden md:block">
+              Sned
+            </p>
           </Link>
         </NavbarBrand>
       </NavbarContent>
@@ -89,12 +100,9 @@ export const Navbar = () => {
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
-          <Link isExternal href={siteConfig.links.discord}>
-            <DiscordIcon className="text-default-500" />
-          </Link>
           <ThemeSwitch />
         </NavbarItem>
-        <CreatePage />
+        <CreatePage href="/create/profile" />
         <Button
           color="default"
           endContent={<IoShareSocialOutline />}
@@ -111,7 +119,7 @@ export const Navbar = () => {
         <NavbarMenuToggle />
       </NavbarContent>
 
-      <NavbarMenu>
+      <NavbarMenu className="bg-background">
         <div className="mx-1 mt-2 flex flex-col gap-4">
           <NavbarMenuItem
             className="flex items-center gap-4"
