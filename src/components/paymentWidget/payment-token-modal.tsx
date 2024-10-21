@@ -1,4 +1,5 @@
 import type { Chain } from "@/providers/paymentWidget/paymentWidgetContext";
+
 import {
   Modal,
   ModalContent,
@@ -64,7 +65,7 @@ const PaymentTokenModal = ({
       classNames={{
         backdrop: "bg-black/50",
         closeButton: "sm:top-2 sm:right-2.5 rounded-none",
-        base: "h-[90dvh] sm:h-auto"
+        base: "h-[90dvh] sm:h-auto",
       }}
       closeButton={<IoCloseSharp size="40" />}
       isOpen={isOpen}
