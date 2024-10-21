@@ -66,7 +66,7 @@ export const Navbar = () => {
   }, [isSuccess, data]);
 
   return (
-    <NextUINavbar maxWidth="2xl" position="sticky">
+    <NextUINavbar maxWidth="2xl" position="sticky" className='md:border-b-1'>
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <Link
