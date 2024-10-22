@@ -1,65 +1,45 @@
-import { Button, useDisclosure } from "@nextui-org/react";
-import { IoShareSocialOutline } from "react-icons/io5";
-
 import SocialMediaList from "./social-media-list";
-import EditPageModal from "./edit-page-modal";
 
-import useShareModal from "@/hooks/use-share-modal";
-import { defaultFormValues } from "@/providers/createProfileFlow/createProfileFlowProvider";
-
+//TODO: include social profiles
 const ProfileHeader = () => {
-  const openShareModal = useShareModal();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   return (
-    <>
+    <div className="bg-background">
       <div className="h-72 relative">
         <img
-          alt="user banner"
+          alt="street photograph"
           className="w-full h-full"
           src="https://images.unsplash.com/photo-1725772685998-be930f3209b9?q=80&w=2831&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         />
         <div className="absolute -bottom-10 inset-x-0 flex justify-center">
           <img
-            alt="user avatar"
+            alt="avatar"
             className="w-24 h-24 bg-gray-400 rounded-full border-4 border-white"
             src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
           />
         </div>
       </div>
-      <div className="pt-12 pb-6 px-4 md:px-8 flex flex-col justify-center text-center items-center">
+      <div className="pt-12 pb-6 px-4 text-center">
+        <div className="inline-block px-3 py-1 mb-2 text-sm bg-purple-100 text-purple-800 rounded-full font-medium">
+          Rising Pro
+        </div>
         <h1 className="text-xl font-bold text-default-900 mb-1">
           Joe Pasky | Urban Photographer
         </h1>
-        <p className="text-default-500 mb-4">180 Donations | 30 Members</p>
-        <div className="flex justify-center items-center space-x-2 gap-2 mb-4 w-full">
-          {/* <Button variant='solid' radius='sm' className='flex-1 min-w-[140px] max-w-[220px]' color='primary'>Join for free</Button> */}
-          <Button
-            className="flex-1 min-w-[140px] max-w-[220px]"
-            color="default"
-            radius="sm"
-            variant="ghost"
-            onPress={onOpen}
-          >
-            Edit page
-          </Button>
-          <Button
-            isIconOnly
-            radius="sm"
-            variant="solid"
-            onPress={openShareModal}
-          >
-            <IoShareSocialOutline />
-          </Button>
+        <p className="text-default-500 mb-4">180 Donations</p>
+        <div className="flex justify-center space-x-2 mb-4">
+          <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full text-sm font-medium transition duration-150 ease-in-out">
+            Hire Me
+          </button>
+          <button className="bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm font-medium transition duration-150 ease-in-out">
+            Subscribe
+          </button>
+          <button className="bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 p-2 rounded-full transition duration-150 ease-in-out">
+            Share
+          </button>
         </div>
         <SocialMediaList />
-        <EditPageModal
-          initialData={defaultFormValues}
-          isOpen={isOpen}
-          onClose={onClose}
-        />
       </div>
-    </>
+    </div>
   );
 };
 

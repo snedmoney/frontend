@@ -23,7 +23,9 @@ import UserMenuDropdown from "./user-menu-dropdown";
 
 import useTheme from "@/hooks/use-theme";
 import { apiClient } from "@/config/api";
+import { DiscordIcon } from "@/components/icons";
 import { ThemeSwitch } from "@/components/theme-switch";
+import { siteConfig } from "@/config/site";
 import useShareModal from "@/hooks/use-share-modal";
 
 //TODO: conditionally render create your own page and share button. Render create your own page if not page owner. Render share button if page owner.
@@ -72,7 +74,7 @@ export const Navbar = () => {
 
   return (
     <NextUINavbar
-      className="md:border-b-1 border-b-default-200 bg-background"
+      className="md:border-b-1 border-b-default-200"
       maxWidth="2xl"
       position="sticky"
     >
@@ -100,6 +102,9 @@ export const Navbar = () => {
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
+          <Link isExternal href={siteConfig.links.discord}>
+            <DiscordIcon className="text-default-500" />
+          </Link>
           <ThemeSwitch />
         </NavbarItem>
         <CreatePage href="/create/profile" />
@@ -119,7 +124,7 @@ export const Navbar = () => {
         <NavbarMenuToggle />
       </NavbarContent>
 
-      <NavbarMenu className="bg-background">
+      <NavbarMenu>
         <div className="mx-1 mt-2 flex flex-col gap-4">
           <NavbarMenuItem
             className="flex items-center gap-4"

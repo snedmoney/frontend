@@ -3,36 +3,32 @@ import FlowLayout from "@/layouts/flow-layout";
 import useCreateProfileFlow from "@/hooks/use-create-profile-flow";
 import { AiOutlineAreaChart } from "react-icons/ai";
 import { HiLightningBolt } from "react-icons/hi";
-import { AnimatedNotifications } from "@/components/animatedNotifications";
+import { AnimatedNotifications } from "@/components/animated-notifications";
 import { ReactNode } from "react";
 import { PiHandCoinsFill } from "react-icons/pi";
 import { IoWalletOutline } from "react-icons/io5";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { useAccount } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useNavigate } from "react-router-dom";
-
-//TODO: I need to check against backend api and see if the wallet already has created a page.
-//if so i just show their profile page and say only 1 profile allowed per wallet
-//this logic only applies to profile page. There can be many donation pages
+import { useFormContext } from "react-hook-form";
 
 const SignUpPage = ({ isDonationPage }: { isDonationPage?: boolean }) => {
-  const { totalSteps, completeStep } = useCreateProfileFlow();
+  const { totalSteps, nextStep } = useCreateProfileFlow();
+  const { setValue } = useFormContext();
   const { isConnected, address } = useAccount();
   const { openConnectModal } = useConnectModal();
-  const navigate = useNavigate();
 
-  const handleNext = async () => {
+  const handleNext = () => {
     if (isConnected && address) {
-      completeStep(1);
-      navigate("/create/profile/user-info1");
+      setValue("walletAddress", address);
+      nextStep();
     } else {
       openConnectModal?.();
     }
   };
 
   const leftContent = (
-    <div className="flex flex-col h-full justify-between py-4 md:py-8 md:px-6">
+    <div className="flex flex-col h-full justify-between py-4 md:p-6 overflow-y-auto">
       <div className="space-y-4 md:space-y-6">
         <div className="space-y-2">
           <h1 className="text-xl md:text-2xl font-bold text-foreground">
@@ -78,8 +74,9 @@ const SignUpPage = ({ isDonationPage }: { isDonationPage?: boolean }) => {
       </div>
     </div>
   );
+
   const rightContent = (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-full">
       <h1 className="text-lg md:text-xl font-bold text-foreground md:text-center">
         {isDonationPage
           ? "Ready to raise funds for a cause that you care about?"
@@ -93,7 +90,6 @@ const SignUpPage = ({ isDonationPage }: { isDonationPage?: boolean }) => {
             : "Sign up is easy."}{" "}
           Simply connect your wallet to get started.
         </h2>
-
         <Button
           size="lg"
           className="w-full md:w-3/4 bg-foreground text-background font-bold flex items-center justify-center gap-2"
@@ -114,11 +110,11 @@ const SignUpPage = ({ isDonationPage }: { isDonationPage?: boolean }) => {
       </div>
     </div>
   );
+
   return (
     <FlowLayout
       leftContent={leftContent}
       rightContent={rightContent}
-      currentStep={1}
       totalSteps={totalSteps}
     />
   );

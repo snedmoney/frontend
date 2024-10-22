@@ -10,7 +10,7 @@ import CreateProfileFlowContext, {
 const FORM_DATA_STORAGE_KEY = "createProfileFormData";
 const CURRENT_STEP_STORAGE_KEY = "currentProfileStep";
 
-export const defaultFormValues: CreateProfileFlowData = {
+const defaultFormValues: CreateProfileFlowData = {
   walletAddress: "",
   name: "",
   slogan: "",
@@ -70,7 +70,7 @@ export const CreateProfileFlowProvider = ({
   });
 
   const resetFlow = useCallback(() => {
-    setCurrentStep(1);
+    setCurrentStep(0);
     sessionStorage.removeItem(FORM_DATA_STORAGE_KEY);
     sessionStorage.removeItem(CURRENT_STEP_STORAGE_KEY);
     methods.reset(defaultFormValues);

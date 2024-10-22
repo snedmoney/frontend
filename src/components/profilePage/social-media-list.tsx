@@ -1,6 +1,6 @@
 import { RiInstagramFill } from "react-icons/ri";
 import { FaLink } from "react-icons/fa";
-import { Button } from "@nextui-org/button";
+import { Button } from "@nextui-org/react";
 import { Link } from "@nextui-org/link";
 
 import Youtube from "@/assets/social-icons/youtube.svg";
@@ -18,14 +18,16 @@ const socialMediaIcons: {
   [key: string]: (props: React.ComponentProps<"svg">) => JSX.Element;
 } = {
   youtube: (props) => <Youtube {...props} />,
-  instagram: (props) => <RiInstagramFill {...props} size="22" />,
+  instagram: (props) => <RiInstagramFill {...props} size="30" />,
   facebook: (props) => <Facebook {...props} />,
   twitch: (props) => <Twitch {...props} />,
   tiktok: (props) => <Tiktok {...props} />,
   discord: (props) => <Discord {...props} />,
   twitter: (props) => <Twitter {...props} />,
-  link1: (props) => <FaLink {...props} size="18" />,
-  link2: (props) => <FaLink {...props} color="#A1A1A1" size="18" />,
+  link1: (props) => <FaLink {...props} size="26" />,
+  link2: (props) => (
+    <FaLink {...props} className="fill-foreground/60" size="26" />
+  ),
 };
 
 const socialAccounts = {
@@ -58,7 +60,7 @@ const renderSocialIcons = (socialAccounts: SocialAccounts) => {
           target="_blank"
           variant="light"
         >
-          <IconComponent className="w-[20px] h-[20px]" height="20" width="20" />
+          <IconComponent className="w-[28px] h-[28px]" height="28" width="28" />
         </Button>
       );
     })
@@ -67,8 +69,10 @@ const renderSocialIcons = (socialAccounts: SocialAccounts) => {
 
 const SocialMediaList = () => {
   return (
-    <div className="flex justify-center flex-wrap">
-      {renderSocialIcons(socialAccounts)}
+    <div className="flex justify-center">
+      <div className="grid grid-cols-5 gap-4 auto-rows-auto">
+        {renderSocialIcons(socialAccounts)}
+      </div>
     </div>
   );
 };

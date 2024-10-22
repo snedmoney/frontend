@@ -39,8 +39,8 @@ const FlowLayout = ({
       <div className="p-4 md:absolute bg-transparent z-20">
         <Link className="flex items-center" color="foreground" href="/">
           <div className="flex items-center ml-0 md:ml-[20px]">
-            <img alt="logo" height="46px" src={logoURL} width="46px" />
-            <p className="font-bold pl-2 text-foreground/80 text-xl hidden md:block">
+            <img height="52px" src={logoURL} width="52px" />
+            <p className="font-bold pl-2 text-foreground/80 text-3xl hidden md:block">
               Sned
             </p>
           </div>

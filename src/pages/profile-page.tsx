@@ -14,14 +14,14 @@ const ProfilePage = () => {
       <Navbar />
       <div className="flex-1 flex md:overflow-hidden">
         {/* Left Side - Profile Info and Bio (Desktop only) */}
-        <div className="hidden md:flex md:flex-col md:w-1/2 border-r border-default-200 overflow-y-auto scrollbar-hide md:m-8 md:mb-0 md:mr-0 md:pr-8">
+        <div className="hidden md:flex md:flex-col md:w-1/2 border-r border-default-200 overflow-y-auto scrollbar-hide md:m-8 md:mr-0 md:pr-8">
           <ProfileHeader />
-          <div className="px-4 p-6 border-t border-default-200">
+          <div className="px-4 py-6 border-t border-default-200">
             <About />
           </div>
         </div>
 
-        <div className="w-full md:w-1/2 flex flex-col md:m-8 md:mb-0">
+        <div className="w-full md:w-1/2 flex flex-col md:m-8">
           {/* Profile Info (Only visible on mobile) */}
           <div className="md:hidden">
             <ProfileHeader />
@@ -31,10 +31,10 @@ const ProfilePage = () => {
             classNames={{
               tabList: "w-full bg-background md:px-0 md:pr-8 md:border-b-1",
               tab: "p-0",
-              panel: "px-4 py-6 md:overflow-y-auto scrollbar-hide md:px-0",
+              panel: "px-4 md:overflow-y-auto scrollbar-hide md:px-0",
               cursor: "w-full",
             }}
-            color="primary"
+            color="success"
             defaultSelectedKey="home"
             variant="underlined"
           >
@@ -98,7 +98,7 @@ const ProfilePage = () => {
           </Tabs>
         </div>
       </div>
-      <h2 className="flex justify-center p-4 border-t-1 text-default-400 border-t-default-200 items-center hover:text-foreground text-sm md:text-md">
+      <h2 className="flex justify-center p-4 border-t-1 text-default-400 border-t-default-200 items-center">
         <a className="text-center" href="/create/profile">
           Create your own page and start earning income!
           <RiShareBoxLine className="pl-2 inline-flex" size="22" />
