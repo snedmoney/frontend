@@ -1,21 +1,39 @@
 import { createContext } from "react";
-import { UseFormReturn } from "react-hook-form";
 
 export type CreateProfileFlowData = {
-  fullName: string;
-  email: string;
-  dateOfBirth: string;
-  phoneNumber: string;
-  preference: string;
+  walletAddress: string;
+  profileImg?: string;
+  coverImg?: string;
+  name: string;
+  slogan: string;
+  userName: string;
+  about: string;
+  paymentMethod: {
+    chainId: string;
+    tokenAddress: string;
+  };
+  websiteLink?: string;
+  socialAccounts: {
+    youtube?: string;
+    facebook?: string;
+    twitter?: string;
+    instagram?: string;
+    discord?: string;
+    tiktok?: string;
+    twitch?: string;
+    link1?: string;
+    link2?: string;
+  };
 };
 
 export type CreateProfileFlowContextType = {
-  methods: UseFormReturn<CreateProfileFlowData>;
-  onSubmit: (data: CreateProfileFlowData) => Promise<void>;
-  completeStep: (step: number) => void;
-  canAccessStep: (step: number) => boolean;
-  completedSteps: number[];
+  currentStep: number;
   totalSteps: number;
+  nextStep: () => void;
+  prevStep: () => void;
+  setStep: (step: number) => void;
+  resetFlow: () => void;
+  onSubmit: (data: CreateProfileFlowData) => Promise<void>;
 };
 
 const CreateProfileFlowContext =
