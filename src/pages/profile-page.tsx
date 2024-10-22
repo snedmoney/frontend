@@ -1,10 +1,11 @@
+import { Tab, Tabs } from "@nextui-org/react";
+import { RiShareBoxLine } from "react-icons/ri";
+
 import { Navbar } from "@/components/navbar";
 import ProfileHeader from "@/components/profilePage/profile-header";
-import { Tab, Tabs } from "@nextui-org/react";
-import About from '@/components/profilePage/about';
+import About from "@/components/profilePage/about";
 import Home from "@/components/profilePage/home";
 import UnderConstruction from "@/components/under-construction";
-import { RiShareBoxLine } from "react-icons/ri";
 
 //TODO: Show 404 if profile page doesnt exist, probably done at route level
 const ProfilePage = () => {
@@ -27,24 +28,24 @@ const ProfilePage = () => {
           </div>
           <Tabs
             aria-label="Tab options"
-            color="success"
-            variant="underlined"
             classNames={{
               tabList: "w-full bg-background md:px-0 md:pr-8 md:border-b-1",
               tab: "p-0",
               panel: "px-4 md:overflow-y-auto scrollbar-hide md:px-0",
-              cursor: "w-full"
+              cursor: "w-full",
             }}
-            defaultSelectedKey='home'
+            color="success"
+            defaultSelectedKey="home"
+            variant="underlined"
           >
             <Tab
               key="about"
+              className="md:hidden"
               title={
                 <div className="flex items-center space-x-2">
                   <span>About</span>
                 </div>
               }
-              className='md:hidden'
             >
               <About />
             </Tab>
@@ -66,7 +67,7 @@ const ProfilePage = () => {
                 </div>
               }
             >
-              <div className='flex justify-center'>
+              <div className="flex justify-center">
                 <UnderConstruction />
               </div>
             </Tab>
@@ -78,7 +79,7 @@ const ProfilePage = () => {
                 </div>
               }
             >
-              <div className='flex justify-center'>
+              <div className="flex justify-center">
                 <UnderConstruction />
               </div>
             </Tab>
@@ -90,21 +91,21 @@ const ProfilePage = () => {
                 </div>
               }
             >
-              <div className='flex justify-center'>
+              <div className="flex justify-center">
                 <UnderConstruction />
               </div>
             </Tab>
           </Tabs>
         </div>
       </div>
-      <h2 className='flex justify-center p-4 border-t-1 text-default-400 border-t-default-200 items-center'>
-        <a href='/create/profile' className='text-center'>
+      <h2 className="flex justify-center p-4 border-t-1 text-default-400 border-t-default-200 items-center">
+        <a className="text-center" href="/create/profile">
           Create your own page and start earning income!
-          <RiShareBoxLine size='22' className='pl-2 inline-flex' />
+          <RiShareBoxLine className="pl-2 inline-flex" size="22" />
         </a>
       </h2>
     </div>
   );
-}
+};
 
 export default ProfilePage;

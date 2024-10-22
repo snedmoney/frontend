@@ -8,6 +8,7 @@ import {
   CardHeader,
   Divider,
 } from "@nextui-org/react";
+
 import BackgroundImage from "@/assets/flow-background.png";
 import useCreateProfileFlow from "@/hooks/use-create-profile-flow";
 
@@ -28,16 +29,17 @@ const FlowLayout = ({
   totalSteps,
 }: TFlowLayoutProps) => {
   const { currentStep } = useCreateProfileFlow();
+
   return (
     <div className="min-h-screen flex flex-col">
       <div
         className="absolute inset-0 bg-cover bg-center hidden md:block"
         style={{ backgroundImage: `url(${BackgroundImage})` }}
-      ></div>
+      />
       <div className="p-4 md:absolute bg-transparent z-20">
         <Link className="flex items-center" color="foreground" href="/">
           <div className="flex items-center ml-0 md:ml-[20px]">
-            <img src={logoURL} height="52px" width="52px" />
+            <img height="52px" src={logoURL} width="52px" />
             <p className="font-bold pl-2 text-foreground/80 text-3xl hidden md:block">
               Sned
             </p>
@@ -49,13 +51,13 @@ const FlowLayout = ({
           <div className="flex flex-col md:flex-row h-full">
             <div className="w-full md:w-2/5 flex flex-col justify-center md:p-8 bg-background md:bg-gradient-to-br md:from-gray-400 md:to-purple-100 md:h-[80vh] md:rounded-r-[40px]">
               <Progress
-                size="sm"
-                aria-label="Sign up progress"
-                value={33}
-                color="success"
-                valueLabel={`${currentStep} of ${totalSteps}`}
                 showValueLabel
+                aria-label="Sign up progress"
                 className="my-3 md:my-2 block md:hidden"
+                color="success"
+                size="sm"
+                value={33}
+                valueLabel={`${currentStep} of ${totalSteps}`}
               />
               {leftContent}
             </div>
@@ -63,13 +65,13 @@ const FlowLayout = ({
               <Card className="w-full h-full border-0 overflow-hidden shadow-none p-0 flex flex-col bg-background md:bg-background/0 md:rounded-l-[40px]">
                 <CardHeader className="md:mt-2 pb-0 md:pl-3 md:pr-8">
                   <Progress
-                    size="sm"
-                    aria-label="Sign up progress"
-                    value={Math.ceil((currentStep / totalSteps) * 100)}
-                    color="success"
-                    valueLabel={`${currentStep} of ${totalSteps}`}
                     showValueLabel
+                    aria-label="Sign up progress"
                     className="hidden mb-6 md:block"
+                    color="success"
+                    size="sm"
+                    value={Math.ceil((currentStep / totalSteps) * 100)}
+                    valueLabel={`${currentStep} of ${totalSteps}`}
                   />
                 </CardHeader>
                 <CardBody className="flex-grow overflow-y-auto px-0 pt-0 pb-2 md:p-8 md:pt-0 md:pl-0 h-full">
