@@ -1,6 +1,6 @@
 const About = () => {
   return (
-    <div className="space-y-4 text-gray-600">
+    <div className="space-y-4 text-default-600">
       <p>
         Hello! I'm Catalin, a passionate traveler and food enthusiast based in Italy.
         As someone living with celiac disease, I've made it my mission to explore

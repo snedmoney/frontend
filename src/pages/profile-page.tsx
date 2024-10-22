@@ -2,37 +2,40 @@ import { Navbar } from "@/components/navbar";
 import ProfileHeader from "@/components/profilePage/profile-header";
 import { Tab, Tabs } from "@nextui-org/react";
 import About from '@/components/profilePage/about';
+import Home from "@/components/profilePage/home";
+import UnderConstruction from "@/components/under-construction";
+import { RiShareBoxLine } from "react-icons/ri";
 
+//TODO: Show 404 if profile page doesnt exist, probably done at route level
 const ProfilePage = () => {
   return (
     <div className="relative flex flex-col h-screen">
       <Navbar />
-      <div className="flex-1 flex md:overflow-hidden md:p-8 md:pb-0">
+      <div className="flex-1 flex md:overflow-hidden">
         {/* Left Side - Profile Info and Bio (Desktop only) */}
-        <div className="hidden md:flex md:flex-col md:w-2/5 border-r border-gray-200 overflow-y-auto">
+        <div className="hidden md:flex md:flex-col md:w-1/2 border-r border-default-200 overflow-y-auto scrollbar-hide md:m-8 md:mr-0 md:pr-8">
           <ProfileHeader />
-          <div className="px-4 py-6 border-t border-gray-200">
-            <h2 className="text-lg font-semibold mb-4 text-gray-800">Bio</h2>
+          <div className="px-4 py-6 border-t border-default-200">
             <About />
           </div>
         </div>
 
-        {/* Right Side - Full width on mobile, 3/5 on desktop */}
-        <div className="w-full md:w-3/5 flex flex-col md:overflow-hidden">
+        <div className="w-full md:w-1/2 flex flex-col md:m-8">
           {/* Profile Info (Only visible on mobile) */}
           <div className="md:hidden">
             <ProfileHeader />
           </div>
           <Tabs
-            aria-label="Options"
-            color="primary"
+            aria-label="Tab options"
+            color="success"
             variant="underlined"
-            // classNames={{
-            //   tabList: "gap-6 w-full relative rounded-none p-0  border-divider flex justify-center",
-            //   cursor: "w-full bg-[#22d3ee]",
-            //   tab: "max-w-fit px-0 h-12",
-            //   tabContent: "group-data-[selected=true]:text-[#06b6d4]"
-            // }}
+            classNames={{
+              tabList: "w-full bg-background md:px-0 md:pr-8 md:border-b-1",
+              tab: "p-0",
+              panel: "px-4 md:overflow-y-auto scrollbar-hide md:px-0",
+              cursor: "w-full"
+            }}
+            defaultSelectedKey='home'
           >
             <Tab
               key="about"
@@ -46,29 +49,61 @@ const ProfilePage = () => {
               <About />
             </Tab>
             <Tab
-              key="music"
+              key="home"
               title={
                 <div className="flex items-center space-x-2">
-                  <span>Music</span>
+                  <span>Home</span>
                 </div>
               }
             >
-              some stuff2
+              <Home />
             </Tab>
             <Tab
-              key="videos"
+              key="posts"
               title={
                 <div className="flex items-center space-x-2">
-                  <span>Videos</span>
+                  <span>Posts</span>
                 </div>
               }
             >
-              someStuff
+              <div className='flex justify-center'>
+                <UnderConstruction />
+              </div>
+            </Tab>
+            <Tab
+              key="membership"
+              title={
+                <div className="flex items-center space-x-2">
+                  <span>Membership</span>
+                </div>
+              }
+            >
+              <div className='flex justify-center'>
+                <UnderConstruction />
+              </div>
+            </Tab>
+            <Tab
+              key="shop"
+              title={
+                <div className="flex items-center space-x-2">
+                  <span>Shop</span>
+                </div>
+              }
+            >
+              <div className='flex justify-center'>
+                <UnderConstruction />
+              </div>
             </Tab>
           </Tabs>
         </div>
       </div>
-    </ div>
+      <h2 className='flex justify-center p-4 border-t-1 text-default-400 border-t-default-200 items-center'>
+        <a href='/create/profile' className='text-center'>
+          Create your own page and start earning income!
+          <RiShareBoxLine size='22' className='pl-2 inline-flex' />
+        </a>
+      </h2>
+    </div>
   );
 }
 

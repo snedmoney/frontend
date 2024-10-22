@@ -5,7 +5,6 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 import { FaChevronDown } from "react-icons/fa";
-
 import { type SocialMediaMetaInfoProps } from "./social-selection-widget";
 
 type SocialIconDropdownProps = {
