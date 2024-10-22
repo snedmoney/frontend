@@ -56,7 +56,7 @@ const UserPaymentInput = () => {
   return (
     <>
       <Card radius="sm" shadow="sm">
-        <CardBody className="w-full px-4 py-5 sm:p-5 bg-default-200/50">
+        <CardBody className="w-full px-4 py-5 sm:p-5 bg-default-200">
           <div className="flex justify-between gap-2 items-center">
             <SelectedChain isLoading={isLoading} onOpen={onOpen} />
             <CustomConnectButton />

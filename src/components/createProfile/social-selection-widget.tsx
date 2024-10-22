@@ -5,9 +5,7 @@ import { LuBadgeInfo } from "react-icons/lu";
 import { MdOutlineAddCircle, MdOutlineRemoveCircle } from "react-icons/md";
 import { FaLink } from "react-icons/fa";
 import { useEffect } from "react";
-
 import SocialIconDropdown from "./social-icon-dropdown";
-
 import Youtube from "@/assets/social-icons/youtube.svg";
 import Instagram from "@/assets/social-icons/instagram.svg";
 import Facebook from "@/assets/social-icons/facebook.svg";
@@ -29,55 +27,55 @@ const socialMediaMetaInfo: SocialMediaMetaInfoProps[] = [
     name: "youtube",
     label: "YouTube",
     icon: <Youtube height="22" width="22" />,
-    urlPattern: /^(https?:\/\/)?(www\.)?youtube\.com\/@[\w-]+$/,
+    urlPattern: /^(https:\/\/)(www\.)?youtube\.com\/@[\w-]+$/,
   },
   {
     name: "instagram",
     label: "Instagram",
     icon: <Instagram height="20" width="20" />,
-    urlPattern: /^(https?:\/\/)?(www\.)?instagram\.com\/[\w.]+$/,
+    urlPattern: /^(https:\/\/)(www\.)?instagram\.com\/[\w.]+$/,
   },
   {
     name: "facebook",
     label: "Facebook",
     icon: <Facebook height="20" width="20" />,
-    urlPattern: /^(https?:\/\/)?(www\.)?facebook\.com\/[\w.]+$/,
+    urlPattern: /^(https:\/\/)(www\.)?facebook\.com\/[\w.]+$/,
   },
   {
     name: "twitch",
     label: "Twitch",
     icon: <Twitch height="20" width="20" />,
-    urlPattern: /^(https?:\/\/)?(www\.)?twitch\.tv\/[\w]+$/,
+    urlPattern: /^(https:\/\/)(www\.)?twitch\.tv\/[\w]+$/,
   },
   {
     name: "tiktok",
     label: "TikTok",
     icon: <Tiktok height="20" width="20" />,
-    urlPattern: /^(https?:\/\/)?(www\.)?tiktok\.com\/@[\w.]+$/,
+    urlPattern: /^(https:\/\/)(www\.)?tiktok\.com\/@[\w.]+$/,
   },
   {
     name: "discord",
     label: "Discord",
     icon: <Discord height="20" width="20" />,
-    urlPattern: /discord/i,
+    urlPattern: /^https:\/\/.*discord/i,
   },
   {
     name: "twitter",
     label: "Twitter",
     icon: <Twitter height="20" width="20" />,
-    urlPattern: /^(https?:\/\/)?(www\.)?(twitter\.com|x\.com)\/[\w]+$/,
+    urlPattern: /^(https:\/\/)(www\.)?(twitter\.com|x\.com)\/[\w]+$/,
   },
   {
     name: "link1",
     label: "Link1",
     icon: <FaLink size="18" />,
-    urlPattern: /^(https?:\/\/)?[\w-]+(\.[\w-]+)+[/#?]?.*$/,
+    urlPattern: /^(https:\/\/)[\w-]+(\.[\w-]+)+[/#?]?.*$/,
   },
   {
     name: "link2",
     label: "Link2",
     icon: <FaLink className="fill-foreground/60" size="18" />,
-    urlPattern: /^(https?:\/\/)?[\w-]+(\.[\w-]+)+[/#?]?.*$/,
+    urlPattern: /^(https:\/\/)[\w-]+(\.[\w-]+)+[/#?]?.*$/,
   },
 ];
 

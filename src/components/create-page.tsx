@@ -15,6 +15,7 @@ const CreatePage = ({
       color="primary"
       href={href}
       variant="ghost"
+      target="_blank"
     >
       {textContent || "Create your own page"}
     </Button>
