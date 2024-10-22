@@ -75,9 +75,9 @@ export const Navbar = () => {
             href="/"
           >
             {!isDark ? (
-              <BlackLogoSVG height="30" width="30" />
+              <img src={logoURLWhite} height="38px" width="38px" />
             ) : (
-              <WhiteLogoSVG height="30" width="30" />
+              <img src={logoURLBlack} height="38px" width="38px" />
             )}
             <p className="font-bold text-inherit">Sned</p>
           </Link>
