@@ -2,7 +2,7 @@
 import { createContext } from "react";
 
 export type Chain = {
-  networkId: number;
+  id: number;
   name: string;
   allowed: boolean;
   iconURL: string;
@@ -22,7 +22,12 @@ export type Token = {
   logoURI: string;
   name: string;
   symbol: string;
-  tokenAddress: string;
+  address: string;
+};
+
+export type TokenWithBalance = Token & {
+  balance?: string;
+  amountInUSD?: string;
 };
 
 export type PaymentWidgetContextType = {

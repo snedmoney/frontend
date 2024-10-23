@@ -5,6 +5,6 @@ export const apiClient = axios.create({
   baseURL: "https://backend-staging-hc8j.onrender.com",
   //  baseURL: "https://backend-g057.onrender.com/api",
   headers: {
-    Authorization: `${localStorage.getItem("token") || ""}`,
+    Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
   },
 });

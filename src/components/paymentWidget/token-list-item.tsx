@@ -1,7 +1,7 @@
-import type { Token } from "@/providers/paymentWidget/paymentWidgetContext";
+import type { TokenWithBalance } from "@/providers/paymentWidget/paymentWidgetContext";
 
 type TokenListItemProps = {
-  token: Token;
+  token: TokenWithBalance;
   onTokenClick: () => void;
   lastItemRef?: React.Ref<HTMLDivElement>;
   isLastItem?: boolean;
@@ -29,8 +29,12 @@ const TokenListItem = ({
       </div>
       <div className="flex flex-col">
         {/* <div>{token.tokenAddress.slice(0, 6)}...{token.tokenAddress.slice(-4)}</div> */}
-        <div className="text-foreground-600 text-xs text-right">1234</div>
-        <div className="text-foreground-600 text-xs text-right">1234</div>
+        <div className="text-foreground-600 text-xs text-right">
+          {token.amountInUSD ? `$${token.amountInUSD}` : ""}
+        </div>
+        <div className="text-foreground-600 text-xs text-right">
+          {token.balance}
+        </div>
       </div>
     </div>
   );
