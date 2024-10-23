@@ -22,6 +22,7 @@ import {
 import ChainFilter from "@/components/chain-filter";
 import TransactionTypeFilter from "@/components/dashboard/transactions/transaction-type-filter";
 import NoTransactions from "@/components/dashboard/transactions/no-transactions";
+import TransactionStatusBadge from "@/components/dashboard/transactions/transaction-status-badge";
 
 type Transaction = {
   id: string;
@@ -116,7 +117,12 @@ const TransactionHistory = () => {
       <h1 className="text-2xl font-bold">Transaction History</h1>
       <div className="space-y-4">
         <div className="flex justify-end">
-          <Button onClick={resetFilters} color="primary" variant="light">
+          <Button
+            onClick={resetFilters}
+            color="primary"
+            variant="light"
+            radius="sm"
+          >
             Reset Filters
           </Button>
         </div>
@@ -129,6 +135,7 @@ const TransactionHistory = () => {
             granularity="day"
             maxValue={maxDate}
             className="w-full"
+            radius="sm"
             calendarProps={{ color: "danger" }}
           />
           <DatePicker
@@ -139,6 +146,7 @@ const TransactionHistory = () => {
             granularity="day"
             maxValue={maxDate}
             className="w-full"
+            radius="sm"
             calendarProps={{ color: "danger" }}
           />
           <ChainFilter
@@ -190,16 +198,7 @@ const TransactionHistory = () => {
                   {formatDate(transaction.date)}
                 </TableCell>
                 <TableCell>
-                  <span
-                    className={`px-2 py-1 rounded text-xs font-semibold
-                      ${
-                        transaction.status === "Completed"
-                          ? "bg-success text-foreground-400"
-                          : "bg-primary text-foreground-400"
-                      }`}
-                  >
-                    {transaction.status}
-                  </span>
+                  <TransactionStatusBadge status={transaction.status} />
                 </TableCell>
                 <TableCell>
                   <FaChevronRight size={16} className="text-foreground-400" />

@@ -38,6 +38,7 @@ const ChainFilter = ({
       className={className}
       variant="bordered"
       selectedKeys={[selectedChain]}
+      radius="sm"
       {...rest}
     >
       {chains.map((chain) => (

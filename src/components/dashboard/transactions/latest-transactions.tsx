@@ -9,6 +9,7 @@ import {
   TableCell,
 } from "@nextui-org/react";
 import NoTransactions from "./no-transactions";
+import TransactionStatusBadge from "./transaction-status-badge";
 
 type Transaction = {
   id: string;
@@ -147,16 +148,7 @@ const LatestTransactions = () => {
               <TableCell>{formatCurrency(transaction.amount)}</TableCell>
               <TableCell>{transaction.date}</TableCell>
               <TableCell>
-                <span
-                  className={`px-2 py-1 rounded text-xs font-semibold
-                  ${
-                    transaction.status === "Completed"
-                      ? "bg-success text-foreground-400"
-                      : "bg-primary text-foreground-400"
-                  }`}
-                >
-                  {transaction.status}
-                </span>
+                <TransactionStatusBadge status={transaction.status} />
               </TableCell>
               <TableCell>
                 <FaChevronRight

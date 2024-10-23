@@ -38,6 +38,7 @@ const TransactionTypeFilter = ({
       className={className}
       variant="bordered"
       selectedKeys={[selectedType]}
+      radius="sm"
       {...rest}
     >
       {transactionTypes.map((type) => (
