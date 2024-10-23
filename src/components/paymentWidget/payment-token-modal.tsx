@@ -42,9 +42,7 @@ const PaymentTokenModal = ({
 
   const onChainClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const chainId = e.currentTarget.getAttribute("data-chain")!;
-    const chosenChain = chains.find(
-      (chain) => chain.networkId === parseInt(chainId),
-    );
+    const chosenChain = chains.find((chain) => chain.id === parseInt(chainId));
 
     setInnerSelectedChain(chosenChain!);
   };
@@ -52,7 +50,7 @@ const PaymentTokenModal = ({
     setSelectedChain(innerSelectedChain);
     onModalClose();
     //@ts-expect-error types are correct
-    await switchChain(config, { chainId: innerSelectedChain.networkId });
+    await switchChain(config, { chainId: innerSelectedChain.id });
   };
 
   useEffect(() => {
@@ -106,12 +104,12 @@ const PaymentTokenModal = ({
         <ModalBody className="px-0 py-0 sm:pb-5 sm:px-3">
           {!isSearching ? (
             <InfiniteScrollTokenList
-              chainId={innerSelectedChain?.networkId}
+              chainId={innerSelectedChain?.id}
               onTokenClick={onTokenClick}
             />
           ) : (
             <TokenSearchResult
-              chainId={innerSelectedChain?.networkId}
+              chainId={innerSelectedChain?.id}
               searchInput={searchInput}
               setSearchInput={setSearchInput}
               onTokenClick={onTokenClick}

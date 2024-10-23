@@ -10,6 +10,9 @@ import { useAccount } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 import UserPaymentInput from "./userPaymentInput";
+import PaymentButtonWrapper from "./payment-button";
+
+import usePaymentWidget from "@/hooks/use-payment-widget";
 
 type PaymentWidgetProps = {
   headerContent?: React.ReactNode;
@@ -18,8 +21,6 @@ type PaymentWidgetProps = {
   handleClick?: () => void;
 };
 
-//TODO: Input needs some validation (disable send button), need to check balance when clicking on submit button, need to get token price
-// waiting for balance from backend, balance text should be hidden when selected token is empty or wallet is not connected
 const PaymentWidget = ({
   headerContent,
   bodyContent,
@@ -28,6 +29,8 @@ const PaymentWidget = ({
 }: PaymentWidgetProps) => {
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
+  const { tokenAmount, selectedToken } = usePaymentWidget();
+
   const onClick = () => {
     if (!isConnected) openConnectModal?.();
     handleClick?.();
@@ -45,16 +48,22 @@ const PaymentWidget = ({
         {bodyContent}
       </CardBody>
       <CardFooter className="px-4 md:p-3">
-        <Button
-          fullWidth
-          className="bg-foreground text-background"
-          size="lg"
-          onClick={onClick}
-        >
-          <span className="font-bold">
-            {isConnected ? "Send $Amount $Symbol" : "Connect Wallet"}
-          </span>
-        </Button>
+        {!isConnected && (
+          <Button
+            fullWidth
+            className="bg-foreground text-background"
+            size="lg"
+            onClick={onClick}
+          >
+            <span className="font-bold">Connect Wallet</span>
+          </Button>
+        )}
+        {isConnected && (
+          <PaymentButtonWrapper
+            amountIn={tokenAmount}
+            tokenIn={selectedToken}
+          />
+        )}
         {footerContent}
       </CardFooter>
     </Card>
