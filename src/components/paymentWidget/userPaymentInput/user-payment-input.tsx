@@ -116,7 +116,7 @@ const UserPaymentInput = () => {
                 </>
               )}
             </div>
-            <p className="text-right text-foreground-500">$1234</p>
+            <p className="text-right text-foreground-500">-</p>
           </div>
         </CardBody>
       </Card>

@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+
 import {
   formatCurrency,
   useChartData,
@@ -21,11 +22,11 @@ import ChartCard from "@/components/dashboard/charts/chart-card";
 // Generate dummy data for 3 years
 const data = generateDummyData(2024, 2026);
 
-interface AverageTransactionSizeChartProps {
+type AverageTransactionSizeChartProps = {
   selectedYear: number;
   selectedMonth: number;
   viewMode: "monthly" | "yearly";
-}
+};
 
 const AverageTransactionSizeChart: React.FC<
   AverageTransactionSizeChartProps
@@ -52,6 +53,7 @@ const AverageTransactionSizeChart: React.FC<
     return aggregatedData.map((item) => {
       const tipsCount = item.tipsCount || 1; // Avoid division by zero
       const donationsCount = item.donationsCount || 1; // Avoid division by zero
+
       return {
         date: item.date,
         avgTipSize: item.tips / tipsCount,
@@ -78,6 +80,7 @@ const AverageTransactionSizeChart: React.FC<
         </div>
       );
     }
+
     return null;
   };
 
@@ -87,7 +90,7 @@ const AverageTransactionSizeChart: React.FC<
       onChainChange={handleChainChange}
     >
       {chartData.length > 0 ? (
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer height="100%" width="100%">
           <BarChart
             data={chartData}
             margin={{
@@ -97,30 +100,30 @@ const AverageTransactionSizeChart: React.FC<
               bottom: 5,
             }}
           >
-            <CartesianGrid vertical={false} className="stroke-foreground/40" />
+            <CartesianGrid className="stroke-foreground/40" vertical={false} />
             <XAxis
-              dataKey="date"
               className="text-xs"
+              dataKey="date"
               tick={{ fill: "#888888" }}
             />
             <YAxis
               className="text-xs"
-              tickFormatter={(value) => `$${value}`}
               tick={{ fill: "#888888" }}
+              tickFormatter={(value) => `$${value}`}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
             <Bar
               dataKey="avgTipSize"
-              stackId="a"
-              name="Average Tip"
               fill="#9F91CC"
+              name="Average Tip"
+              stackId="a"
             />
             <Bar
               dataKey="avgDonationSize"
-              stackId="a"
-              name="Average Donation"
               fill="#6A9C89"
+              name="Average Donation"
+              stackId="a"
             />
           </BarChart>
         </ResponsiveContainer>

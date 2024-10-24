@@ -91,7 +91,7 @@ const SocialSelectionWidget = () => {
 
   useEffect(() => {
     const socialAccounts = getValues("socialAccounts");
-    const initialAddedSocials = Object.entries(socialAccounts)
+    const initialAddedSocials = Object.entries(socialAccounts ?? {})
       .filter(([_, value]) => value !== "")
       .map(([key]) => key);
 

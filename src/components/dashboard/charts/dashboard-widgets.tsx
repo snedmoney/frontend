@@ -1,22 +1,23 @@
 import React from "react";
+import { FaSackDollar } from "react-icons/fa6";
+import { HiEye } from "react-icons/hi2";
+import { PiUsersThree } from "react-icons/pi";
+import { CiCreditCard2 } from "react-icons/ci";
+
 import {
   useChartData,
   formatCurrency,
   generateDummyData,
   calculateMetrics,
 } from "@/lib/chart-utils";
-import { FaSackDollar } from "react-icons/fa6";
-import { HiEye } from "react-icons/hi2";
-import { PiUsersThree } from "react-icons/pi";
-import { CiCreditCard2 } from "react-icons/ci";
 
 const data = generateDummyData(2024, 2026);
 
-interface DashboardWidgetsProps {
+type DashboardWidgetsProps = {
   selectedYear: number;
   selectedMonth: number;
   viewMode: "monthly" | "yearly";
-}
+};
 
 const DashboardWidgets: React.FC<DashboardWidgetsProps> = ({
   selectedYear,
