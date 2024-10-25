@@ -30,6 +30,27 @@ export type TokenWithBalance = Token & {
   amountInUSD?: string;
 };
 
+export type Transaction = {
+  type: string;
+  status: string;
+  sourceTokenAmount: number;
+  sourceTotalFiat: number;
+  feeInFiat: number;
+  destinationTokenAmount: number;
+  destinationTokenPriceFiat: number;
+  transactionHash: string;
+  createdAt: Date;
+  updatedAt: Date;
+  sourceToken: Token;
+  destinationToken: Token;
+  sourceChain: Chain;
+  destinationChain: Chain;
+  walletId: number;
+  linkId: number;
+  name: string;
+  message: string;
+};
+
 export type PaymentWidgetContextType = {
   selectedChain: Chain;
   selectedToken: Token;
