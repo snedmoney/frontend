@@ -5,10 +5,16 @@ import { AxiosResponse } from "axios";
 
 import { apiClient } from "../config/api";
 
-const fetchChains = async (): Promise<Chain[]> => {
+export type GetChainsResponse = {
+  chains: Chain[];
+  page: number;
+  per_page: number;
+  count: number;
+};
+const fetchChains = async (): Promise<GetChainsResponse> => {
   try {
-    const response: AxiosResponse<{ chains: Chain[] }> = await apiClient.get(
-      "/chains?per_page=100"
+    const response: AxiosResponse<GetChainsResponse> = await apiClient.get(
+      "/chains?per_page=100",
     );
     const order = [
       "Ethereum",
@@ -23,20 +29,22 @@ const fetchChains = async (): Promise<Chain[]> => {
       "Aurora",
     ];
 
-    response.data.chains.sort((a: Chain, b: Chain) => {
-      const indexA = order.indexOf(a.name);
-      const indexB = order.indexOf(b.name);
+    response.data?.chains
+      .filter((chain) => chain.allowed)
+      .sort((a: Chain, b: Chain) => {
+        const indexA = order.indexOf(a.name);
+        const indexB = order.indexOf(b.name);
 
-      if (indexA !== -1 && indexB !== -1) {
-        return indexA - indexB;
-      }
-      if (indexA !== -1) return -1;
-      if (indexB !== -1) return 1;
+        if (indexA !== -1 && indexB !== -1) {
+          return indexA - indexB;
+        }
+        if (indexA !== -1) return -1;
+        if (indexB !== -1) return 1;
 
-      return 0;
-    });
+        return 0;
+      });
 
-    return response.data.chains;
+    return response.data;
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message || "Failed to fetch chains");
@@ -46,7 +54,7 @@ const fetchChains = async (): Promise<Chain[]> => {
 };
 
 const useGetChains = () => {
-  return useQuery<Chain[]>({
+  return useQuery<GetChainsResponse>({
     queryKey: ["chains"],
     queryFn: fetchChains,
     staleTime: 1000 * 60 * 5, // 5 minutes

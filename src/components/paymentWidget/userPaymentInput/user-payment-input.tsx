@@ -13,16 +13,15 @@ import PaymentTokenModal from "../payment-token-modal";
 import SelectedChain from "../selected-chain";
 import SelectedToken from "../selected-token";
 import CustomConnectButton from "../custom-connect-button";
-
-import usePaymentWidget from "@/hooks/use-payment-widget";
-import useGetChains from "@/hooks/use-get-chains";
 import useFetchBalance from "@/hooks/use-fetch-balance";
+import useGetChains from "@/hooks/use-get-chains";
+import usePaymentWidget from "@/hooks/use-payment-widget";
 
 const UserPaymentInput = () => {
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
   const chainId = useChainId();
-  const { data: chains = [], isLoading } = useGetChains();
-  const initialChain = chains.find((chain) => chain.id === chainId);
+  const { data, isLoading } = useGetChains();
+  const initialChain = data?.chains.find((chain) => chain.id === chainId);
   const { selectedToken, setTokenAmount, tokenAmount, setSelectedChain } =
     usePaymentWidget();
   const { data: fetchedBalance, isLoading: isTokenBalanceLoading } =
@@ -121,7 +120,7 @@ const UserPaymentInput = () => {
         </CardBody>
       </Card>
       <PaymentTokenModal
-        chains={chains!}
+        chains={data?.chains!}
         isLoadingChains={isLoading}
         isOpen={isOpen}
         onModalClose={onClose}
