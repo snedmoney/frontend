@@ -15,7 +15,7 @@ export type TokensResponse = {
 
 const fetchTokens = async (
   chainId: number,
-  page: number = 1
+  page: number = 1,
 ): Promise<TokensResponse> => {
   try {
     const response: AxiosResponse<TokensResponse> = await apiClient.get(
@@ -25,7 +25,7 @@ const fetchTokens = async (
           page: page,
           per_page: 60,
         },
-      }
+      },
     );
 
     return response.data;

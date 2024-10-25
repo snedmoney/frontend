@@ -9,7 +9,7 @@ export type CreateProfileFlowData = {
   userName: string;
   about: string;
   paymentMethod: {
-    chainId: string;
+    chainId: number;
     tokenAddress: string;
   };
   websiteLink?: string;

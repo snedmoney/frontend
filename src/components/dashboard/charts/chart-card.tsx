@@ -1,4 +1,5 @@
 import { PropsWithChildren, ReactNode, useState } from "react";
+
 import ChainFilter from "@/components/chain-filter";
 
 type ChartCardProps = {
@@ -25,7 +26,7 @@ const ChartCard = ({
     <div className="w-full bg-default-100 text-default-900 rounded-lg shadow-lg p-4 sm:p-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
         <h2 className="text-xl font-bold">{title}</h2>
-        <div className="w-full sm:w-auto">
+        <div className="w-full sm:w-[200px]">
           <ChainFilter
             selectedChain={selectedChain}
             onChainChange={handleChainChange}

@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { formatCurrency } from "@/lib/chart-utils";
 import { FaChevronRight } from "react-icons/fa";
 import {
   Table,
@@ -19,6 +18,8 @@ import {
   getLocalTimeZone,
   today,
 } from "@internationalized/date";
+
+import { formatCurrency } from "@/lib/chart-utils";
 import ChainFilter from "@/components/chain-filter";
 import TransactionTypeFilter from "@/components/dashboard/transactions/transaction-type-filter";
 import NoTransactions from "@/components/dashboard/transactions/no-transactions";
@@ -38,6 +39,7 @@ type Transaction = {
 const generateMockTransactions = (count: number): Transaction[] => {
   const transactions: Transaction[] = [];
   const currentDate = today(getLocalTimeZone());
+
   for (let i = 0; i < count; i++) {
     transactions.push({
       id: `${i + 1}`,
@@ -49,6 +51,7 @@ const generateMockTransactions = (count: number): Transaction[] => {
       status: Math.random() > 0.2 ? "Completed" : "In progress",
     });
   }
+
   return transactions;
 };
 
@@ -62,6 +65,7 @@ const dateFormatter = new DateFormatter("en-US", {
 
 const formatDate = (date: CalendarDate) => {
   const formatted = dateFormatter.format(date.toDate(getLocalTimeZone()));
+
   return formatted.replace(/^\w/, (c) => c.toLowerCase());
 };
 
@@ -89,6 +93,7 @@ const TransactionHistory = () => {
         transaction.chain.toLowerCase() === selectedChain;
       const typeCondition =
         selectedType === "all" || transaction.type === selectedType;
+
       return dateCondition && chainCondition && typeCondition;
     });
   }, [startDate, endDate, selectedChain, selectedType]);
@@ -100,6 +105,7 @@ const TransactionHistory = () => {
     return filteredItems
       .sort((a, b) => {
         const cmp = a.date.compare(b.date);
+
         return sortDescriptor.direction === "descending" ? -cmp : cmp;
       })
       .slice(start, end);
@@ -118,50 +124,50 @@ const TransactionHistory = () => {
       <div className="space-y-4">
         <div className="flex justify-end">
           <Button
-            onClick={resetFilters}
             color="primary"
-            variant="light"
             radius="sm"
+            variant="light"
+            onClick={resetFilters}
           >
             Reset Filters
           </Button>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <DatePicker
+            showMonthAndYearPickers
+            calendarProps={{ color: "danger" }}
+            className="w-full"
+            granularity="day"
             label="From Date"
+            maxValue={maxDate}
+            radius="sm"
             value={startDate}
             onChange={setStartDate}
-            showMonthAndYearPickers
-            granularity="day"
-            maxValue={maxDate}
-            className="w-full"
-            radius="sm"
-            calendarProps={{ color: "danger" }}
           />
           <DatePicker
+            showMonthAndYearPickers
+            calendarProps={{ color: "danger" }}
+            className="w-full"
+            granularity="day"
             label="To Date"
+            maxValue={maxDate}
+            radius="sm"
             value={endDate}
             onChange={setEndDate}
-            showMonthAndYearPickers
-            granularity="day"
-            maxValue={maxDate}
-            className="w-full"
-            radius="sm"
-            calendarProps={{ color: "danger" }}
           />
           <ChainFilter
-            selectedChain={selectedChain}
-            onChainChange={setSelectedChain}
-            label="Select chain"
-            variant="flat"
             className="w-full"
+            label="Select chain"
+            selectedChain={selectedChain}
+            variant="flat"
+            onChainChange={setSelectedChain}
           />
           <TransactionTypeFilter
-            selectedType={selectedType}
-            onTypeChange={setSelectedType}
-            label="Select transaction type"
-            variant="flat"
             className="w-full"
+            label="Select transaction type"
+            selectedType={selectedType}
+            variant="flat"
+            onTypeChange={setSelectedType}
           />
         </div>
       </div>
@@ -181,14 +187,14 @@ const TransactionHistory = () => {
               DATE
             </TableColumn>
             <TableColumn>STATUS</TableColumn>
-            <TableColumn children={undefined}></TableColumn>
+            <TableColumn children={undefined} />
           </TableHeader>
           <TableBody emptyContent={<NoTransactions />}>
             {items.map((transaction) => (
               <TableRow
                 key={transaction.id}
-                onClick={() => {}}
                 className="cursor-pointer"
+                onClick={() => {}}
               >
                 <TableCell>{transaction.from}</TableCell>
                 <TableCell>{transaction.chain}</TableCell>
@@ -201,7 +207,7 @@ const TransactionHistory = () => {
                   <TransactionStatusBadge status={transaction.status} />
                 </TableCell>
                 <TableCell>
-                  <FaChevronRight size={16} className="text-foreground-400" />
+                  <FaChevronRight className="text-foreground-400" size={16} />
                 </TableCell>
               </TableRow>
             ))}
@@ -210,10 +216,10 @@ const TransactionHistory = () => {
         {filteredItems.length > rowsPerPage && (
           <div className="flex justify-center">
             <Pagination
-              total={Math.ceil(filteredItems.length / rowsPerPage)}
-              page={page}
-              onChange={setPage}
               showControls
+              page={page}
+              total={Math.ceil(filteredItems.length / rowsPerPage)}
+              onChange={setPage}
             />
           </div>
         )}
