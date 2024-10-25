@@ -1,4 +1,8 @@
-import { Select, SelectItem, SelectProps } from "@nextui-org/react";
+import { SelectProps } from "@nextui-org/react";
+
+import { ChainSelector } from "./chain-selector";
+
+import useGetChains from "@/hooks/use-get-chains";
 
 type ChainFilterProps = {
   selectedChain: string;
@@ -9,44 +13,38 @@ type ChainFilterProps = {
   "onChange" | "onSelectionChange" | "selectedKeys" | "children" | "className"
 >;
 
-const chains = [
-  { key: "all", label: "All Chains" },
-  { key: "ethereum", label: "Ethereum" },
-  { key: "polygon", label: "Polygon" },
-  // Add more chains as needed
-];
-
 const ChainFilter = ({
   selectedChain,
   onChainChange,
-  className,
   ...rest
 }: ChainFilterProps) => {
   const handleChainChange = (keys: any) => {
     // If keys is empty (same item clicked), maintain the current selection
     const selectedKey =
       keys.size > 0 ? (Array.from(keys)[0] as string) : selectedChain;
+
     onChainChange(selectedKey);
   };
+  const { data, isLoading } = useGetChains();
+  const chainsData =
+    data?.chains
+      .filter((chain) => !chain.name.includes("Testnet"))
+      .map((chain) => ({ ...chain, key: chain.id, label: chain.name })) || [];
 
   return (
-    <Select
-      value={selectedChain}
-      onSelectionChange={handleChainChange}
+    <ChainSelector
       aria-label="Chain"
-      defaultSelectedKeys={[chains[0].key]}
-      className={className}
-      variant="bordered"
-      selectedKeys={[selectedChain]}
+      chains={chainsData}
+      hasAllSelector
+      defaultSelectedKeys={[chainsData[0]?.key]}
+      isLoading={isLoading}
       radius="sm"
+      selectedKeys={[selectedChain]}
+      value={selectedChain}
+      variant="bordered"
+      onSelectionChange={handleChainChange}
       {...rest}
-    >
-      {chains.map((chain) => (
-        <SelectItem key={chain.key} value={chain.key}>
-          {chain.label}
-        </SelectItem>
-      ))}
-    </Select>
+    />
   );
 };
 
