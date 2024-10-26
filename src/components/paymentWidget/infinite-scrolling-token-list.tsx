@@ -39,6 +39,7 @@ const InfiniteScrollTokenList = ({
       ...t,
       balance: tokensBalance[i]?.balance,
       amountInUSD: tokensBalance[i]?.amountInUSD,
+      price: tokensBalance[i]?.price,
     };
   });
 
