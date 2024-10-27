@@ -5,13 +5,15 @@ import { useAccount, usePublicClient } from "wagmi";
 import { useDebounce } from "use-debounce";
 
 import QUOTER_ABI from "@/config/quoter-abi";
-import { getUniswapQuoter, getWethAddress } from "@/lib/contract-address";
+import { getWethAddress } from "@/lib/contract-address";
 import { Token } from "@/providers/paymentWidget/paymentWidgetContext";
 
 interface QuoteParams {
   tokenIn?: Token;
   tokenOut?: Token;
   amountIn?: string;
+  quoter: Address;
+  enabled: boolean;
 }
 
 type Route = {
@@ -19,7 +21,7 @@ type Route = {
   fees: number[];
 };
 
-function encodePath(path: string[], fees: number[]): `0x${string}` {
+export function encodePath(path: string[], fees: number[]): `0x${string}` {
   if (path.length !== fees.length + 1) {
     throw new Error("path/fee lengths do not match");
   }
@@ -37,11 +39,9 @@ function encodePath(path: string[], fees: number[]): `0x${string}` {
 
 async function fetchQuote(
   client: ReturnType<typeof usePublicClient>,
-  { tokenIn, tokenOut, amountIn }: Required<QuoteParams>
+  { quoter, tokenIn, tokenOut, amountIn }: Required<QuoteParams>,
 ) {
   const chainId = await client!.getChainId();
-
-  const QUOTER_ADDRESS = getUniswapQuoter(chainId) as Address;
 
   const wethAddress = getWethAddress(chainId) as Address;
 
@@ -70,7 +70,7 @@ async function fetchQuote(
         });
 
         const { data: result } = await client!.call({
-          to: QUOTER_ADDRESS,
+          to: quoter,
           data,
         });
 
@@ -85,7 +85,12 @@ async function fetchQuote(
           bestRoute = route;
         }
       } catch (error) {
-        console.log(`Error in finding quote`, error);
+        // console.log(`Error in finding quote`, error);
+
+        return {
+          quote: amountInWei,
+          route: routes[0],
+        };
       }
     }
   }
@@ -96,7 +101,7 @@ async function fetchQuote(
   };
 }
 
-export function useUniswapV3Quote(params: QuoteParams) {
+export function useSwapV3Quote(key: String, params: QuoteParams) {
   const { chainId } = useAccount();
   const client = usePublicClient();
 
@@ -115,7 +120,7 @@ export function useUniswapV3Quote(params: QuoteParams) {
   };
 
   return useQuery({
-    queryKey: ["uniswapV3Quote", debouncedParams],
+    queryKey: [`${key}V3Quote`, debouncedParams],
     queryFn: fetchQuoteFn,
     refetchInterval: 30000, // Refetch every 30 seconds
     refetchIntervalInBackground: true,
@@ -124,6 +129,7 @@ export function useUniswapV3Quote(params: QuoteParams) {
       !!debouncedParams.tokenOut?.address &&
       !!debouncedParams.amountIn &&
       !!chainId &&
+      debouncedParams.enabled &&
       !!client,
   });
 }

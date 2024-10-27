@@ -6,26 +6,36 @@ import { Button } from "@nextui-org/button";
 import abi from "@/config/abi";
 import useTransaction from "@/hooks/use-transaction";
 import { getWormholeChainId } from "@/lib/wormhole";
-import { getPaymentContract } from "@/lib/contract-address";
-import { useUniswapV3Quote } from "@/hooks/use-quotation";
+import {
+  getPancakeswapRouter,
+  getPaymentContract,
+  getUniswapQuoter,
+  getUniswapRouter,
+  getWxUSDT,
+} from "@/lib/contract-address";
+import { useSwapV3Quote } from "@/hooks/use-quotation";
 import { Token } from "@/providers/paymentWidget/paymentWidgetContext";
-import { addressToBytes32, generateUUID } from "@/lib/utils";
+import { addressToBytes32, generateRandomBytes32 } from "@/lib/utils";
+import TransactionModal from "@/components/transactionModal/transaction-modal";
 
 interface ButtonProps {
   onClick?: () => void;
   disabled?: boolean;
+  isLoading?: boolean;
   children?: React.ReactNode;
 }
 
 const ButtonComponent: React.FC<ButtonProps> = ({
   onClick,
   disabled,
+  isLoading,
   children,
 }) => (
   <Button
     fullWidth
     className="bg-foreground text-background"
     disabled={disabled}
+    isLoading={isLoading}
     radius="full"
     size="lg"
     style={{
@@ -50,8 +60,10 @@ const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
 
   const paymentContract = getPaymentContract(chainId);
 
+  const wxUsdt = getWxUSDT(chainId);
+
   // TODO: Replace this with the tokenOut from the config.
-  const tokenOut: Token = {
+  const usdtToken: Token = {
     chainId: chainId as number,
     chainName: "Arbitrum",
     decimals: 6,
@@ -62,14 +74,40 @@ const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
     address: "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
   };
 
-  const { data: quoteData } = useUniswapV3Quote({
-    tokenIn,
-    tokenOut,
-    amountIn: amountIn,
-  });
+  const wxUsdtToken: Token = {
+    chainId: chainId as number,
+    chainName: "Arbitrum",
+    decimals: 6,
+    id: 100,
+    logoURI: "Some logo",
+    name: "USDT",
+    symbol: "USDT",
+    address: wxUsdt as Address,
+  };
 
-  // Optimism
-  const destinationChainId = 10;
+  const uniswapQuoter = getUniswapQuoter(chainId) as Address;
+
+  const uniswapRouter = getUniswapRouter(chainId) as Address;
+
+  const pancakeswapRouter = getPancakeswapRouter(chainId) as Address;
+
+  const isUniswapEnabled =
+    tokenIn && usdtToken && tokenIn.address !== usdtToken.address
+      ? true
+      : false;
+
+  const { data: uniswapQuoteData, isFetching: isFetchingQuote } =
+    useSwapV3Quote("uniswap", {
+      tokenIn,
+      tokenOut: usdtToken,
+      amountIn: amountIn,
+      quoter: uniswapQuoter,
+      enabled: isUniswapEnabled,
+    });
+
+  // Base
+  const destinationChainId = 8453;
+  // const destinationChainId = 42161;
   const destinationPaymentContract = getPaymentContract(destinationChainId);
   const wormholeDestinationChainId = getWormholeChainId(destinationChainId);
 
@@ -102,11 +140,13 @@ const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
     writeContract: approveWriteContract,
   } = useTransaction();
 
+  const txParams = useTransaction();
+
   const {
     isPending: isPaymentPending,
     isSuccess: isPaymentSuccess,
     writeContract: paymentWriteContract,
-  } = useTransaction();
+  } = txParams;
 
   useEffect(() => {
     if (!decimals || !amountIn) return;
@@ -137,12 +177,7 @@ const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
   };
 
   const handlePayment = () => {
-    if (
-      !decimals ||
-      !amountIn ||
-      !quoteData?.route ||
-      !destinationPaymentContract
-    ) {
+    if (!decimals || !amountIn || !destinationPaymentContract) {
       return;
     }
 
@@ -151,19 +186,38 @@ const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
 
     const amountInWei = parseUnits(amountIn, decimals);
 
-    const swapParams = {
-      route: quoteData.route.path,
-      fees: quoteData.route.fees,
-      amountIn: amountInWei,
-      amountOutMinimum: quoteData.quote,
-      deadline: BigInt(deadline),
-    };
+    const swapParams = [];
+
+    if (isUniswapEnabled && uniswapQuoteData?.route) {
+      swapParams.push({
+        router: uniswapRouter,
+        route: uniswapQuoteData.route.path,
+        fees: uniswapQuoteData.route.fees,
+        amountOutMinimum: uniswapQuoteData.quote,
+        deadline: BigInt(deadline),
+        swapType: 0,
+      });
+    }
+
+    if (chainId !== destinationChainId) {
+      const quote = uniswapQuoteData?.quote ?? amountInWei;
+
+      swapParams.push({
+        router: pancakeswapRouter,
+        route: [usdtToken.address, wxUsdtToken.address],
+        fees: [100],
+        amountOutMinimum: (quote * 98n) / 100n,
+        deadline: BigInt(deadline),
+        swapType: 1,
+      });
+    }
 
     const paymentParams = {
-      paymentId: generateUUID(),
+      paymentId: generateRandomBytes32(),
       destAddress: address,
       tokenIn: tokenIn!.address,
-      tokenOut: tokenOut!.address,
+      tokenOut: wxUsdtToken!.address,
+      amountIn: amountInWei,
     };
 
     const bridgeParams = {
@@ -187,14 +241,23 @@ const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
   return (
     <React.Fragment>
       {isApprovalNeeded ? (
-        <ButtonComponent disabled={isApprovePending} onClick={handleApprove}>
+        <ButtonComponent isLoading={isApprovePending} onClick={handleApprove}>
           Approve {amountIn} {tokenIn.symbol}
         </ButtonComponent>
       ) : (
-        <ButtonComponent disabled={isPaymentPending} onClick={handlePayment}>
+        <ButtonComponent
+          disabled={isFetchingQuote}
+          isLoading={isPaymentPending}
+          onClick={handlePayment}
+        >
           Send {amountIn} {tokenIn.symbol}
         </ButtonComponent>
       )}
+      <TransactionModal
+        amountIn={amountIn}
+        isOpen={isPaymentPending || isPaymentSuccess}
+        txParams={txParams}
+      />
     </React.Fragment>
   );
 };

@@ -1,11 +1,12 @@
-import { useState, useEffect, ReactNode, useCallback } from "react";
-import { useForm, FormProvider } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { useAccount } from "wagmi";
-
 import CreateProfileFlowContext, {
   CreateProfileFlowData,
 } from "./createProfileFlowContext";
+import { FormProvider, useForm } from "react-hook-form";
+import { ReactNode, useCallback, useEffect, useState } from "react";
+
+import { apiClient } from "@/config/api";
+import { useAccount } from "wagmi";
+import { useNavigate } from "react-router-dom";
 
 const FORM_DATA_STORAGE_KEY = "createProfileFormData";
 const CURRENT_STEP_STORAGE_KEY = "currentProfileStep";
@@ -114,9 +115,12 @@ export const CreateProfileFlowProvider = ({
     try {
       console.log("Submitting data:", data);
       // toast to show submission success?
-      // await api.createProfile(data);
+      const { data: savedData } = await apiClient.post("/users", data);
+      const {
+        savedUser: { userName },
+      } = savedData;
       resetFlow();
-      navigate("/profile");
+      navigate(`/profile/${userName}`);
       // Trigger share modal after navigate
     } catch (error) {
       console.error("Error submitting form:", error);

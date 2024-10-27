@@ -13,6 +13,7 @@ import PaymentTokenModal from "../payment-token-modal";
 import SelectedChain from "../selected-chain";
 import SelectedToken from "../selected-token";
 import CustomConnectButton from "../custom-connect-button";
+
 import useFetchBalance from "@/hooks/use-fetch-balance";
 import useGetChains from "@/hooks/use-get-chains";
 import usePaymentWidget from "@/hooks/use-payment-widget";
@@ -58,6 +59,11 @@ const UserPaymentInput = () => {
   };
 
   const error_condition = false;
+
+  const amount =
+    tokenAmount && selectedToken.price
+      ? +tokenAmount * +selectedToken.price
+      : undefined;
 
   return (
     <>
@@ -115,7 +121,9 @@ const UserPaymentInput = () => {
                 </>
               )}
             </div>
-            <p className="text-right text-foreground-500">-</p>
+            <p className="text-right text-foreground-500">
+              ${amount && !isNaN(amount) ? amount.toFixed(2) : "-"}
+            </p>
           </div>
         </CardBody>
       </Card>

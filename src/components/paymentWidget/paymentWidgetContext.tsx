@@ -2,7 +2,7 @@
 import { createContext } from "react";
 
 export type Chain = {
-  networkId: number;
+  id: number;
   name: string;
   allowed: boolean;
   iconURL: string;
@@ -22,15 +22,42 @@ export type Token = {
   logoURI: string;
   name: string;
   symbol: string;
-  tokenAddress: string;
+  address: string;
+};
+
+export type TokenWithBalance = Token & {
+  balance?: string;
+  amountInUSD?: string;
+  price?: number;
+};
+
+export type Transaction = {
+  type: string;
+  status: string;
+  sourceTokenAmount: number;
+  sourceTotalFiat: number;
+  feeInFiat: number;
+  destinationTokenAmount: number;
+  destinationTokenPriceFiat: number;
+  transactionHash: string;
+  createdAt: Date;
+  updatedAt: Date;
+  sourceToken: Token;
+  destinationToken: Token;
+  sourceChain: Chain;
+  destinationChain: Chain;
+  walletId: number;
+  linkId: number;
+  name: string;
+  message: string;
 };
 
 export type PaymentWidgetContextType = {
   selectedChain: Chain;
-  selectedToken: Token;
+  selectedToken: TokenWithBalance;
   isSearching: boolean;
   setSelectedChain: (chain: Chain) => void;
-  setSelectedToken: (token: Token) => void;
+  setSelectedToken: (token: TokenWithBalance) => void;
   tokenAmount?: string;
   setTokenAmount: (amount?: string) => void;
   setIsSearching: (isSearching: boolean) => void;
@@ -39,7 +66,7 @@ export type PaymentWidgetContextType = {
 //Later we might need more values for chain switching
 const PaymentWidgetContext = createContext<PaymentWidgetContextType>({
   selectedChain: {} as Chain,
-  selectedToken: {} as Token,
+  selectedToken: {} as TokenWithBalance,
   tokenAmount: undefined,
   isSearching: false,
   setSelectedChain: () => {},
