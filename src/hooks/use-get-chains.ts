@@ -13,9 +13,7 @@ export type GetChainsResponse = {
 };
 const fetchChains = async (): Promise<GetChainsResponse> => {
   try {
-    const response: AxiosResponse<GetChainsResponse> = await apiClient.get(
-      "/chains?per_page=100",
-    );
+    const response: AxiosResponse<GetChainsResponse> = await apiClient.get("/chains?per_page=100");
     const order = [
       "Ethereum",
       "Arbitrum",
@@ -24,13 +22,9 @@ const fetchChains = async (): Promise<GetChainsResponse> => {
       "BNB Smart Chain",
       "Polygon",
       "Avalanche C-Chain",
-      "Fantom Opera",
-      "Klaytn",
-      "Aurora",
     ];
-
-    response.data?.chains
-      .filter((chain) => chain.allowed)
+    const filteredChains = response.data.chains
+      .filter(chain => chain.allowed && chain.id !== 42220)
       .sort((a: Chain, b: Chain) => {
         const indexA = order.indexOf(a.name);
         const indexB = order.indexOf(b.name);
@@ -44,7 +38,11 @@ const fetchChains = async (): Promise<GetChainsResponse> => {
         return 0;
       });
 
-    return response.data;
+    return {
+      ...response.data,
+      chains: filteredChains,
+      count: filteredChains.length
+    };
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message || "Failed to fetch chains");
