@@ -5,60 +5,43 @@ import {
   NavbarContent,
   NavbarItem,
 } from "@nextui-org/navbar";
-import { useAccount, useSignMessage } from "wagmi";
-import { useEffect } from "react";
-import { ThemeSwitch } from "@/components/theme-switch";
-import { apiClient } from "@/config/api";
-import UserMenuDropdown from "@/components/navBar/user-menu-dropdown";
-import CreatePage from "../create-page";
 import { IoShareSocialOutline } from "react-icons/io5";
-import useTheme from '@/hooks/use-theme';
 import { Button } from "@nextui-org/button";
+
+import CreatePage from "../create-page";
+
+import { ThemeSwitch } from "@/components/theme-switch";
+import UserMenuDropdown from "@/components/navBar/user-menu-dropdown";
+import useTheme from "@/hooks/use-theme";
 import useShareModal from "@/hooks/use-share-modal";
 
 //TODO: conditionally render create your own page and share button. Render create your own page if not page owner. Render share button if page owner.
-const logoURLWhite = new URL('../../assets/logos/sample-logo1.png', import.meta.url).href;
-const logoURLBlack = new URL('../../assets/logos/sample-logo2.png', import.meta.url).href;
+const logoURLWhite = new URL(
+  "../../assets/logos/sample-logo1.png",
+  import.meta.url,
+).href;
+const logoURLBlack = new URL(
+  "../../assets/logos/sample-logo2.png",
+  import.meta.url,
+).href;
 
 type NavbarProps = {
   isSidebarOpen?: boolean;
   setIsSidebarOpen?: (open: boolean) => void;
-}
+};
 
 export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarProps) => {
-  const token = localStorage.getItem("token");
-  const { isConnected, isDisconnected } = useAccount();
-  const { signMessage, isSuccess, data } = useSignMessage();
-  const { isDark } = useTheme();
   const openShareModal = useShareModal();
+  const { isDark } = useTheme();
   const onUserMenuClick = () => setIsSidebarOpen?.(!isSidebarOpen);
-  useEffect(() => {
-    if (!token && isConnected) {
-      signMessage({ message: "hello world" });
-    }
-  }, [isConnected]);
-
-  useEffect(() => {
-    if (isDisconnected) {
-      localStorage.removeItem("token");
-    }
-  }, [isDisconnected]);
-
-  useEffect(() => {
-    async function process() {
-      if (isSuccess && data) {
-        apiClient.post("/authorize", { signature: data }).then((response) => {
-          if (response.data.token) {
-            localStorage.setItem("token", response.data.token);
-          }
-        });
-      }
-    }
-    process();
-  }, [isSuccess, data]);
 
   return (
-    <NextUINavbar maxWidth="2xl" position="sticky" className='md:border-b-1 border-b-default-200 bg-background' classNames={{ base: 'px-4 md:px-8', wrapper: 'px-0' }}>
+    <NextUINavbar
+      className="md:border-b-1 border-b-default-200 bg-background"
+      classNames={{ base: "px-4 md:px-8", wrapper: "px-0" }}
+      maxWidth="2xl"
+      position="sticky"
+    >
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <Link
@@ -66,8 +49,14 @@ export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarProps) => {
             color="foreground"
             href="/"
           >
-            {!isDark ? <img src={logoURLWhite} height='38px' width='38px' /> : <img src={logoURLBlack} height='38px' width='38px' />}
-            <p className="font-bold text-foreground/80 pl-1 text-xl hidden md:block">Sned</p>
+            {!isDark ? (
+              <img alt="logo" height="38px" src={logoURLWhite} width="38px" />
+            ) : (
+              <img alt="logo" height="38px" src={logoURLBlack} width="38px" />
+            )}
+            <p className="font-bold text-foreground/80 pl-1 text-xl hidden md:block">
+              Sned
+            </p>
           </Link>
         </NavbarBrand>
       </NavbarContent>
@@ -78,8 +67,13 @@ export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarProps) => {
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
         </NavbarItem>
-        <CreatePage href='/create/profile' />
-        <Button color="default" onPress={openShareModal} variant="ghost" endContent={<IoShareSocialOutline />}>
+        <CreatePage href="/create/profile" />
+        <Button
+          color="default"
+          endContent={<IoShareSocialOutline />}
+          variant="ghost"
+          onPress={openShareModal}
+        >
           Share this page
         </Button>
         <UserMenuDropdown onUserMenuClick={onUserMenuClick} />
