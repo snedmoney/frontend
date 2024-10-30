@@ -24,22 +24,7 @@ function App() {
   const token = localStorage.getItem("token");
   const { isConnected, isDisconnected } = useAccount();
   const { signMessage, isSuccess, data } = useSignMessage();
-  const authMessage = `Welcome to Sned!
-
-  By connecting your wallet, you authorize Sned to:
-  
-  1. View your wallet address
-  2. Request approval for transactions
-  3. Display your account balance and assets
-  
-  This connection does not give us permission to:
-  • Initiate transactions without your approval
-  • Access your private keys
-  • Transfer funds without your explicit consent
-  
-  You can disconnect your wallet at any time.
-  
-  To proceed, please sign this message to verify your ownership of the wallet.`;
+  const authMessage = `Welcome to Sned! By signing this message, you authorize Sned to view your wallet address, request transaction approvals, and display your account balance. We cannot initiate transactions, access your private keys, or transfer funds without your explicit consent. You can disconnect your wallet at any time. Sign to verify ownership and proceed.`;
 
   useEffect(() => {
     if (!token && isConnected) {
