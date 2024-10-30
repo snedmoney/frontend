@@ -16,7 +16,7 @@ const TokenListItem = ({
     <div
       key={token.id}
       ref={isLastItem ? lastItemRef : undefined}
-      className="flex justify-between items-center rounded-md gap-2 py-3"
+      className="flex justify-between items-center rounded-md gap-2"
     >
       <span>
         <img alt="token logo" height="32" src={token.logoURI} width="32" />

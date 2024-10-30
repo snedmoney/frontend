@@ -73,7 +73,7 @@ function App() {
           <Route index element={<IndexPage />} />
           <Route element={<ProfilePage />} path="/profile/:username" />
         </Route>
-        <Route element={<DashboardLayout />} path="/user">
+        <Route element={<DashboardLayout />} path="/user/">
           <Route element={<DashboardPage />} path="dashboard" />
           <Route element={<TransactionHistoryPage />} path="history" />
           <Route element={<ManageProfile />} path="profile" />

@@ -114,7 +114,7 @@ const InfiniteScrollTokenList = ({
       aria-label="Available tokens list"
       className="p-0 h-[400px]"
       classNames={{
-        list: "overflow-y-auto",
+        list: "overflow-y-auto gap-2",
       }}
       selectedKeys={[selectedToken.address + selectedToken.id]}
       selectionMode="single"
