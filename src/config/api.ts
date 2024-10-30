@@ -2,9 +2,17 @@ import axios from "axios";
 
 export const apiClient = axios.create({
   // baseURL: "http://localhost:8002/api",
-  baseURL: "https://backend-staging-hc8j.onrender.com",
-  //  baseURL: "https://backend-g057.onrender.com/api",
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
-  },
+  //baseURL: "https://backend-staging-hc8j.onrender.com/api",
+  baseURL: "https://backend-g057.onrender.com/api",
+});
+
+apiClient.interceptors.request.use((config) => {
+  // Add token to header before each request
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
 });

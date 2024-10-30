@@ -33,7 +33,10 @@ const InfiniteScrollTokenList = ({
   const allTokens = tokens?.pages.flatMap((page) => page.tokens) || [];
 
   const { tokensBalance, isFetching: isFetchingBalance } =
-    useMultipleTokenBalances(allTokens.map((t) => t.address));
+    useMultipleTokenBalances(
+      chainId,
+      allTokens.map((t) => t.address),
+    );
   const allTokensWithPrice: TokenWithBalance[] = allTokens.map((t, i) => {
     return {
       ...t,
@@ -44,8 +47,15 @@ const InfiniteScrollTokenList = ({
   });
 
   const sortedTokensWithPrice = allTokensWithPrice.sort((a, b) => {
-    const amountA = parseFloat(a.amountInUSD || "0");
-    const amountB = parseFloat(b.amountInUSD || "0");
+    let amountA, amountB;
+
+    if (a.amountInUSD && b.amountInUSD) {
+      amountA = parseFloat(a.amountInUSD || "0");
+      amountB = parseFloat(b.amountInUSD || "0");
+    } else {
+      amountA = parseFloat(a.balance || "0");
+      amountB = parseFloat(b.balance || "0");
+    }
 
     return amountB - amountA;
   });
@@ -56,7 +66,7 @@ const InfiniteScrollTokenList = ({
   });
 
   const loadMoreItems = useCallback(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
+    if (inView && hasNextPage && !isFetchingNextPage && !isFetchingBalance) {
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
@@ -66,7 +76,7 @@ const InfiniteScrollTokenList = ({
   }, [loadMoreItems]);
 
   React.useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
+    if (inView && hasNextPage && !isFetchingNextPage && !isFetchingBalance) {
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
