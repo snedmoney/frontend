@@ -1,23 +1,15 @@
-import { Controller, useFormContext } from "react-hook-form";
-import { Input, Button } from "@nextui-org/react";
-import { ReactNode, useState } from "react";
-
-import PaymentMethodSelector from "../payment-method-selector";
-
-import SocialSelectionWidget from "./social-selection-widget";
+import { useFormContext } from "react-hook-form";
+import { Button } from "@nextui-org/react";
+import { useState } from "react";
 
 import useCreateProfileFlow from "@/hooks/use-create-profile-flow";
 import FlowLayout from "@/layouts/flow-layout";
 import { CreateProfileFlowData } from "@/providers/createProfileFlow/createProfileFlowContext";
+import UserInfo2Form from "@/components/user-info2-form";
 
 const UserInfo2 = () => {
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-    setValue,
-  } = useFormContext<CreateProfileFlowData>();
-  const { totalSteps, onSubmit, prevStep } = useCreateProfileFlow();
+  const { handleSubmit } = useFormContext<CreateProfileFlowData>();
+  const { totalSteps, onSubmit, prevStep, currentStep } = useCreateProfileFlow();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmitWrapper = async (data: CreateProfileFlowData) => {
@@ -37,7 +29,7 @@ const UserInfo2 = () => {
             Payment Method & Social Links
           </h1>
           <h2 className="text-base md:text-lg text-foreground/80 mt-2">
-            We are almost at the finish line! Just need to know how you&apos;d
+            We are almost at the finish line! Just need to know how you'd
             like to be paid.
           </h2>
           <h2 className="text-base md:text-lg text-foreground/80 mt-2">
@@ -45,44 +37,6 @@ const UserInfo2 = () => {
           </h2>
         </div>
       </div>
-    </div>
-  );
-
-  const rightContent = (
-    <div className="flex flex-col gap-2 md:gap-4 md:pl-3">
-      <PaymentMethodSelector />
-      <Controller
-        control={control}
-        name="websiteLink"
-        render={({ field }) => (
-          <Input
-            {...field}
-            isClearable
-            errorMessage={errors.websiteLink?.message as ReactNode}
-            isInvalid={!!errors.websiteLink?.message}
-            label="Website"
-            labelPlacement="outside"
-            placeholder="https://"
-            radius="sm"
-            type="url"
-            variant="bordered"
-            onClear={() => setValue("websiteLink", "")}
-          />
-        )}
-        rules={{
-          validate: (value) => {
-            if (value === "" || value === null) return true;
-            try {
-              new URL(value!);
-
-              return true;
-            } catch (_) {
-              return "Please enter a valid URL";
-            }
-          },
-        }}
-      />
-      <SocialSelectionWidget />
     </div>
   );
 
@@ -108,9 +62,14 @@ const UserInfo2 = () => {
   return (
     <FlowLayout
       leftContent={leftContent}
-      rightContent={rightContent}
+      rightContent={
+        <div className="flex flex-col gap-2 md:gap-4 md:pl-3">
+          <UserInfo2Form />
+        </div>
+      }
       rightFooterContent={rightFooterContent}
       totalSteps={totalSteps}
+      currentStep={currentStep}
     />
   );
 };
