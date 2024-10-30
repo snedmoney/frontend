@@ -17,6 +17,7 @@ import { useSwapV3Quote } from "@/hooks/use-quotation";
 import { Token } from "@/providers/paymentWidget/paymentWidgetContext";
 import { addressToBytes32, generateRandomBytes32 } from "@/lib/utils";
 import TransactionModal from "@/components/transactionModal/transaction-modal";
+import { apiClient } from "@/config/api";
 
 interface ButtonProps {
   onClick?: () => void;
@@ -146,7 +147,10 @@ const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
     isPending: isPaymentPending,
     isSuccess: isPaymentSuccess,
     writeContract: paymentWriteContract,
+    hash,
   } = txParams;
+
+  const [paymentId, setPaymentId] = useState(generateRandomBytes32());
 
   useEffect(() => {
     if (!decimals || !amountIn) return;
@@ -161,6 +165,19 @@ const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
       refetchAllowance();
     }
   }, [isApprovalSuccess]);
+
+  useEffect(() => {
+    if (isPaymentSuccess) {
+      apiClient.post("/transactions", {
+        id: paymentId,
+        sourceChainId: chainId,
+        sourceTransactionHash: hash,
+        type: "tip",
+      });
+
+      setPaymentId(generateRandomBytes32());
+    }
+  }, [isPaymentSuccess]);
 
   const handleApprove = () => {
     if (!decimals || !amountIn || !tokenIn) return;
@@ -213,7 +230,7 @@ const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
     }
 
     const paymentParams = {
-      paymentId: generateRandomBytes32(),
+      paymentId,
       destAddress: address,
       tokenIn: tokenIn!.address,
       tokenOut: wxUsdtToken!.address,
