@@ -1,3 +1,4 @@
+import { DateValue } from "@internationalized/date";
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Address, padHex } from "viem";
@@ -19,4 +20,14 @@ export function generateUUID() {
 
     return v.toString(16);
   });
+}
+
+export function convertDateValueToString(dateValue: undefined): undefined;
+export function convertDateValueToString(dateValue: DateValue): string;
+export function convertDateValueToString(dateValue: any): any {
+  if (!dateValue) {
+    return undefined;
+  }
+
+  return dateValue.toString();
 }
