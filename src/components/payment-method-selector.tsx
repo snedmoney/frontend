@@ -191,6 +191,7 @@ const chainsToTokensMapping: Record<number, Token[]> = {
   //   },
   // ],
 };
+
 //TODO: connect to back end api for tokens and chains
 const PaymentMethodSelector = () => {
   const {
@@ -236,6 +237,7 @@ const PaymentMethodSelector = () => {
               label="Select chain *"
               placeholder="Select your preferred chain"
               selectedKeys={[field.value]}
+              variant="bordered"
               onSelectionChange={(keys) => {
                 const selectedValue = keys[0];
 
