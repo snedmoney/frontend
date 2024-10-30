@@ -22,10 +22,10 @@ const Home = () => {
     </div>
   );
   const bodyContent = (
-    <div className="flex flex-col gap-4 mt-6">
+    <div className="flex flex-col gap-6 mt-6">
       <Input
         isClearable
-        placeholder="You name or leave it blank 🥲"
+        placeholder="Your name or leave it blank 🥲"
         radius="sm"
         value={input}
         variant="bordered"
@@ -43,7 +43,7 @@ const Home = () => {
   );
 
   return (
-    <div className="mt-0 md:mt-4">
+    <>
       <div className="flex justify-center">
         <PaymentWidget
           bodyContent={bodyContent}
@@ -66,7 +66,7 @@ const Home = () => {
         <SupportMessage name="Emma" />
         <SupportMessage initialReply="Thank you so much!" name="Tom" />
       </div>
-    </div>
+    </>
   );
 };
 
