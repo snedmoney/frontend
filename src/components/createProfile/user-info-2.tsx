@@ -1,11 +1,10 @@
-import { useFormContext } from "react-hook-form";
 import { Button } from "@nextui-org/react";
-import { useState } from "react";
-
-import useCreateProfileFlow from "@/hooks/use-create-profile-flow";
-import FlowLayout from "@/layouts/flow-layout";
 import { CreateProfileFlowData } from "@/providers/createProfileFlow/createProfileFlowContext";
+import FlowLayout from "@/layouts/flow-layout";
 import UserInfo2Form from "@/components/user-info2-form";
+import useCreateProfileFlow from "@/hooks/use-create-profile-flow";
+import { useFormContext } from "react-hook-form";
+import { useState } from "react";
 
 const UserInfo2 = () => {
   const { handleSubmit } = useFormContext<CreateProfileFlowData>();
@@ -29,8 +28,8 @@ const UserInfo2 = () => {
             Payment Method & Social Links
           </h1>
           <h2 className="text-base md:text-lg text-foreground/80 mt-2">
-            We are almost at the finish line! Just need to know how you'd
-            like to be paid.
+            We are almost at the finish line! Just need to know how you'd like
+            to be paid.
           </h2>
           <h2 className="text-base md:text-lg text-foreground/80 mt-2">
             And social media accounts to display on your profile page!
@@ -51,7 +50,8 @@ const UserInfo2 = () => {
       </Button>
       <Button
         className="bg-foreground text-background font-bold flex justify-center items-center"
-        disabled={isSubmitting}
+        isDisabled={isSubmitting}
+        isLoading={isSubmitting}
         onClick={handleSubmit(handleSubmitWrapper)}
       >
         Submit

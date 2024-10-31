@@ -1,8 +1,9 @@
-import { useFormContext, Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { Input, Textarea } from "@nextui-org/react";
-import { ReactNode } from "react";
 
 import { CreateProfileFlowData } from "@/providers/createProfileFlow/createProfileFlowContext";
+import { ReactNode } from "react";
+import { apiClient } from "@/config/api";
 
 const UserInfo1Form = () => {
   const {
@@ -10,6 +11,21 @@ const UserInfo1Form = () => {
     formState: { errors },
     setValue,
   } = useFormContext<CreateProfileFlowData>();
+
+  const checkIfUsernameIsTaken = async (username = "") => {
+    try {
+      const { data: userData } = await apiClient.get(
+        `/users/username${username.length === 0 ? "" : "/"}${username}`,
+      );
+
+      return !!userData?.user?.userName;
+    } catch (e) {
+      if (e instanceof Error && "status" in e && e.status === 404) {
+        return false;
+      }
+      throw e;
+    }
+  };
 
   return (
     <>
@@ -51,7 +67,16 @@ const UserInfo1Form = () => {
             onClear={() => setValue("userName", "")}
           />
         )}
-        rules={{ required: "Username is required" }}
+        rules={{
+          required: "Username is required",
+          validate: {
+            checkIfUsernameIsTaken: async (value) => {
+              const isTaken = await checkIfUsernameIsTaken(value);
+
+              return !isTaken || "Username Taken";
+            },
+          },
+        }}
       />
       <Controller
         control={control}

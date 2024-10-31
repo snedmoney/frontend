@@ -22,6 +22,7 @@ const UserPaymentInput = () => {
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
   const chainId = useChainId();
   const { data, isLoading } = useGetChains();
+
   const initialChain = data?.chains.find((chain) => chain.id === chainId);
   const { selectedToken, setTokenAmount, tokenAmount, setSelectedChain } =
     usePaymentWidget();
