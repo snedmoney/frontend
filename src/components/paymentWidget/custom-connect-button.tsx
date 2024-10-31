@@ -52,7 +52,7 @@ const CustomConnectButton = () => {
 
         return (
           <Button
-            className="text-foreground-500 font-bold px-1 py-0 gap-1 bg-default-500/10"
+            className="text-foreground-500 font-bold px-1 py-0 gap-1 bg-default-300/10"
             data-hover="false"
             size="sm"
             variant="ghost"

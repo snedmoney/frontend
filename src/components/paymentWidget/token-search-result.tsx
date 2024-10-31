@@ -1,9 +1,11 @@
 import { Listbox, ListboxItem, Spinner } from "@nextui-org/react";
-import TokenListItem from "./token-list-item";
-import usePaymentWidget from "@/hooks/use-payment-widget";
-import useSearchTokens from "@/hooks/use-search-tokens";
 import { BiSearch } from "react-icons/bi";
 import { VscSearchStop } from "react-icons/vsc";
+
+import TokenListItem from "./token-list-item";
+
+import usePaymentWidget from "@/hooks/use-payment-widget";
+import useSearchTokens from "@/hooks/use-search-tokens";
 
 type TokenSearchResultProps = {
   onTokenClick: () => void;
@@ -23,6 +25,7 @@ const TokenSearchResult = ({
     chainId,
     searchInput ?? "",
   );
+
   // if (isError) {
   //   return (
   //     <div className="p-0 h-[400px] grid place-items-center" aria-label='no tokens found'>
@@ -42,24 +45,25 @@ const TokenSearchResult = ({
 
   return (
     <Listbox
-      aria-label="Available tokens list"
-      variant="flat"
       disallowEmptySelection
-      selectionMode="single"
+      aria-label="Available tokens list"
       className="p-0 h-[400px]"
       classNames={{
-        list: "h-full",
+        list: "h-full gap-2",
       }}
+      selectionMode="single"
+      variant="flat"
     >
       {searchResult?.length > 0 ? (
         searchResult?.map((token) => (
           <ListboxItem
             key={token.id}
-            textValue={token.name}
             classNames={{
               selectedIcon: "hidden",
               base: ["data-[selected]:bg-default/40"],
             }}
+            className='h-auto'
+            textValue={token.name}
             onClick={() => {
               onTokenClick();
               setSelectedToken(token);
@@ -67,13 +71,12 @@ const TokenSearchResult = ({
               setSearchInput("");
             }}
           >
-            <TokenListItem onTokenClick={onTokenClick} token={token} />
+            <TokenListItem token={token} onTokenClick={onTokenClick} />
           </ListboxItem>
         ))
       ) : (
         <ListboxItem
           key="search-tokens"
-          textValue="search tokens"
           classNames={{
             selectedIcon: "hidden",
             base: [
@@ -82,20 +85,21 @@ const TokenSearchResult = ({
               "data-[hover=true]:bg-transparent",
             ],
           }}
+          textValue="search tokens"
         >
           <div className="p-0">
             <div className="flex flex-col items-center justify-center gap-2">
               {searchResult.length === 0 && !isLoading && searchInput && (
                 <>
-                  <VscSearchStop size="84" className="fill-default-400" />
+                  <VscSearchStop className="fill-default-400" size="84" />
                   <p className="text-l text-default-400">
-                    No tokens found for "{searchInput}"
+                    No tokens found for &quot;{searchInput}&quot;
                   </p>
                 </>
               )}
               {isSearching && !searchInput && (
                 <>
-                  <BiSearch size="72" className="fill-default-400" />
+                  <BiSearch className="fill-default-400" size="72" />
                   <p className="text-l text-default-400">
                     Search token name or symbol
                   </p>

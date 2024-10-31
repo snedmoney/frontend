@@ -1,10 +1,10 @@
 const About = () => {
   return (
-    <div className="space-y-4 text-default-600">
+    <div className="text-sm space-y-4 text-default-600 md:text-md">
       <p>
-        Hello! I&apos;m Catalin, a passionate traveler and food enthusiast based
-        in Italy. As someone living with celiac disease, I&apos;ve made it my
-        mission to explore and share gluten-free adventures around the world.
+        Hello! I&apos;m Catalin, a passionate traveler and food enthusiast based in
+        Italy. As someone living with celiac disease, I&apos;ve made it my mission to
+        explore and share gluten-free adventures around the world.
       </p>
       <p>
         With over 5 years of experience in creating travel and food content, I

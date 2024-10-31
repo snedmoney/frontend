@@ -28,6 +28,7 @@ export type Token = {
 export type TokenWithBalance = Token & {
   balance?: string;
   amountInUSD?: string;
+  price?: number;
 };
 
 export type Transaction = {
@@ -49,14 +50,14 @@ export type Transaction = {
   linkId: number;
   name: string;
   message: string;
-};
+}
 
 export type PaymentWidgetContextType = {
   selectedChain: Chain;
-  selectedToken: Token;
+  selectedToken: TokenWithBalance;
   isSearching: boolean;
   setSelectedChain: (chain: Chain) => void;
-  setSelectedToken: (token: Token) => void;
+  setSelectedToken: (token: TokenWithBalance) => void;
   tokenAmount?: string;
   setTokenAmount: (amount?: string) => void;
   setIsSearching: (isSearching: boolean) => void;
@@ -65,7 +66,7 @@ export type PaymentWidgetContextType = {
 //Later we might need more values for chain switching
 const PaymentWidgetContext = createContext<PaymentWidgetContextType>({
   selectedChain: {} as Chain,
-  selectedToken: {} as Token,
+  selectedToken: {} as TokenWithBalance,
   tokenAmount: undefined,
   isSearching: false,
   setSelectedChain: () => {},

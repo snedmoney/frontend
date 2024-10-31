@@ -1,6 +1,10 @@
 import type { Token } from "@/providers/paymentWidget/paymentWidgetContext";
 
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import { useEffect } from "react";
 
@@ -23,7 +27,7 @@ const fetchTokens = async (
       {
         params: {
           page: page,
-          per_page: 60,
+          per_page: 500,
         },
       },
     );
@@ -60,6 +64,7 @@ const useGetTokens = (chainId: Token["chainId"]) => {
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
     enabled: !!chainId,
+    placeholderData: keepPreviousData,
   });
 
   return {

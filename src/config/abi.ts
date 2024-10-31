@@ -7,9 +7,9 @@ const abi = [
         type: "address",
       },
       {
-        internalType: "address",
-        name: "_swapRouter",
-        type: "address",
+        internalType: "address[]",
+        name: "_initialRouters",
+        type: "address[]",
       },
       {
         internalType: "address",
@@ -20,6 +20,16 @@ const abi = [
         internalType: "uint16",
         name: "_currentWormChainId",
         type: "uint16",
+      },
+      {
+        internalType: "address",
+        name: "_pythContract",
+        type: "address",
+      },
+      {
+        internalType: "bytes32",
+        name: "_priceId",
+        type: "bytes32",
       },
     ],
     stateMutability: "nonpayable",
@@ -105,9 +115,9 @@ const abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "string",
+        internalType: "bytes32",
         name: "paymentId",
-        type: "string",
+        type: "bytes32",
       },
       {
         indexed: true,
@@ -186,9 +196,9 @@ const abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "string",
+        internalType: "bytes32",
         name: "paymentId",
-        type: "string",
+        type: "bytes32",
       },
       {
         indexed: true,
@@ -217,9 +227,9 @@ const abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "string",
+        internalType: "bytes32",
         name: "paymentId",
-        type: "string",
+        type: "bytes32",
       },
       {
         indexed: false,
@@ -277,7 +287,57 @@ const abi = [
   },
   {
     inputs: [],
-    name: "COMMISSION_RATE",
+    name: "MAX_COMMISSION_RATE",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "router",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "allowed",
+        type: "bool",
+      },
+    ],
+    name: "addRouterToAllowlist",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "allowlistedRouters",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "commissionRate",
     outputs: [
       {
         internalType: "uint256",
@@ -296,9 +356,41 @@ const abi = [
         type: "bytes",
       },
       {
-        internalType: "uint256",
-        name: "fee",
-        type: "uint256",
+        components: [
+          {
+            internalType: "address",
+            name: "router",
+            type: "address",
+          },
+          {
+            internalType: "address[]",
+            name: "route",
+            type: "address[]",
+          },
+          {
+            internalType: "uint24[]",
+            name: "fees",
+            type: "uint24[]",
+          },
+          {
+            internalType: "uint256",
+            name: "amountOutMinimum",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "deadline",
+            type: "uint256",
+          },
+          {
+            internalType: "uint8",
+            name: "swapType",
+            type: "uint8",
+          },
+        ],
+        internalType: "struct PaymentStructs.SwapParams[]",
+        name: "swapParamsArray",
+        type: "tuple[]",
       },
     ],
     name: "completePayment",
@@ -324,6 +416,11 @@ const abi = [
       {
         components: [
           {
+            internalType: "address",
+            name: "router",
+            type: "address",
+          },
+          {
             internalType: "address[]",
             name: "route",
             type: "address[]",
@@ -335,11 +432,6 @@ const abi = [
           },
           {
             internalType: "uint256",
-            name: "amountIn",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
             name: "amountOutMinimum",
             type: "uint256",
           },
@@ -348,17 +440,22 @@ const abi = [
             name: "deadline",
             type: "uint256",
           },
+          {
+            internalType: "uint8",
+            name: "swapType",
+            type: "uint8",
+          },
         ],
-        internalType: "struct SnedPayment.SwapParams",
-        name: "swapParams",
-        type: "tuple",
+        internalType: "struct PaymentStructs.SwapParams[]",
+        name: "swapParamsArray",
+        type: "tuple[]",
       },
       {
         components: [
           {
-            internalType: "string",
+            internalType: "bytes32",
             name: "paymentId",
-            type: "string",
+            type: "bytes32",
           },
           {
             internalType: "address",
@@ -375,8 +472,13 @@ const abi = [
             name: "tokenOut",
             type: "address",
           },
+          {
+            internalType: "uint256",
+            name: "amountIn",
+            type: "uint256",
+          },
         ],
-        internalType: "struct SnedPayment.PaymentParams",
+        internalType: "struct PaymentStructs.PaymentParams",
         name: "paymentParams",
         type: "tuple",
       },
@@ -393,7 +495,7 @@ const abi = [
             type: "bytes32",
           },
         ],
-        internalType: "struct SnedPayment.BridgeParams",
+        internalType: "struct PaymentStructs.BridgeParams",
         name: "bridgeParams",
         type: "tuple",
       },
@@ -437,6 +539,19 @@ const abi = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "router",
+        type: "address",
+      },
+    ],
+    name: "removeRouterFromAllowlist",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "renounceOwnership",
     outputs: [],
@@ -462,16 +577,16 @@ const abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "swapRouter",
-    outputs: [
+    inputs: [
       {
-        internalType: "contract ISwapRouter",
-        name: "",
-        type: "address",
+        internalType: "uint256",
+        name: "newRate",
+        type: "uint256",
       },
     ],
-    stateMutability: "view",
+    name: "setCommissionRate",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -495,16 +610,16 @@ const abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "wormholeBridge",
-    outputs: [
+    inputs: [
       {
-        internalType: "contract IWormhole",
-        name: "",
+        internalType: "address",
+        name: "newOwner",
         type: "address",
       },
     ],
-    stateMutability: "view",
+    name: "updateOwner",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ];

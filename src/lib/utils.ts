@@ -1,7 +1,7 @@
 import { DateValue } from "@internationalized/date";
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Address, padHex } from "viem";
+import { padHex, Address, toHex } from "viem";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -13,13 +13,12 @@ export function addressToBytes32(address: Address) {
   return bytes;
 }
 
-export function generateUUID() {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-    const r = (Math.random() * 16) | 0;
-    const v = c === "x" ? r : (r & 0x3) | 0x8;
+export function generateRandomBytes32(): `0x${string}` {
+  const randomBytes = new Uint8Array(32);
 
-    return v.toString(16);
-  });
+  crypto.getRandomValues(randomBytes);
+
+  return toHex(randomBytes) as `0x${string}`;
 }
 
 export function convertDateValueToString(dateValue: undefined): undefined;

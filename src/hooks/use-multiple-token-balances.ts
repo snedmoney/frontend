@@ -1,5 +1,5 @@
 import { useAccount, useReadContracts } from "wagmi";
-import { erc20Abi } from "viem";
+import { erc20Abi, numberToHex } from "viem";
 import { formatUnits } from "viem";
 import { useQuery } from "@tanstack/react-query";
 
@@ -10,7 +10,10 @@ type MoralisPrice = {
   tokenAddress: string;
 };
 
-export default function useMultipleTokenBalances(tokens: string[]) {
+export default function useMultipleTokenBalances(
+  chainId: number,
+  tokens: string[],
+) {
   const { address } = useAccount();
 
   const balanceContracts = tokens.map((tokenAddress) => ({
@@ -18,12 +21,14 @@ export default function useMultipleTokenBalances(tokens: string[]) {
     abi: erc20Abi,
     functionName: "balanceOf",
     args: [address],
+    chainId,
   }));
 
   const decimalContracts = tokens.map((tokenAddress) => ({
     address: tokenAddress as `0x${string}`,
     abi: erc20Abi,
     functionName: "decimals",
+    chainId,
   }));
 
   const {
@@ -62,15 +67,15 @@ export default function useMultipleTokenBalances(tokens: string[]) {
 
       pricePromises.push(
         apiClient.post("/price", {
-          chain: "0xa4b1",
+          chain: numberToHex(chainId),
           tokens: chunk,
-        })
+        }),
       );
     }
 
     const responses = await Promise.all(pricePromises);
     const allPrices = responses.flatMap(
-      (response) => response.data?.tokenPrices ?? []
+      (response) => response.data?.tokenPrices ?? [],
     );
 
     return allPrices;
@@ -93,11 +98,11 @@ export default function useMultipleTokenBalances(tokens: string[]) {
       ? balanceData.map((balance, index) => {
           const formattedBalance = formatBalance(
             balance.result as bigint,
-            decimalData[index].result as number
+            decimalData[index].result as number,
           );
           const tokenAddress = tokens[index];
           const tokenPrice = priceData?.find(
-            (item) => item.tokenAddress === tokenAddress
+            (item) => item.tokenAddress === tokenAddress,
           )?.usdPrice;
 
           const amountInUSD =
