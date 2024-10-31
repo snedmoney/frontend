@@ -5,6 +5,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 
 import { apiClient } from "@/config/api";
+import toast from "react-hot-toast";
 import { useAccount } from "wagmi";
 import { useNavigate } from "react-router-dom";
 
@@ -114,36 +115,36 @@ export const CreateProfileFlowProvider = ({
   const onSubmit = async (data: CreateProfileFlowData) => {
     try {
       console.log("Submitting data:", data);
-      // toast to show submission success?
       const { data: savedData } = await apiClient.post("/users", data);
       const {
         savedUser: { userName },
       } = savedData;
       resetFlow();
-      navigate(`/profile/${userName}`);
-      // Trigger share modal after navigate
+      navigate(`/profile/${userName}?openShareModal=true`);
+      toast.success("Information Saved");
     } catch (error) {
       console.error("Error submitting form:", error);
-      // Handle submission error
-      // toast to show submission error?
+      toast.error(`Error submitting form: ${error}`);
     }
   };
 
   return (
-    <CreateProfileFlowContext.Provider
-      value={{
-        currentStep,
-        totalSteps,
-        nextStep,
-        prevStep,
-        setStep,
-        resetFlow,
-        onSubmit,
-      }}
-    >
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
-      </FormProvider>
-    </CreateProfileFlowContext.Provider>
+    <>
+      <CreateProfileFlowContext.Provider
+        value={{
+          currentStep,
+          totalSteps,
+          nextStep,
+          prevStep,
+          setStep,
+          resetFlow,
+          onSubmit,
+        }}
+      >
+        <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
+        </FormProvider>
+      </CreateProfileFlowContext.Provider>
+    </>
   );
 };

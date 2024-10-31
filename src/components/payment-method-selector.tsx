@@ -1,12 +1,12 @@
 import { Avatar, Select, SelectItem } from "@nextui-org/react";
-import { useFormContext, Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import clsx from "clsx";
 
 import { ChainSelector } from "./chain-selector";
 
 import { CreateProfileFlowData } from "@/providers/createProfileFlow/createProfileFlowContext";
-import useGetChains from "@/hooks/use-get-chains";
 import { Token } from "@/providers/paymentWidget/paymentWidgetContext";
+import useGetChains from "@/hooks/use-get-chains";
 
 const chainsToTokensMapping: Record<number, Token[]> = {
   1: [
@@ -203,8 +203,6 @@ const PaymentMethodSelector = () => {
   const { data: chainsData, isLoading: isChainsLoading } = useGetChains();
   const values = watch();
 
-  console.log(values);
-
   const supportedChains =
     chainsData?.chains.filter(
       (chain) =>
@@ -238,10 +236,10 @@ const PaymentMethodSelector = () => {
               placeholder="Select your preferred chain"
               selectedKeys={[field.value]}
               variant="bordered"
-              onSelectionChange={(keys) => {
-                const selectedValue = keys[0];
+              onSelectionChange={(keys: Set<string>) => {
+                const selectedValues = Array.from(keys.values());
 
-                setValue("paymentMethod.chainId", selectedValue);
+                setValue("paymentMethod.chainId", parseInt(selectedValues[0]));
               }}
             />
           )}
@@ -262,10 +260,11 @@ const PaymentMethodSelector = () => {
               selectedKeys={[field.value]}
               value={field.value}
               variant="bordered"
-              onSelectionChange={(keys) => {
-                const selectedValue = keys[0];
+              // defaultSelectedKeys={[defaultTokenAddress]}
+              onSelectionChange={(keys: Set<string>) => {
+                const selectedValues = Array.from(keys.values());
 
-                setValue("paymentMethod.tokenAddress", selectedValue);
+                setValue("paymentMethod.tokenAddress", selectedValues[0]);
               }}
             >
               {tokens?.map((token) => (

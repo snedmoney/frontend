@@ -4,9 +4,14 @@ import { Address } from "viem";
 import { useAccount, usePublicClient } from "wagmi";
 import { useDebounce } from "use-debounce";
 
+import usePaymentWidget from "./use-payment-widget";
+
 import QUOTER_ABI from "@/config/quoter-abi";
 import { getWethAddress } from "@/lib/contract-address";
-import { Token } from "@/providers/paymentWidget/paymentWidgetContext";
+import {
+  Token,
+  TokenWithBalance,
+} from "@/providers/paymentWidget/paymentWidgetContext";
 
 interface QuoteParams {
   tokenIn?: Token;
@@ -39,6 +44,7 @@ export function encodePath(path: string[], fees: number[]): `0x${string}` {
 
 async function fetchQuote(
   client: ReturnType<typeof usePublicClient>,
+  selectedToken: TokenWithBalance,
   { quoter, tokenIn, tokenOut, amountIn }: Required<QuoteParams>,
 ) {
   const chainId = await client!.getChainId();
@@ -57,6 +63,8 @@ async function fetchQuote(
 
   let bestQuote = BigInt(0);
   let bestRoute: Route | undefined = undefined;
+
+  const errors = [];
 
   if (amountInWei > 0n) {
     for (const route of routes) {
@@ -85,14 +93,25 @@ async function fetchQuote(
           bestRoute = route;
         }
       } catch (error) {
-        // console.log(`Error in finding quote`, error);
-
-        return {
-          quote: amountInWei,
-          route: routes[0],
-        };
+        errors.push(error);
       }
     }
+  }
+
+  if (errors.length === routes.length) {
+    console.error("Error in finding quote", errors);
+
+    const amountOut =
+      amountIn && selectedToken.price ? +amountIn * +selectedToken.price : 0;
+
+    const parsedAmountOut = parseUnits(amountOut.toString(), tokenOut.decimals);
+
+    const quote = parsedAmountOut - (parsedAmountOut * BigInt(3)) / BigInt(100);
+
+    return {
+      route: routes[0],
+      quote: quote,
+    };
   }
 
   return {
@@ -104,6 +123,7 @@ async function fetchQuote(
 export function useSwapV3Quote(key: String, params: QuoteParams) {
   const { chainId } = useAccount();
   const client = usePublicClient();
+  const { selectedToken } = usePaymentWidget();
 
   const [debouncedParams] = useDebounce(params, 500);
 
@@ -115,7 +135,11 @@ export function useSwapV3Quote(key: String, params: QuoteParams) {
       chainId &&
       client
     ) {
-      return fetchQuote(client, debouncedParams as Required<QuoteParams>);
+      return fetchQuote(
+        client,
+        selectedToken,
+        debouncedParams as Required<QuoteParams>,
+      );
     }
   };
 

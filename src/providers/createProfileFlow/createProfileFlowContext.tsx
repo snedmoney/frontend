@@ -26,6 +26,10 @@ export type CreateProfileFlowData = {
   };
 };
 
+export type Profile = CreateProfileFlowData & {
+  id?: bigint;
+};
+
 export type CreateProfileFlowContextType = {
   currentStep: number;
   totalSteps: number;

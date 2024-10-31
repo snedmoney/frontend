@@ -1,24 +1,24 @@
-import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useAccount, useSignMessage } from "wagmi";
 
+import CreateDonationFlowPage from "./pages/create-donation-flow-page";
 import CreateProfileFlowPage from "./pages/create-profile-flow-page";
-import NotFound404 from "./pages/404";
-import ProfilePage from "./pages/profile-page";
 import DashboardLayout from "./layouts/dashboard-layout";
 import DashboardPage from "./pages/dashboardPages/dashboard";
-import TransactionHistoryPage from "./pages/dashboardPages/transaction-history";
+import DefaultLayout from "@/layouts/default";
 import FundraisePage from "./pages/dashboardPages/fundraise";
+import IndexPage from "@/pages/index";
 import ManageProfile from "./pages/dashboardPages/manage-profile";
 import MembershipsPage from "./pages/dashboardPages/memberships";
-import ShopPage from "./pages/dashboardPages/shop";
+import NotFound404 from "./pages/404";
+import ProfilePage from "./pages/profile-page";
 import SettingsPage from "./pages/dashboardPages/settings";
-import CreateDonationFlowPage from "./pages/create-donation-flow-page";
-
 import ShareModal from "@/components/share-modal";
-import IndexPage from "@/pages/index";
-import DefaultLayout from "@/layouts/default";
+import ShopPage from "./pages/dashboardPages/shop";
+import { Toaster } from "react-hot-toast";
+import TransactionHistoryPage from "./pages/dashboardPages/transaction-history";
 import { apiClient } from "@/config/api";
+import { useEffect } from "react";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -78,6 +78,7 @@ function App() {
         <Route element={<NotFound404 />} path="*" />
       </Routes>
       <ShareModal />
+      <Toaster />
     </>
   );
 }

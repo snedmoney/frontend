@@ -16,12 +16,14 @@ type TransactionModalProps = {
   txParams: ReturnType<typeof useTransaction>;
   isOpen: boolean;
   amountIn: string;
+  onClose?: () => void;
 };
 
 export const TransactionModal = ({
   txParams,
   amountIn,
   isOpen,
+  onClose,
 }: TransactionModalProps) => {
   return (
     <Modal
@@ -36,6 +38,7 @@ export const TransactionModal = ({
       radius="none"
       scrollBehavior="inside"
       size="md"
+      onClose={onClose}
     >
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1 py-3 px-3 sm:py-4 sm:px-6">
