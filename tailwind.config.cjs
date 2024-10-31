@@ -10,17 +10,30 @@ module.exports = {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
+    fontFamily: {
+      'hero': ['Clash Display']
+    },
     extend: {
       animation: {
         grid: "grid 15s linear infinite",
+        marquee: "marquee var(--duration) linear infinite",
+        "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
       },
       keyframes: {
         grid: {
           "0%": { transform: "translateY(-50%)" },
           "100%": { transform: "translateY(0)" },
         },
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(calc(-100% - var(--gap)))" },
+        },
+        "marquee-vertical": {
+          from: { transform: "translateY(0)" },
+          to: { transform: "translateY(calc(-100% - var(--gap)))" },
+        },
       },
-    }
+    },
   },
   darkMode: "class",
   plugins: [nextui({
@@ -41,17 +54,17 @@ module.exports = {
             DEFAULT: "#E3626F"
           },
           primary: {
-            50: "#f9f9fb",
-            100: "#f3f2f7",
-            200: "#e4e3ee",
-            300: "#d6d3e4",
-            400: "#cac6dc",
-            500: "#aca6c9",
-            600: "#958db9",
-            700: "#655b95",
-            800: "#453e65",
-            900: "#201d2f",
-            DEFAULT: "#CCC2FF"
+            50: "#f9f8fb",
+            100: "#f3f2f8",
+            200: "#e5e1ef",
+            300: "#d6d1e6",
+            400: "#cac4de",
+            500: "#ada3cc",
+            600: "#9589be",
+            700: "#65559b",
+            800: "#453a69",
+            900: "#201b31",
+            "DEFAULT": "#9F91CC"
           },
           secondary: {
             50: "#f9fafb",
@@ -110,17 +123,17 @@ module.exports = {
             DEFAULT: "#E3626F"
           },
           primary: {
-            50: "#201d2f",
-            100: "#453e65",
-            200: "#655b95",
-            300: "#958db9",
-            400: "#aca6c9",
-            500: "#cac6dc",
-            600: "#d6d3e4",
-            700: "#e4e3ee",
-            800: "#f3f2f7",
-            900: "#f9f9fb",
-            DEFAULT: "#CCC2FF"
+            50: "#201b31",
+            100: "#453a69",
+            200: "#65559b",
+            300: "#9589be",
+            400: "#beb7d7",
+            500: "#cac4de",
+            600: "#d6d1e6",
+            700: "#e5e1ef",
+            800: "#f3f2f8",
+            900: "#f9f8fb",
+            "DEFAULT": "#9F91CC"
           },
           secondary: {
             50: "#21272c",
