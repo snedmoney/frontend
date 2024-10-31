@@ -41,7 +41,6 @@ const fetchTokenBalance = async (chainId: number, tokenAddress: `0x${string}`, w
 
     return balance;
   } catch (error) {
-    console.error('Error fetching token balance:', error);
     throw new Error('Error fetching token balance');
   }
 };

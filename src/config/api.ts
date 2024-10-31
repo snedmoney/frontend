@@ -3,7 +3,8 @@ import axios from "axios";
 export const apiClient = axios.create({
   // baseURL: "http://localhost:8002/api",
   //baseURL: "https://backend-staging-hc8j.onrender.com/api",
-  baseURL: "https://backend-g057.onrender.com/api",
+  // baseURL: "https://backend-g057.onrender.com/api",
+  baseURL: "https://api.sned.money/api",
 });
 
 apiClient.interceptors.request.use((config) => {
