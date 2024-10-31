@@ -1,9 +1,10 @@
 import { Button, useDisclosure } from "@nextui-org/react";
-import SocialMediaList from "./social-media-list";
-import { IoShareSocialOutline } from "react-icons/io5";
-import useShareModal from "@/hooks/use-share-modal";
+
 import EditPageModal from "./edit-page-modal";
+import { IoShareSocialOutline } from "react-icons/io5";
+import SocialMediaList from "./social-media-list";
 import { defaultFormValues } from "@/providers/createProfileFlow/createProfileFlowProvider";
+import useShareModal from "@/hooks/use-share-modal";
 
 const ProfileHeader = () => {
   const openShareModal = useShareModal();

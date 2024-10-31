@@ -219,7 +219,7 @@ const SocialSelectionWidget = () => {
                 )
               }
               validationBehavior="aria"
-              value={inputValue}
+              value={inputValue || field.value}
               variant="bordered"
               onChange={(e) => {
                 setInputValue(e.target.value);
