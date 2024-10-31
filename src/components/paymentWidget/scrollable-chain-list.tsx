@@ -24,7 +24,7 @@ const ScrollableChainList = ({
               aria-label={chain.name}
               className="bg-transparent focus:border-foreground data-[selected=true]:border-foreground"
               data-chain={chain.id}
-              data-selected={chain.id === innerSelectedChain.id}
+              data-selected={chain.id === innerSelectedChain?.id}
               size="lg"
               variant="bordered"
               onClick={onChainClick}
