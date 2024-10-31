@@ -20,7 +20,9 @@ const PoweredBySection = () => {
   return (
     <section className="py-16 md:py-24 px-4">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-xl md:text-4xl font-bold text-center mb-8 md:mb-12">Powered By</h2>
+        <h2 className="text-xl md:text-4xl font-bold text-center mb-8 md:mb-12">
+          Powered By
+        </h2>
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 lg:gap-16">
           {partners.map((partner) => (
             <div key={partner.name} className="flex-shrink-0 p-4">
