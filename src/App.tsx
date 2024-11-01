@@ -7,12 +7,13 @@ import DashboardLayout from "./layouts/dashboard-layout";
 import DashboardPage from "./pages/dashboardPages/dashboard";
 import DefaultLayout from "@/layouts/default";
 import FundraisePage from "./pages/dashboardPages/fundraise";
-import IndexPage from "@/pages/index";
 import ManageProfile from "./pages/dashboardPages/manage-profile";
 import MembershipsPage from "./pages/dashboardPages/memberships";
 import NotFound404 from "./pages/404";
 import ProfilePage from "./pages/profile-page";
 import SettingsPage from "./pages/dashboardPages/settings";
+import LandingPage from "./pages/landing-page";
+import LandingPageLayout from "./layouts/landing-page-layout";
 import ShareModal from "@/components/share-modal";
 import ShopPage from "./pages/dashboardPages/shop";
 import { Toaster } from "react-hot-toast";
@@ -54,9 +55,8 @@ function App() {
   return (
     <>
       <Routes>
-        <Route element={<DefaultLayout />} path="/">
-          <Route index element={<IndexPage />} />
-          <Route element={<ProfilePage />} path="/profile/:username" />
+        <Route element={<DefaultLayout />} path="/profile/">
+          <Route path=":username" element={<ProfilePage />} />
         </Route>
         <Route element={<DashboardLayout />} path="/user/">
           <Route element={<DashboardPage />} path="dashboard" />
@@ -66,12 +66,10 @@ function App() {
           <Route element={<MembershipsPage />} path="memberships" />
           <Route element={<ShopPage />} path="shop" />
           <Route element={<SettingsPage />} path="settings" />
-          {/* <Route element={<PostsPage />} path="posts" />
-          <Route element={<GalleryPage />} path="gallery" />
-          <Route element={<MessagesPage />} path="messages" />
-          <Route element={<ButtonsPage />} path="buttons" />
-          <Route element={<IntegrationsPage />} path="integrations" />
-          <Route element={<PayoutsPage />} path="payouts" /> */}
+        </Route>
+        <Route path="/create/profile" element={<CreateProfileFlowPage />} />
+        <Route element={<LandingPageLayout />} path='/'>
+          <Route index element={<LandingPage />} />
         </Route>
         <Route element={<CreateProfileFlowPage />} path="/create/profile" />
         <Route element={<CreateDonationFlowPage />} path="/create/fundraiser" />

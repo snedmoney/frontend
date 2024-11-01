@@ -65,7 +65,7 @@ export const loggedOutItems: () => DropdownItemProps[] = () => {
       { label: 'Create your page', icon: <MdScreenshotMonitor className={dropdownIconClassName} />, href: '/create/profile', newTab: false }, //TODO: Dynamically change
       { label: 'Share this page', icon: <IoShareSocialOutline className={dropdownIconClassName} />, action: () => openShareModal() },
       { label: 'About', icon: <TbInfoHexagon className={dropdownIconClassName} />, href: '/about', newTab: false },
-      { label: 'Need help?', icon: <LuHeartHandshake className={dropdownIconClassName} />, href: '', newTab: true }, //TODO: need discord link
+      { label: 'Need help?', icon: <LuHeartHandshake className={dropdownIconClassName} />, href: 'https://discord.gg/rKqEUHPR2m', newTab: true }, //TODO: need discord link
     ]);
 };
 
@@ -79,6 +79,6 @@ export const loggedInItems: () => DropdownItemProps[] = () => {
     { label: 'Share this page', icon: <IoShareSocialOutline className={dropdownIconClassName} />, action: () => openShareModal() },
     // { label: 'Settings', icon: <TbSettings className={dropdownIconClassName} />, href: '/settings' },
     { label: 'Transaction history', icon: <MdOutlineHistory className={dropdownIconClassName} />, href: 'user/history', newTab: false },
-    { label: 'Need help?', icon: <LuHeartHandshake className={dropdownIconClassName} />, href: '', newTab: true }, //TODO: need discord link
+    { label: 'Need help?', icon: <LuHeartHandshake className={dropdownIconClassName} />, href: 'https://discord.gg/rKqEUHPR2m', newTab: true }, //TODO: need discord link
   ]);
 };

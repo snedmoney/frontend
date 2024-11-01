@@ -56,7 +56,7 @@ const Home = () => {
         Recent Supports
       </h2>
       <div className="flex flex-col gap-6 md:pl-1">
-        <SupportMessage message="ty so much keep up the good work ty so much keep up the good work ty so much keep up the good work ty so much keep up the good work ty so much keep up the good work ty so much keep up the good workty so much keep up the good workty so much" />
+        <SupportMessage message="ty so much keep up the good work!" />
         <SupportMessage
           imageSrc="https://i.pravatar.cc/150?u=a042581f4e29026024d"
           initialReply="Thank you!"
