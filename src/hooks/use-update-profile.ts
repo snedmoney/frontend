@@ -1,8 +1,8 @@
-import type { Token } from "@/providers/paymentWidget/paymentWidgetContext";
-
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
+
 import { apiClient } from "../config/api";
+
 import { Profile } from "@/providers/createProfileFlow/createProfileFlowContext";
 
 const updateProfile = async (
@@ -26,8 +26,15 @@ const updateProfile = async (
 };
 
 const useUpdateProfile = (userId?: bigint) => {
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: (data: Partial<Profile>) => updateProfile(userId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
+    },
   });
 
   return {
