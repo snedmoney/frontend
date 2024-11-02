@@ -115,7 +115,10 @@ export const CreateProfileFlowProvider = ({
   const onSubmit = async (data: CreateProfileFlowData) => {
     try {
       console.log("Submitting data:", data);
-      const { data: savedData } = await apiClient.post("/users", data);
+      const { data: savedData } = await apiClient.post("/users", {
+        ...data,
+        type: "profile",
+      });
       const {
         savedUser: { userName },
       } = savedData;

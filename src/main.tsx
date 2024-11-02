@@ -6,7 +6,8 @@ import App from "./App.tsx";
 import { Provider } from "./providers/provider.tsx";
 import "@/styles/globals.css";
 import { ThemeProvider } from "./providers/theme/themeProvider.tsx";
-import { PaymentWidgetProvider } from "./providers/paymentWidget/paymentWidgetProvider";
+import { PaymentWidgetProvider } from "./providers/paymentWidget/paymentWidgetProvider.tsx";
+import { AuthProvider } from "./providers/auth/authProvider.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -14,7 +15,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <ThemeProvider>
         <Provider>
           <PaymentWidgetProvider>
-            <App />
+            <AuthProvider>
+              <App />
+            </AuthProvider>
           </PaymentWidgetProvider>
         </Provider>
       </ThemeProvider>

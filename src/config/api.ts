@@ -11,6 +11,8 @@ apiClient.interceptors.request.use((config) => {
   // Add token to header before each request
   const token = localStorage.getItem("token");
 
+  config.headers["Access-Control-Allow-Origin"] = "*";
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
