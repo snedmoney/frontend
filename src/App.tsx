@@ -21,39 +21,8 @@ import TransactionHistoryPage from "./pages/dashboardPages/transaction-history";
 
 import ShareModal from "@/components/share-modal";
 import DefaultLayout from "@/layouts/default";
-import { apiClient } from "@/config/api";
 
 function App() {
-  const token = localStorage.getItem("token");
-  const { isConnected, isDisconnected } = useAccount();
-  const { signMessage, isSuccess, data } = useSignMessage();
-  const authMessage = `Welcome to Sned! By signing this message, you authorize Sned to view your wallet address, request transaction approvals, and display your account balance. We cannot initiate transactions, access your private keys, or transfer funds without your explicit consent. You can disconnect your wallet at any time. Sign to verify ownership and proceed.`;
-
-  useEffect(() => {
-    if (!token && isConnected) {
-      signMessage({ message: authMessage });
-    }
-  }, [isConnected]);
-
-  useEffect(() => {
-    if (isDisconnected) {
-      localStorage.removeItem("token");
-    }
-  }, [isDisconnected]);
-
-  useEffect(() => {
-    async function process() {
-      if (isSuccess && data) {
-        apiClient.post("/authorize", { signature: data }).then((response) => {
-          if (response.data.token) {
-            localStorage.setItem("token", response.data.token);
-          }
-        });
-      }
-    }
-    process();
-  }, [isSuccess, data]);
-
   return (
     <>
       <Routes>
