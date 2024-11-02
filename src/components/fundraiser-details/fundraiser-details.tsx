@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-import DonationList from "../donationList";
+import DonationList from "../donation-list";
 
 import DonationDescription from "./description";
 import Organizer from "./organizer";
