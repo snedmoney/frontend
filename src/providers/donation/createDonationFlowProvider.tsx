@@ -119,6 +119,7 @@ export const CreateDonationFlowProvider = ({
     try {
       const response = await apiClient.post("/links", {
         type: "donation",
+        title: data.title,
         description: data.description,
         goalAmount: +data.goal,
         destinationTokenAddress: data.paymentMethod.tokenAddress,
@@ -126,8 +127,9 @@ export const CreateDonationFlowProvider = ({
         destinationWalletAddress: data.walletAddress,
         acceptUntil: data.endDate.toString(),
       });
+
       resetFlow();
-      // navigate("/profile");
+      navigate(`/fundraiser/${response.data.id}?openShareModal=true`);
     } catch (error) {
       console.error("Error submitting form:", error);
       // Handle submission error
