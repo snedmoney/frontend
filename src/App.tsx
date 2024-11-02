@@ -1,25 +1,27 @@
 import { Route, Routes } from "react-router-dom";
 import { useAccount, useSignMessage } from "wagmi";
+import { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
 
 import CreateDonationFlowPage from "./pages/create-donation-flow-page";
 import CreateProfileFlowPage from "./pages/create-profile-flow-page";
 import DashboardLayout from "./layouts/dashboard-layout";
 import DashboardPage from "./pages/dashboardPages/dashboard";
-import DefaultLayout from "@/layouts/default";
 import FundraisePage from "./pages/dashboardPages/fundraise";
 import ManageProfile from "./pages/dashboardPages/manage-profile";
 import MembershipsPage from "./pages/dashboardPages/memberships";
 import NotFound404 from "./pages/404";
 import ProfilePage from "./pages/profile-page";
 import SettingsPage from "./pages/dashboardPages/settings";
+import FundraiserPage from "./pages/fundraiser";
 import LandingPage from "./pages/landing-page";
 import LandingPageLayout from "./layouts/landing-page-layout";
-import ShareModal from "@/components/share-modal";
 import ShopPage from "./pages/dashboardPages/shop";
-import { Toaster } from "react-hot-toast";
 import TransactionHistoryPage from "./pages/dashboardPages/transaction-history";
+
+import ShareModal from "@/components/share-modal";
+import DefaultLayout from "@/layouts/default";
 import { apiClient } from "@/config/api";
-import { useEffect } from "react";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -56,7 +58,10 @@ function App() {
     <>
       <Routes>
         <Route element={<DefaultLayout />} path="/profile/">
-          <Route path=":username" element={<ProfilePage />} />
+          <Route element={<ProfilePage />} path=":username" />
+        </Route>
+        <Route element={<DefaultLayout />} path="/fundraiser/">
+          <Route element={<FundraiserPage />} path=":id" />
         </Route>
         <Route element={<DashboardLayout />} path="/user/">
           <Route element={<DashboardPage />} path="dashboard" />
@@ -67,8 +72,8 @@ function App() {
           <Route element={<ShopPage />} path="shop" />
           <Route element={<SettingsPage />} path="settings" />
         </Route>
-        <Route path="/create/profile" element={<CreateProfileFlowPage />} />
-        <Route element={<LandingPageLayout />} path='/'>
+        <Route element={<CreateProfileFlowPage />} path="/create/profile" />
+        <Route element={<LandingPageLayout />} path="/">
           <Route index element={<LandingPage />} />
         </Route>
         <Route element={<CreateProfileFlowPage />} path="/create/profile" />

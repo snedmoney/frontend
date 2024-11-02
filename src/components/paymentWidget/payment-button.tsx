@@ -53,11 +53,19 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 interface PaymentButtonWrapperProps {
   tokenIn?: Token;
   amountIn?: string;
+  name?: string;
+  message?: string;
+  destinationChainId: number;
+  destinationWalletAddress: string;
 }
 
 const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
   tokenIn,
   amountIn,
+  name,
+  message,
+  destinationChainId,
+  destinationWalletAddress,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { address, chainId } = useAccount();
@@ -102,8 +110,8 @@ const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
       enabled: isUniswapEnabled,
     });
 
-  // Base
-  const destinationChainId = 8453;
+  // NOTE: Hardcoded
+  // const destinationChainId = 8453;
   // const destinationChainId = 42161;
   const destinationPaymentContract = getPaymentContract(destinationChainId);
   const wormholeDestinationChainId = getWormholeChainId(destinationChainId);
@@ -169,6 +177,8 @@ const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
         sourceChainId: chainId,
         sourceTransactionHash: hash,
         type: "tip",
+        name: name || "",
+        message: message || "",
       });
 
       setPaymentId(generateRandomBytes32());
@@ -253,7 +263,7 @@ const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
 
     const paymentParams = {
       paymentId,
-      destAddress: address,
+      destAddress: destinationWalletAddress, // NOTE: Hardcoded, needs to come from Link's destinationWallet address
       tokenIn: tokenIn!.address,
       tokenOut: tokenOut,
       amountIn: amountInWei,

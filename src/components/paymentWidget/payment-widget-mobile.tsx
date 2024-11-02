@@ -1,21 +1,16 @@
-import React from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Button,
-} from "@nextui-org/react";
+import React, { ComponentProps } from "react";
+import { Button } from "@nextui-org/react";
 import { useAccount } from "wagmi";
+import clsx from "clsx";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 import UserPaymentInput from "./userPaymentInput";
 import PaymentButtonWrapper from "./payment-button";
 
-import usePaymentWidget from "@/hooks/use-payment-widget";
 import useShareModal from "@/hooks/use-share-modal";
+import usePaymentWidget from "@/hooks/use-payment-widget";
 
-type PaymentWidgetProps = {
+type PaymentWidgetMobileProps = ComponentProps<"div"> & {
   headerContent?: React.ReactNode;
   bodyContent?: React.ReactNode;
   footerContent?: React.ReactNode;
@@ -26,23 +21,21 @@ type PaymentWidgetProps = {
   destinationWalletAddress?: string;
 };
 
-const PaymentWidget = ({
+const PaymentWidgetMobile = ({
   headerContent,
   bodyContent,
   footerContent,
+  className,
+  handleClick,
   name,
   message,
   destinationChainId,
-  destinationWalletAddress,
-  handleClick,
-}: PaymentWidgetProps) => {
+  destinationWalletAddress
+}: PaymentWidgetMobileProps) => {
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
   const { tokenAmount, selectedToken } = usePaymentWidget();
   const openShareModal = useShareModal();
-
-  console.log(name, message, destinationChainId, destinationWalletAddress);
-
   const onClick = () => {
     if (!isConnected) openConnectModal?.();
     handleClick?.();
@@ -50,16 +43,11 @@ const PaymentWidget = ({
   };
 
   return (
-    <Card
-      className="min-w-[375px] max-w-[480px] w-full px-0 py-0 bg-transparent shadow-none md:bg-default-50 md:shadow-md md:rounded-large md:px-5 md:py-4"
-      shadow="md"
-    >
-      <CardHeader className="px-4 pt-0 md:p-3">{headerContent}</CardHeader>
-      <CardBody className="px-4 md:p-3">
+    <div className={clsx("w-full", className)}>
+      {headerContent}
+      <div className="flex flex-col gap-4">
         <UserPaymentInput />
         {bodyContent}
-      </CardBody>
-      <CardFooter className="flex-col gap-4 px-4 md:p-3">
         {!isConnected && (
           <Button
             fullWidth
@@ -89,10 +77,10 @@ const PaymentWidget = ({
         >
           Share
         </Button>
-        {footerContent}
-      </CardFooter>
-    </Card>
+      </div>
+      {footerContent}
+    </div>
   );
 };
 
-export default PaymentWidget;
+export default PaymentWidgetMobile;

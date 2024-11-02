@@ -1,4 +1,10 @@
-import { DateValue } from "@internationalized/date";
+import {
+  CalendarDate,
+  DateFormatter,
+  DateValue,
+  getLocalTimeZone,
+  parseAbsoluteToLocal,
+} from "@internationalized/date";
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { padHex, Address, toHex } from "viem";
@@ -30,3 +36,25 @@ export function convertDateValueToString(dateValue: any): any {
 
   return dateValue.toString();
 }
+
+const dateFormatter = new DateFormatter("en-US", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+});
+
+export const formatDate = (date: CalendarDate) => {
+  const formatted = dateFormatter.format(date.toDate(getLocalTimeZone()));
+
+  return formatted.replace(/^\w/, (c) => c.toLowerCase());
+};
+
+export const formatDateFromISOString = (isoString: string) => {
+  const date = parseAbsoluteToLocal(isoString);
+
+  return date.toDate().toLocaleString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
