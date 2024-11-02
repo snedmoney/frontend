@@ -1,0 +1,1 @@
+export { DonationList as default } from "./donation-list";
