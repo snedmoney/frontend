@@ -3,9 +3,14 @@ import { Progress } from "@nextui-org/progress";
 type SidebarHeaderProps = {
   goalAmount: number;
   logoURI: string;
+  totalDonations?: number;
 };
 
-const SidebarHeader = ({ goalAmount, logoURI }: SidebarHeaderProps) => {
+const SidebarHeader = ({
+  goalAmount,
+  logoURI,
+  totalDonations = 0,
+}: SidebarHeaderProps) => {
   return (
     <div className="w-full my-4 lg:my-0">
       <div className="flex items-baseline gap-1 mb-2">
@@ -23,7 +28,7 @@ const SidebarHeader = ({ goalAmount, logoURI }: SidebarHeaderProps) => {
         </span>
       </div>
       <Progress aria-label="Loading..." color="success" size="sm" value={60} />
-      <p className="mt-2">23 donations</p>
+      <p className="mt-2">{totalDonations} donations</p>
     </div>
   );
 };
