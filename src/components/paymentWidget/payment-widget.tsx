@@ -13,23 +13,35 @@ import UserPaymentInput from "./userPaymentInput";
 import PaymentButtonWrapper from "./payment-button";
 
 import usePaymentWidget from "@/hooks/use-payment-widget";
+import useShareModal from "@/hooks/use-share-modal";
 
 type PaymentWidgetProps = {
   headerContent?: React.ReactNode;
   bodyContent?: React.ReactNode;
   footerContent?: React.ReactNode;
   handleClick?: () => void;
+  name?: string;
+  message?: string;
+  destinationChainId?: number;
+  destinationWalletAddress?: string;
 };
 
 const PaymentWidget = ({
   headerContent,
   bodyContent,
   footerContent,
+  name,
+  message,
+  destinationChainId,
+  destinationWalletAddress,
   handleClick,
 }: PaymentWidgetProps) => {
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
   const { tokenAmount, selectedToken } = usePaymentWidget();
+  const openShareModal = useShareModal();
+
+  console.log(name, message, destinationChainId, destinationWalletAddress);
 
   const onClick = () => {
     if (!isConnected) openConnectModal?.();
@@ -47,7 +59,7 @@ const PaymentWidget = ({
         <UserPaymentInput />
         {bodyContent}
       </CardBody>
-      <CardFooter className="px-4 md:p-3">
+      <CardFooter className="flex-col gap-4 px-4 md:p-3">
         {!isConnected && (
           <Button
             fullWidth
@@ -58,12 +70,25 @@ const PaymentWidget = ({
             <span className="font-bold">Connect Wallet</span>
           </Button>
         )}
-        {isConnected && (
+        {isConnected && destinationChainId && destinationWalletAddress && (
           <PaymentButtonWrapper
             amountIn={tokenAmount}
+            destinationChainId={destinationChainId}
+            destinationWalletAddress={destinationWalletAddress}
+            message={message}
+            name={name}
             tokenIn={selectedToken}
           />
         )}
+        <Button
+          fullWidth
+          radius="full"
+          size="lg"
+          variant="bordered"
+          onClick={openShareModal}
+        >
+          Share
+        </Button>
         {footerContent}
       </CardFooter>
     </Card>
