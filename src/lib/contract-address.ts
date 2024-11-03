@@ -17,7 +17,7 @@ export const getPaymentContract = (
     10: "0xe58592b8fd375eb2f0a779877278cbc3224f5a14",
     137: "0xe58592b8fd375eb2f0a779877278cbc3224f5a14",
     56: "0xe58592b8fd375eb2f0a779877278cbc3224f5a14",
-    43114: "0xe58592b8fd375eb2f0a779877278cbc3224f5a14",
+    43114: "0x42d0b0e199021e4af767550c815b59feb0b2dd97",
   };
 
   return contracts[chainId];
