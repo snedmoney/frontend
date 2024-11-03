@@ -4,11 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import CTA from "@/components/cta";
 import FundraiserDetails from "@/components/fundraiser-details";
 import useGetLink from "@/hooks/use-get-link";
+import { SnedBirdIcon } from "@/components/sned-bird-icon";
 
 const FundraiserPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data, isLoading } = useGetLink(id);
+  const { data: fundraiser, isLoading, isError } = useGetLink(id);
 
   useEffect(() => {
     if (!id) {
@@ -24,13 +25,20 @@ const FundraiserPage = () => {
     );
   }
 
-  if (!data) return null;
+  if (isError) {
+    return (
+      <div className="w-screen h-screen flex flex-col justify-center items-center gap-3">
+        <SnedBirdIcon />
+        <h3>Oops, there&apos;s no user with the linkID {id}</h3>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4">
-      {data && (
+      {fundraiser && (
         <>
-          <FundraiserDetails data={data} />
+          <FundraiserDetails data={fundraiser} />
           <CTA />
         </>
       )}
