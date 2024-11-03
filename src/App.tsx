@@ -21,6 +21,7 @@ import TransactionHistoryPage from "./pages/dashboardPages/transaction-history";
 
 import ShareModal from "@/components/share-modal";
 import DefaultLayout from "@/layouts/default";
+import ProtectedRoute from "./components/protected-route";
 
 function App() {
   return (
@@ -32,14 +33,16 @@ function App() {
         <Route element={<DefaultLayout />} path="/fundraiser/">
           <Route element={<FundraiserPage />} path=":id" />
         </Route>
-        <Route element={<DashboardLayout />} path="/user/">
-          <Route element={<DashboardPage />} path="dashboard" />
-          <Route element={<TransactionHistoryPage />} path="history" />
-          <Route element={<ManageProfile />} path="profile" />
-          <Route element={<FundraisePage />} path="fundraise" />
-          <Route element={<MembershipsPage />} path="memberships" />
-          <Route element={<ShopPage />} path="shop" />
-          <Route element={<SettingsPage />} path="settings" />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<DashboardLayout />} path="/user/">
+            <Route element={<DashboardPage />} path="dashboard" />
+            <Route element={<TransactionHistoryPage />} path="history" />
+            <Route element={<ManageProfile />} path="profile" />
+            <Route element={<FundraisePage />} path="fundraise" />
+            <Route element={<MembershipsPage />} path="memberships" />
+            <Route element={<ShopPage />} path="shop" />
+            <Route element={<SettingsPage />} path="settings" />
+          </Route>
         </Route>
         <Route element={<CreateProfileFlowPage />} path="/create/profile" />
         <Route element={<LandingPageLayout />} path="/">

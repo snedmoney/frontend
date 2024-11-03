@@ -17,6 +17,7 @@ import UserMenuDropdown from "@/components/navBar/user-menu-dropdown";
 import useTheme from "@/hooks/use-theme";
 import useShareModal from "@/hooks/use-share-modal";
 import useGetProfileLinks from "@/hooks/use-get-profile-links";
+import { useNavigation } from "react-router-dom";
 
 //TODO: conditionally render create your own page and share button. Render create your own page if not page owner. Render share button if page owner.
 const logoURLWhite = new URL(
@@ -39,6 +40,7 @@ export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarProps) => {
   const onUserMenuClick = () => setIsSidebarOpen?.(!isSidebarOpen);
   const { address, isDisconnected } = useAccount();
   const { data: links } = useGetProfileLinks(address);
+  const isDashboardLink = /user/i.test(location.pathname);
 
   const hasProfileLink = useMemo(() => {
     if (!links) return false;
@@ -81,7 +83,7 @@ export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarProps) => {
         {(!hasProfileLink || isDisconnected) && (
           <CreatePage href="/create/profile" />
         )}
-        <Button
+        {!isDashboardLink && <Button
           color="default"
           endContent={<IoShareSocialOutline />}
           variant="ghost"
@@ -89,6 +91,7 @@ export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarProps) => {
         >
           Share this page
         </Button>
+        }
         <UserMenuDropdown onUserMenuClick={onUserMenuClick} />
       </NavbarContent>
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
