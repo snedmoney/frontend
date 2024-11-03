@@ -20,6 +20,7 @@ import { Token } from "@/providers/paymentWidget/paymentWidgetContext";
 import { addressToBytes32, generateRandomBytes32 } from "@/lib/utils";
 import TransactionModal from "@/components/transactionModal/transaction-modal";
 import { apiClient } from "@/config/api";
+import { TransactionType } from "@/types";
 
 interface ButtonProps {
   onClick?: () => void;
@@ -39,7 +40,6 @@ const ButtonComponent: React.FC<ButtonProps> = ({
     className="bg-foreground text-background"
     disabled={disabled}
     isLoading={isLoading}
-    radius="full"
     size="lg"
     style={{
       opacity: disabled ? "0.25" : "1",
@@ -57,6 +57,8 @@ interface PaymentButtonWrapperProps {
   message?: string;
   destinationChainId: number;
   destinationWalletAddress: string;
+  transactionType?: TransactionType;
+  linkId?: string;
 }
 
 const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
@@ -66,6 +68,8 @@ const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
   message,
   destinationChainId,
   destinationWalletAddress,
+  transactionType = "tip",
+  linkId,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { address, chainId } = useAccount();
@@ -176,9 +180,10 @@ const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
         id: paymentId,
         sourceChainId: chainId,
         sourceTransactionHash: hash,
-        type: "tip",
+        type: transactionType,
         name: name || "",
         message: message || "",
+        linkId,
       });
 
       setPaymentId(generateRandomBytes32());
@@ -304,7 +309,9 @@ const PaymentButtonWrapper: React.FC<PaymentButtonWrapperProps> = ({
       )}
       <TransactionModal
         amountIn={amountIn}
+        destinationChainId={destinationChainId}
         isOpen={isOpen}
+        sourceChainId={chainId!}
         txParams={txParams}
         onClose={() => setIsOpen(false)}
       />

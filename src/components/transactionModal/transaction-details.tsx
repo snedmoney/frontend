@@ -26,16 +26,17 @@ const TransactionMessage = () => (
 
 type TransactionDetailsProps = {
   txParams: ReturnType<typeof useTransaction>;
+  transactionURL: string;
   amountIn: string;
 };
 
-export const TransactionDetails = ({ txParams }: TransactionDetailsProps) => {
+export const TransactionDetails = ({ txParams, transactionURL }: TransactionDetailsProps) => {
   return (
     <div className="px-1">
-      <div className="flex flex-col gap-2 py-2">
+      {/* <div className="flex flex-col gap-2 py-2">
         <span className="font-bold">Transaction Hash</span>
         <Code style={{ whiteSpace: "pre-wrap" }}>{txParams.hash}</Code>
-      </div>
+      </div> */}
       <div className="flex flex-col gap-2 py-2">
         <span className="font-bold" />
       </div>
@@ -46,9 +47,9 @@ export const TransactionDetails = ({ txParams }: TransactionDetailsProps) => {
           showAnchorIcon
           anchorIcon={<FaLink />}
           color="warning"
-          href="https://github.com/nextui-org/nextui"
+          href={transactionURL}
         >
-          Tip
+          Transaction Link
         </Link>
       </div>
       <div className="py-2 flex items-center justify-between">

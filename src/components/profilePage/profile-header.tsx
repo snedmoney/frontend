@@ -5,10 +5,30 @@ import { IoShareSocialOutline } from "react-icons/io5";
 import SocialMediaList from "./social-media-list";
 import { defaultFormValues } from "@/providers/createProfileFlow/createProfileFlowProvider";
 import useShareModal from "@/hooks/use-share-modal";
+import { useNavigate } from "react-router-dom";
+import { Social } from "@/hooks/use-get-profile-by-address";
 
-const ProfileHeader = () => {
+type ProfileHeaderProps = {
+  name: string;
+  isOwnProfile?: boolean;
+  socials?: Social[];
+  slogan?: string;
+};
+
+const ProfileHeader = ({
+  name,
+  socials,
+  isOwnProfile,
+  slogan,
+}: ProfileHeaderProps) => {
   const openShareModal = useShareModal();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
+
+  const onClickJoinFree = () => {
+    navigate("/create/profile");
+  };
+
   return (
     <>
       <div className="h-72 relative">
@@ -21,24 +41,53 @@ const ProfileHeader = () => {
           <img
             className="w-24 h-24 bg-gray-400 rounded-full border-4 border-white"
             src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
-            alt='user image'
+            alt="user image"
           />
         </div>
       </div>
       <div className="pt-12 pb-6 px-4 md:px-8 flex flex-col justify-center text-center items-center">
         <h1 className="text-xl font-bold text-default-900 mb-1">
-          Joe Pasky | Urban Photographer
+          {name} | {slogan}
         </h1>
         <p className="text-default-500 mb-4">180 Donations | 30 Members</p>
         <div className="flex justify-center items-center space-x-2 gap-2 mb-4 w-full">
-          {/* <Button variant='solid' radius='sm' className='flex-1 min-w-[140px] max-w-[220px]' color='primary'>Join for free</Button> */}
-          <Button variant='ghost' radius='sm' className='flex-1 min-w-[140px] max-w-[220px]' color='default' onPress={onOpen}>Edit page</Button>
-          <Button isIconOnly variant='solid' radius='sm' onPress={openShareModal}>
+          {!isOwnProfile && (
+            <Button
+              variant="solid"
+              radius="sm"
+              className="flex-1 min-w-[140px] max-w-[220px]"
+              color="primary"
+              onClick={onClickJoinFree}
+            >
+              Join for free
+            </Button>
+          )}
+          {isOwnProfile && (
+            <Button
+              variant="ghost"
+              radius="sm"
+              className="flex-1 min-w-[140px] max-w-[220px]"
+              color="default"
+              onPress={onOpen}
+            >
+              Edit page
+            </Button>
+          )}
+          <Button
+            isIconOnly
+            variant="solid"
+            radius="sm"
+            onPress={openShareModal}
+          >
             <IoShareSocialOutline />
           </Button>
         </div>
-        <SocialMediaList />
-        <EditPageModal isOpen={isOpen} onClose={onClose} initialData={defaultFormValues} />
+        {socials && <SocialMediaList socials={socials} />}
+        <EditPageModal
+          isOpen={isOpen}
+          onClose={onClose}
+          initialData={defaultFormValues}
+        />
       </div>
     </>
   );
