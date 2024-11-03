@@ -57,7 +57,7 @@ import {
   }: {
     onUserMenuClick: () => void;
   }) => {
-    const { address, isDisconnected } = useAccount();
+    const { address, isConnected } = useAccount();
     const { openConnectModal } = useConnectModal();
     const { disconnect } = useDisconnect();
     const location = useLocation();
@@ -143,7 +143,7 @@ import {
       >
         <DropdownTrigger>
           <button className="px-0" onClick={onUserMenuClick}>
-            {isDisconnected ? (
+            {!isConnected ? (
               <PiDotsThreeOutlineVertical size="24" className="h-[40px]" />
             ) : (
               <div
@@ -178,7 +178,7 @@ import {
               )}
               textValue="login status"
             >
-              {isDisconnected ? (
+              {!isConnected ? (
                 <button
                   onClick={() => openConnectModal?.()}
                   className="px-3 py-1 flex items-center gap-4 w-full"
@@ -195,17 +195,17 @@ import {
             </DropdownItem>
           </DropdownSection>
           <DropdownSection
-            showDivider={!isDisconnected}
+            showDivider={isConnected}
             classNames={{ base: "mb-0", divider: "mt-0" }}
-            className={`${isDisconnected ? "mb-0" : ""}`}
+            className={`${!isConnected ? "mb-0" : ""}`}
           >
-            {isDisconnected
+            {!isConnected
               ? renderDropdownItems(loggedOutItems)
               : renderDropdownItems(loggedInItemsFiltered)}
           </DropdownSection>
           <DropdownSection classNames={{ base: "mb-0", divider: "mt-0" }}>
             <DropdownItem
-              className={`flex items-center space-x-2 data-[hover=true]:bg-danger-400 hover:text-accent-foreground rounded-md p-2 my-2 transition-colors ${isDisconnected ? "hidden" : ""}`}
+              className={`flex items-center space-x-2 data-[hover=true]:bg-danger-400 hover:text-accent-foreground rounded-md p-2 my-2 transition-colors ${!isConnected ? "hidden" : ""}`}
               textValue="logout"
             >
               <div
