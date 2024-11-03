@@ -4,7 +4,7 @@ import { Button } from "@nextui-org/react";
 import FlowLayout from "@/layouts/flow-layout";
 import useCreateProfileFlow from "@/hooks/use-create-profile-flow";
 import { CreateProfileFlowData } from "@/providers/createProfileFlow/createProfileFlowContext";
-import UserInfo1Form from "@/components/user-info1-form";
+import UserInfoForm1 from "@/components/user-info1-form";
 
 const UserInfo1 = () => {
   const { trigger } = useFormContext<CreateProfileFlowData>();
@@ -58,7 +58,7 @@ const UserInfo1 = () => {
       leftContent={leftContent}
       rightContent={
         <div className="flex flex-col gap-2 md:gap-4 md:pl-3">
-          <UserInfo1Form />
+          <UserInfoForm1 />
         </div>
       }
       rightFooterContent={rightFooterContent}

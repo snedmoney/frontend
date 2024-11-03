@@ -1,7 +1,7 @@
 import { Button } from "@nextui-org/react";
 import { CreateProfileFlowData } from "@/providers/createProfileFlow/createProfileFlowContext";
 import FlowLayout from "@/layouts/flow-layout";
-import UserInfo2Form from "@/components/user-info2-form";
+import UserInfoForm2 from "@/components/user-info2-form";
 import useCreateProfileFlow from "@/hooks/use-create-profile-flow";
 import { useFormContext } from "react-hook-form";
 import { useState } from "react";
@@ -64,7 +64,7 @@ const UserInfo2 = () => {
       leftContent={leftContent}
       rightContent={
         <div className="flex flex-col gap-2 md:gap-4 md:pl-3">
-          <UserInfo2Form />
+          <UserInfoForm2 />
         </div>
       }
       rightFooterContent={rightFooterContent}
