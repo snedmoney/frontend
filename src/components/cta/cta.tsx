@@ -16,17 +16,12 @@ export const CTA = () => {
             title="Easy"
           />
           <CTAItem
-            description="Send help right to the people and causes you care about."
+            description="Let your fans show how much they care."
             icon={<FiHeart size={32} />}
             title="Powerful"
           />
           <CTAItem
-            description={
-              <>
-                Your donation is protected by the{" "}
-                <span className="underline">GoFundMe Giving Guarantee</span>.
-              </>
-            }
+            description={<>Your donation is protected and secure.</>}
             icon={<FiShield size={32} />}
             title="Trusted"
           />
