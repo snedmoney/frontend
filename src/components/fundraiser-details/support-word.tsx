@@ -10,7 +10,7 @@ type SupportWordProps = {
 
 const SupportWord = ({ transaction }: SupportWordProps) => {
   return (
-    <div className="my-10 last:mb-0 flex gap-4 items-start">
+    <div className="my-4 last:mb-0 flex gap-4 items-start">
       <Avatar
         showFallback
         className="shrink-0"
