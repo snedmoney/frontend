@@ -51,8 +51,9 @@ export const CreateDonationFlowProvider = ({
 
     if (savedData) {
       const parsedData = JSON.parse(savedData);
+      const endDate = parseDate(parsedData?.endDate);
 
-      return { ...defaultFormValues, ...parsedData };
+      return { ...defaultFormValues, ...parsedData, endDate };
     }
 
     return defaultFormValues;

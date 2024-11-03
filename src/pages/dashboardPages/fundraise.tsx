@@ -4,6 +4,7 @@ import { CalendarDate, today, getLocalTimeZone } from "@internationalized/date";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaHandsHelping, FaRocket, FaChartLine } from 'react-icons/fa';
 import { GiStairsGoal } from "react-icons/gi";
+import { Link } from "@nextui-org/link";
 
 type Campaign = {
   image: string;
@@ -100,7 +101,7 @@ const FundraisePage = () => {
     const key = String(columnKey);
     switch (key) {
       case "image":
-        return <Avatar showFallback src={campaign.image} radius="sm"  className='bg-default-100'/>
+        return <Avatar showFallback src={campaign.image} radius="sm" className='bg-default-100' />
       case "fundingStatus":
         const progressValue = (campaign.received / campaign.goal) * 100;
         return (
@@ -210,7 +211,7 @@ const FundraisePage = () => {
         </div>
       </div>
       <div className="flex justify-end mb-4">
-        <Button color="primary" variant="ghost" radius="sm" onPress={handleNewCampaign}>New Campaign</Button>
+        <Button color="primary" variant="ghost" as={Link} radius="sm" href="/create/fundraiser" target="_blank">New Campaign</Button>
       </div>
       <Table aria-label="Fundraising campaigns table">
         <TableHeader columns={columns}>

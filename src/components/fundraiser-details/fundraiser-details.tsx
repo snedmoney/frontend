@@ -11,6 +11,7 @@ import Sidebar from "./sidebar/sidebar";
 
 import { formatDateFromISOString } from "@/lib/utils";
 import { FundraiserData } from "@/types";
+import useGetTransactions from "@/hooks/use-get-transactions-by-linkid";
 
 type FundraiserDetailsProps = {
   data: FundraiserData;
@@ -18,6 +19,7 @@ type FundraiserDetailsProps = {
 
 export const FundraiserDetails = ({ data }: FundraiserDetailsProps) => {
   const endDate = formatDateFromISOString(data.acceptUntil);
+  const { data: transactions } = useGetTransactions(data.id);
 
   return (
     <div
@@ -36,13 +38,22 @@ export const FundraiserDetails = ({ data }: FundraiserDetailsProps) => {
         destinationToken={data.destinationToken}
         destinationWalletAddress={data.destinationWallet.address}
         goalAmount={data.goalAmount}
+        linkId={data.id}
+        transactions={transactions}
       />
       <FeaturedImage />
       <div className="[grid-area:content]">
         <DonationDescription description={data.description} />
-        <DonationList className="py-8 lg:hidden" />
+        {transactions && transactions.length > 0 && (
+          <DonationList
+            className="py-8 lg:hidden"
+            transactions={transactions}
+          />
+        )}
         {data?.user?.name && <Organizer user={data.user} />}
-        <SupportWords />
+        {transactions && transactions.length > 0 && (
+          <SupportWords transactions={transactions} />
+        )}
         <Meta createdAt={data.createdAt} />
       </div>
     </div>

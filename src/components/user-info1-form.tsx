@@ -1,31 +1,63 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { Input, Textarea } from "@nextui-org/react";
+import { ReactNode, useState, useCallback, useRef, useEffect } from "react";
 
 import { CreateProfileFlowData } from "@/providers/createProfileFlow/createProfileFlowContext";
-import { ReactNode } from "react";
 import { apiClient } from "@/config/api";
+
+const USERNAME_PATTERN = /^[a-z0-9_]+$/;
 
 const UserInfo1Form = () => {
   const {
     control,
     formState: { errors },
     setValue,
+    watch,
   } = useFormContext<CreateProfileFlowData>();
+  const [aboutLength, setAboutLength] = useState(0);
+  const originalUsernameRef = useRef("");
+  const currentUsername = watch("userName");
 
-  const checkIfUsernameIsTaken = async (username = "") => {
+  useEffect(() => {
+    originalUsernameRef.current = currentUsername || "";
+  }, []);
+
+  const checkIfUsernameIsTaken = useCallback(async (username = "") => {
     try {
       const { data: userData } = await apiClient.get(
         `/users/username${username.length === 0 ? "" : "/"}${username}`,
       );
 
-      return !!userData?.user?.userName;
+      return userData?.user?.userName;
     } catch (e) {
       if (e instanceof Error && "status" in e && e.status === 404) {
-        return false;
+        return null;
       }
       throw e;
     }
-  };
+  }, []);
+
+  const validateUsername = useCallback(
+    async (value: string) => {
+      if (value === originalUsernameRef.current) {
+        return true;
+      }
+
+      // Check for pattern validation first
+      if (!USERNAME_PATTERN.test(value)) {
+        return "Username can only contain lowercase letters, numbers, and underscores";
+      }
+
+      const takenUsername = await checkIfUsernameIsTaken(value);
+
+      if (takenUsername && takenUsername !== originalUsernameRef.current) {
+        return "Username is taken";
+      }
+
+      return true;
+    },
+    [checkIfUsernameIsTaken],
+  );
 
   return (
     <>
@@ -69,13 +101,7 @@ const UserInfo1Form = () => {
         )}
         rules={{
           required: "Username is required",
-          validate: {
-            checkIfUsernameIsTaken: async (value) => {
-              const isTaken = await checkIfUsernameIsTaken(value);
-
-              return !isTaken || "Username Taken";
-            },
-          },
+          validate: validateUsername,
         }}
       />
       <Controller
@@ -104,12 +130,18 @@ const UserInfo1Form = () => {
         render={({ field }) => (
           <Textarea
             {...field}
+            description={`${aboutLength}/255 characters`}
             errorMessage={errors.about?.message as ReactNode}
             isInvalid={!!errors.about?.message}
             label="About *"
             labelPlacement="outside"
+            maxLength={255}
             placeholder="Introduce yourself"
             variant="bordered"
+            onChange={(e) => {
+              field.onChange(e);
+              setAboutLength(e.target.value.length);
+            }}
           />
         )}
         rules={{ required: "About section is required" }}

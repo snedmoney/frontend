@@ -9,12 +9,14 @@ import { CreateProfileFlowData } from "@/providers/createProfileFlow/createProfi
 import UserInfoForm1 from "@/components/user-info1-form";
 import UserInfoForm2 from "@/components/user-info2-form";
 import { defaultFormValues } from "@/providers/createProfileFlow/createProfileFlowProvider";
-import useGetProfile from "@/hooks/use-get-profile";
+import useGetProfile from "@/hooks/use-get-profile-by-address";
 import useUpdateProfile from "@/hooks/use-update-profile";
+import { useNavigate } from "react-router-dom";
 
 const ManageProfile = () => {
   const { address } = useAccount();
-  const { data } = useGetProfile(address);
+  const { data, isLoading: isGetProfileLoading } = useGetProfile(address);
+  const navigate = useNavigate();
   const {
     mutate: updateUser,
     isSuccess: isUpdateSuccess,
@@ -29,11 +31,14 @@ const ManageProfile = () => {
     mode: "onChange",
   });
 
+  const onClickViewPage = () => {
+    navigate(`/profile/${data?.user.userName}`);
+  };
+
   // when previous profile information comes in, update the default values
   useEffect(() => {
     if (data?.user) {
       const defaultProfile = data.user;
-
       methods.reset(defaultProfile);
     }
   }, [data]);
@@ -84,6 +89,8 @@ const ManageProfile = () => {
           endContent={<TbEyeCode size="20" />}
           href=""
           target="_blank"
+          isDisabled={isGetProfileLoading}
+          onClick={onClickViewPage}
         >
           View My Page
         </Button>

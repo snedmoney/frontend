@@ -1,22 +1,17 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
+import { Outlet } from 'react-router-dom';
+import { useAccount } from 'wagmi';
+import { useAuth } from "@/hooks/use-auth";
+import NotFound404 from '@/pages/404';
 
-type ProtectedRouteProps = {
-  children: React.ReactNode;
-  canAccess: boolean;
-  redirectPath: string;
-};
+const ProtectedRoute = () => {
+  const { isConnected } = useAccount();
+  const { token } = useAuth();
 
-const ProtectedRoute = ({
-  children,
-  canAccess,
-  redirectPath,
-}: ProtectedRouteProps) => {
-  if (!canAccess) {
-    return <Navigate replace to={redirectPath} />;
+  if (!isConnected || !token) {
+    return <NotFound404 message="Please Login to see this page" showConnectButton />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

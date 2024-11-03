@@ -4,6 +4,10 @@ import { apiClient } from "../config/api";
 
 import { Profile } from "@/providers/createProfileFlow/createProfileFlowContext";
 
+export type Wallet = {
+  address: string;
+};
+
 export type PaymentMethod = {
   chain: {
     allowed: boolean;
@@ -26,13 +30,14 @@ export type Social = {
 export type ProfileResponse = Profile & {
   paymentMethods: PaymentMethod[];
   socials: Social[];
+  wallets: Wallet[];
 };
 
 export type GetProfileByAddressResponse = {
   user: ProfileResponse;
 };
 
-const fetchProfile = async (address?: string) => {
+const fetchProfileByAddress = async (address?: string) => {
   if (!address) return;
 
   try {
@@ -64,7 +69,6 @@ const fetchProfile = async (address?: string) => {
       });
       response.data.user.socialAccounts = socialAccounts;
     }
-    console.log("i got user", response.data);
 
     return response.data;
   } catch (error) {
@@ -75,10 +79,10 @@ const fetchProfile = async (address?: string) => {
   }
 };
 
-const useGetProfile = (address?: string) => {
+const useGetProfileByAddress = (address?: string) => {
   const query = useQuery({
     queryKey: ["users", "wallet", "address", address],
-    queryFn: () => fetchProfile(address),
+    queryFn: () => fetchProfileByAddress(address),
     enabled: !!address,
   });
 
@@ -87,4 +91,4 @@ const useGetProfile = (address?: string) => {
   };
 };
 
-export default useGetProfile;
+export default useGetProfileByAddress;

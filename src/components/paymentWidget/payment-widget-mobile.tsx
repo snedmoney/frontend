@@ -9,6 +9,7 @@ import PaymentButtonWrapper from "./payment-button";
 
 import useShareModal from "@/hooks/use-share-modal";
 import usePaymentWidget from "@/hooks/use-payment-widget";
+import { TransactionType } from "@/types";
 
 type PaymentWidgetMobileProps = ComponentProps<"div"> & {
   headerContent?: React.ReactNode;
@@ -19,6 +20,8 @@ type PaymentWidgetMobileProps = ComponentProps<"div"> & {
   message?: string;
   destinationChainId?: number;
   destinationWalletAddress?: string;
+  transactionType?: TransactionType;
+  linkId?: string;
 };
 
 const PaymentWidgetMobile = ({
@@ -30,7 +33,9 @@ const PaymentWidgetMobile = ({
   name,
   message,
   destinationChainId,
-  destinationWalletAddress
+  destinationWalletAddress,
+  transactionType,
+  linkId,
 }: PaymentWidgetMobileProps) => {
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
@@ -63,18 +68,14 @@ const PaymentWidgetMobile = ({
             amountIn={tokenAmount}
             destinationChainId={destinationChainId}
             destinationWalletAddress={destinationWalletAddress}
+            linkId={linkId}
             message={message}
             name={name}
             tokenIn={selectedToken}
+            transactionType={transactionType}
           />
         )}
-        <Button
-          fullWidth
-          radius="full"
-          size="lg"
-          variant="bordered"
-          onClick={openShareModal}
-        >
+        <Button fullWidth size="lg" variant="bordered" onClick={openShareModal}>
           Share
         </Button>
       </div>

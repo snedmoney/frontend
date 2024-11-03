@@ -7,6 +7,8 @@ import {
 } from "@nextui-org/navbar";
 import { IoShareSocialOutline } from "react-icons/io5";
 import { Button } from "@nextui-org/button";
+import { useAccount } from "wagmi";
+import { useMemo } from "react";
 
 import CreatePage from "../create-page";
 
@@ -14,6 +16,8 @@ import { ThemeSwitch } from "@/components/theme-switch";
 import UserMenuDropdown from "@/components/navBar/user-menu-dropdown";
 import useTheme from "@/hooks/use-theme";
 import useShareModal from "@/hooks/use-share-modal";
+import useGetProfileLinks from "@/hooks/use-get-profile-links";
+import { useNavigation } from "react-router-dom";
 
 //TODO: conditionally render create your own page and share button. Render create your own page if not page owner. Render share button if page owner.
 const logoURLWhite = new URL(
@@ -34,6 +38,15 @@ export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarProps) => {
   const openShareModal = useShareModal();
   const { isDark } = useTheme();
   const onUserMenuClick = () => setIsSidebarOpen?.(!isSidebarOpen);
+  const { address, isDisconnected } = useAccount();
+  const { data: links } = useGetProfileLinks(address);
+  const isDashboardLink = /user/i.test(location.pathname);
+
+  const hasProfileLink = useMemo(() => {
+    if (!links) return false;
+
+    return links.find((link) => link.type === "profile");
+  }, [links]);
 
   return (
     <NextUINavbar
@@ -67,8 +80,10 @@ export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarProps) => {
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
         </NavbarItem>
-        <CreatePage href="/create/profile" />
-        <Button
+        {(!hasProfileLink || isDisconnected) && (
+          <CreatePage href="/create/profile" />
+        )}
+        {!isDashboardLink && <Button
           color="default"
           endContent={<IoShareSocialOutline />}
           variant="ghost"
@@ -76,6 +91,7 @@ export const Navbar = ({ isSidebarOpen, setIsSidebarOpen }: NavbarProps) => {
         >
           Share this page
         </Button>
+        }
         <UserMenuDropdown onUserMenuClick={onUserMenuClick} />
       </NavbarContent>
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">

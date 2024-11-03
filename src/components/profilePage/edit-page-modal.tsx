@@ -12,6 +12,11 @@ import { CreateProfileFlowData } from "@/providers/createProfileFlow/createProfi
 import UserInfoForm1 from "@/components/user-info1-form";
 import UserInfoForm2 from "@/components/user-info2-form";
 import { useEffect, useState } from "react";
+import { useAccount } from "wagmi";
+import useGetProfileByAddress from "@/hooks/use-get-profile-by-address";
+import useUpdateProfile from "@/hooks/use-update-profile";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 type EditPageModalProps = {
   isOpen: boolean;
@@ -24,16 +29,43 @@ const EditPageModal = ({
   onClose,
   initialData,
 }: EditPageModalProps) => {
+  const { address } = useAccount();
+  const [hasChanges, setHasChanges] = useState(false);
+  const { data } = useGetProfileByAddress(address);
+  const navigate = useNavigate();
   const methods = useForm<CreateProfileFlowData>({
-    defaultValues: initialData,
+    defaultValues: data?.user || initialData,
     mode: "onChange",
   });
+  const {
+    mutate: updateUser,
+    isSuccess: isUpdateSuccess,
+    isPending: isUpdatingProfile,
+    isError: isUpdateError,
+  } = useUpdateProfile(data?.user.id);
 
-  const [hasChanges, setHasChanges] = useState(false);
+  // when previous profile information comes in, update the default values
+  useEffect(() => {
+    if (data?.user) {
+      const defaultProfile = data.user;
+      methods.reset(defaultProfile);
+    }
+  }, [data]);
 
   const resetForm = () => {
-    methods.reset(initialData);
+    methods.reset(data?.user || initialData);
   };
+
+  useEffect(() => {
+    if (isUpdateError) {
+      toast.error("There was an issue in updating your profile");
+    } else if (isUpdateSuccess) {
+      toast.success("Profile updated successfully");
+      onClose();
+      const updatedUserName = methods.getValues("userName");
+      navigate(`/profile/${updatedUserName}`);
+    }
+  }, [isUpdateSuccess, isUpdateError]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -54,7 +86,7 @@ const EditPageModal = ({
     if (isValid) {
       console.log("Saving data:", data);
       // Here you would typically send the data to your backend
-      onClose();
+      updateUser(data);
     }
   };
 
@@ -97,6 +129,7 @@ const EditPageModal = ({
             <Button
               type="submit"
               className="bg-foreground text-background"
+              isLoading={isUpdatingProfile}
               onClick={methods.handleSubmit(handleSave)}
             >
               Save

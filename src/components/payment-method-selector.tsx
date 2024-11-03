@@ -234,7 +234,7 @@ const PaymentMethodSelector = () => {
               isLoading={isChainsLoading}
               label="Select chain *"
               placeholder="Select your preferred chain"
-              selectedKeys={[field.value]}
+              selectedKeys={[field.value.toString()]}
               variant="bordered"
               onSelectionChange={(keys: Set<string>) => {
                 const selectedValues = Array.from(keys.values());

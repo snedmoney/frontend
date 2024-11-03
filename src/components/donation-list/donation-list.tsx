@@ -7,9 +7,16 @@ import { FaChartLine } from "react-icons/fa";
 
 import DonationItem from "./donation-item";
 
-type TDonationListProps = ComponentProps<"div"> & {};
+import { TransactionDataType } from "@/types";
 
-export const DonationList = ({ className }: TDonationListProps) => {
+type TDonationListProps = ComponentProps<"div"> & {
+  transactions: TransactionDataType[];
+};
+
+export const DonationList = ({
+  className,
+  transactions,
+}: TDonationListProps) => {
   return (
     <div
       className={clsx("w-full border-t border-content4 lg:border-0", className)}
@@ -28,11 +35,9 @@ export const DonationList = ({ className }: TDonationListProps) => {
         <strong className="text-primary-800">15.3K people just donated</strong>
       </div>
       <div>
-        <DonationItem />
-        <DonationItem />
-        <DonationItem />
-        <DonationItem />
-        <DonationItem />
+        {transactions.map((transaction) => (
+          <DonationItem key={transaction.id} transaction={transaction} />
+        ))}
       </div>
       <div className="flex justify-between gap-2 mt-4">
         <Button fullWidth variant="bordered">

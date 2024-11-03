@@ -13,7 +13,12 @@ const DonationInfo1 = () => {
     useCreateDonationFlow();
 
   const handleNext = async () => {
-    const isValid = await trigger(["goal"]);
+    const isValid = await trigger([
+      "goal",
+      "endDate",
+      "paymentMethod.chainId",
+      "paymentMethod.tokenAddress",
+    ]);
 
     if (isValid) {
       nextStep();
