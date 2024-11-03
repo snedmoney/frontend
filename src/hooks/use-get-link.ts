@@ -58,13 +58,7 @@ const useGetLink = (linkId?: string) => {
       return fetchLink(linkId);
     },
     enabled: Boolean(linkId),
-    retry: (failureCount, error) => {
-      // Don't retry on 404 errors
-      if (error.status === 404) return false;
-
-      // Retry up to 3 times for other errors
-      return failureCount < 3;
-    },
+    refetchOnWindowFocus: false,
   });
 };
 

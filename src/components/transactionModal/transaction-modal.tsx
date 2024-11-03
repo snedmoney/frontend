@@ -11,12 +11,15 @@ import { TransactionDetails } from "./transaction-details";
 import { TransactionFlow } from "./transaction-flow";
 
 import useTransaction from "@/hooks/use-transaction";
+import useGetChains from "@/hooks/use-get-chains";
 
 type TransactionModalProps = {
   txParams: ReturnType<typeof useTransaction>;
   isOpen: boolean;
   amountIn: string;
   onClose?: () => void;
+  sourceChainId: number;
+  destinationChainId: number;
 };
 
 export const TransactionModal = ({
@@ -24,7 +27,13 @@ export const TransactionModal = ({
   amountIn,
   isOpen,
   onClose,
+  sourceChainId,
+  destinationChainId
 }: TransactionModalProps) => {
+  const { data } = useGetChains();
+  const explorerURL = data?.chains.find(chain => sourceChainId === chain.id)?.explorerURL;
+  const transactionURL = sourceChainId === destinationChainId ? `${explorerURL}/tx/${txParams.hash}` : `https://wormholescan.io/#/tx/${txParams.hash}`
+
   return (
     <Modal
       className="dark:bg-default-100 max-w-[480px] mx-0 my-0 rounded-t-lg rounded-b-none sm:rounded-b-lg"
@@ -48,7 +57,7 @@ export const TransactionModal = ({
         <div className="px-3 sm:px-6 pt-5" />
         <ModalBody className="px-10 py-0 sm:pb-5 sm:px-7">
           <TransactionFlow amountIn={amountIn} />
-          <TransactionDetails amountIn={amountIn} txParams={txParams} />
+          <TransactionDetails amountIn={amountIn} txParams={txParams} transactionURL={transactionURL} />
         </ModalBody>
       </ModalContent>
     </Modal>

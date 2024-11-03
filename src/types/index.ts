@@ -8,6 +8,7 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 };
 
 export type FundraiserData = {
+  id: string;
   title: string;
   description: string;
   createdAt: string;
@@ -21,4 +22,14 @@ export type FundraiserData = {
   destinationChain: {
     id: number;
   };
+};
+
+export type TransactionType = "donation" | "tip" | "payment";
+
+export type TransactionDataType = {
+  createdAt: string;
+  id: string;
+  message?: string;
+  name?: string;
+  status: "pending";
 };

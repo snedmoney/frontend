@@ -13,7 +13,9 @@ export type GetChainsResponse = {
 };
 const fetchChains = async (): Promise<GetChainsResponse> => {
   try {
-    const response: AxiosResponse<GetChainsResponse> = await apiClient.get("/chains?per_page=100");
+    const response: AxiosResponse<GetChainsResponse> = await apiClient.get(
+      "/chains?per_page=100",
+    );
     const order = [
       "Ethereum",
       "Arbitrum",
@@ -24,7 +26,14 @@ const fetchChains = async (): Promise<GetChainsResponse> => {
       "Avalanche C-Chain",
     ];
     const filteredChains = response.data.chains
-      .filter(chain => chain.allowed && chain.id !== 42220)
+      .filter(
+        (chain) =>
+          chain.allowed &&
+          chain.id !== 42220 &&
+          chain.id !== 10 &&
+          chain.id !== 43114,
+      )
+      .filter((chain) => !chain.name.toLowerCase().includes("testnet"))
       .sort((a: Chain, b: Chain) => {
         const indexA = order.indexOf(a.name);
         const indexB = order.indexOf(b.name);
@@ -41,7 +50,7 @@ const fetchChains = async (): Promise<GetChainsResponse> => {
     return {
       ...response.data,
       chains: filteredChains,
-      count: filteredChains.length
+      count: filteredChains.length,
     };
   } catch (error) {
     if (error instanceof Error) {
