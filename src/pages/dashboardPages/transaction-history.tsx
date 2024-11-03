@@ -12,18 +12,14 @@ import {
   Button,
   SortDescriptor,
 } from "@nextui-org/react";
-import {
-  CalendarDate,
-  DateFormatter,
-  getLocalTimeZone,
-  today,
-} from "@internationalized/date";
+import { CalendarDate, getLocalTimeZone, today } from "@internationalized/date";
 
 import { formatCurrency } from "@/lib/chart-utils";
 import ChainFilter from "@/components/chain-filter";
 import TransactionTypeFilter from "@/components/dashboard/transactions/transaction-type-filter";
 import NoTransactions from "@/components/dashboard/transactions/no-transactions";
 import TransactionStatusBadge from "@/components/dashboard/transactions/transaction-status-badge";
+import { formatDate } from "@/lib/utils";
 
 type Transaction = {
   id: string;
@@ -57,17 +53,7 @@ const generateMockTransactions = (count: number): Transaction[] => {
 
 const mockTransactions = generateMockTransactions(50);
 
-const dateFormatter = new DateFormatter("en-US", {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-});
 
-const formatDate = (date: CalendarDate) => {
-  const formatted = dateFormatter.format(date.toDate(getLocalTimeZone()));
-
-  return formatted.replace(/^\w/, (c) => c.toLowerCase());
-};
 
 const TransactionHistory = () => {
   const [page, setPage] = useState(1);
