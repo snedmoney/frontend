@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import { Input, Textarea } from "@nextui-org/react";
 
@@ -10,7 +10,7 @@ const DonationInfo2Form = () => {
     formState: { errors },
     setValue,
   } = useFormContext<CreateDonationFlowData>();
-
+  const [descriptionLength, setDescriptionLength] = useState(0);
   return (
     <>
       <Controller
@@ -24,7 +24,7 @@ const DonationInfo2Form = () => {
             isInvalid={!!errors.title?.message}
             label="Title *"
             labelPlacement="outside"
-            placeholder="Your fundriser title"
+            placeholder="Your fundraiser title"
             radius="sm"
             type="text"
             variant="bordered"
@@ -45,8 +45,14 @@ const DonationInfo2Form = () => {
             isInvalid={!!errors.description?.message}
             label="Description *"
             labelPlacement="outside"
-            placeholder="Write description about fundriser"
+            placeholder="Write description about fundraiser"
             variant="bordered"
+            onChange={(e) => {
+              field.onChange(e);
+              setDescriptionLength(e.target.value.length);
+            }}
+            maxLength={255}
+            description={`${descriptionLength}/255 characters`}
           />
         )}
         rules={{ required: "Description is required" }}
