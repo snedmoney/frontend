@@ -81,7 +81,7 @@ const BenefitsSection = () => {
       title: "Simplified E-commerce",
       description:
         "Sell your products or services effortlessly with our user-friendly e-commerce tools, designed specifically for creators.",
-      image: `${isDark ? dashboardImgDark : dashboardImg}`,
+      image: "https://images.unsplash.com/photo-1677693972403-db681288b5da?q=80&w=2835&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       icon: <IoStorefrontOutline className="h-6 w-6 text-primary" />,
       className: "md:col-span-1",
     },
